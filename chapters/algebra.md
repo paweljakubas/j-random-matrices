@@ -1090,3 +1090,77 @@ _1 1 1
 0 0 0 0
 0 0 0 0
 ```
+
+### Solution to exercise 10
+```
+   NB. (a) Show capability to update (increment) the second nearest neighbors in a matrix.
+   m
+100 101 102 103
+104 105 106 107
+108 109 110 111
+112 113 114 115
+  NB. For (x,y) we will update 4 points: (x-1,y-1),(x-1,y+1),(x+1,y-1),(x+1,y+1)
+   nnn=: 3 : '( ((0{y)-1), ((1{y)-1) ),( ((0{y)-1), ((1{y)+1) ),( ((0{y)+1), ((1{y)-1) ),:( ((0{y)+1), ((1{y)+1) )'
+   ]nnn22=: nnn 2 2
+1 1
+1 3
+3 1
+3 3
+   ]nnn00=: nnn 0 0
+_1 _1
+_1  1
+ 1 _1
+ 1  1
+   validateNeighbors=: 3 : '((0{y) >: 0) *. ((0{y) <: maxR) *. ((1{y) >: 0) *. ((1{y) <: maxC)'
+   validateNeighbors"1 nnn00
+0 0 0 1
+   validateNeighbors"1 nnn22
+1 1 1 1
+   ]nnn00Filtered=: (validateNeighbors"1 nnn00) # (i.(0{$nnn00)) { nnn00
+1 1
+   ]nnn22Filtered=: (validateNeighbors"1 nnn22) # (i.(0{$nnn22)) { nnn22
+1 1
+1 3
+3 1
+3 3
+   ($m) $ 1 (calcIxs"1 nnn00Filtered) } (,($m) $ 0)
+0 0 0 0
+0 1 0 0
+0 0 0 0
+0 0 0 0
+   ]nnn00Ixs=: calcIxs"1 nnn00Filtered
+5
+   ]nnn00Vals=: (calcIxs"1 nnn00Filtered) { ,m
+105
+   ]m00=:($m) $ (>: nnn00Vals) nnn00Ixs } ,m
+100 101 102 103
+104 106 106 107
+108 109 110 111
+112 113 114 115
+   m00 - m
+0 0 0 0
+0 1 0 0
+0 0 0 0
+0 0 0 0
+
+   ($m) $ 1 (calcIxs"1 nnn22Filtered) } (,($m) $ 0)
+0 0 0 0
+0 1 0 1
+0 0 0 0
+0 1 0 1
+   ]nnn22Ixs=: calcIxs"1 nnn22Filtered
+5 7 13 15
+   ]nnn22Vals=: (calcIxs"1 nnn22Filtered) { ,m
+105 107 113 115
+   ]m22=:($m) $ (>: nnn22Vals) nnn22Ixs } ,m
+100 101 102 103
+104 106 106 108
+108 109 110 111
+112 114 114 116
+   m22 - m
+0 0 0 0
+0 1 0 1
+0 0 0 0
+0 1 0 1
+
+```

@@ -23,12 +23,12 @@ in correctness of Richard Feynman's famous quote:
 *It's the way I study - to understand something by trying to work it out or, in other words, to understand something by creating it.*
 
 The sequel to this tutorial is planned as a continuation and will cover the author's J experiments in network science.
-I plan also trying usefulness of J in the context of high dimensional statistics and probability, probably with example from computational neuroscience.
-I am definitely considering to check J in the context of statistical mechanics and quantum physics too.
-I find this hacking so enjoyable that I hope this will become multi-year project for me.
+I plan also trying usefulness of J in the context of high dimensional statistics and probability, probably with examples from computational neuroscience.
+I am definitely considering to experiment with J whe delving into statistical mechanics and quantum physics too.
+I find this hacking so enjoyable that I hope this will become a multi-year project for me.
 
 Following is the list of books that I found especially useful during the first installement:
-### Linear algebra and machine learning
+### Linear algebra, optimization and machine learning
 1. Linear Algebra and Optimization for Machine Learning. A Textbook, Charu C. Aggarwal, Springer 2020
 2. Matrix Differential Calculus with Applications in Statistics and Econometrics, 3rd Edition, Jan R. Magnus, Heinz Neudecker, Wiley 2019
 3. Fundamentals of Machine Learning for Predictive Data Analytics, 2nd Edition, John D. Kelleher, Brian Mac Namee and Aoife D'Arcy, MIT Press 2020
