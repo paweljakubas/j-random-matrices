@@ -514,7 +514,9 @@ Show capability to update (decrement) the nearest neighbors in a tensor
 
 **Exercise 10**
 (a) Show capability to update (increment) the second nearest neighbors in a matrix.
-(b) Also show updating simultaneuously the nearest neighbors (incrementing) and
+(b) Also show updating simultaneuously the nearest neighbors of two points at the same time
+(both incrementing, then one incrementing second decrementing)
+(c) Also show updating simultaneuously the nearest neighbors (incrementing) and
 second nearest neighbors (decrementing)
 
 [Solution to exercise 10](#solution-to-exercise-10)
@@ -1162,5 +1164,32 @@ _1  1
 0 1 0 1
 0 0 0 0
 0 1 0 1
+
+
+   NB. (b) Also show updating simultaneuously the nearest neighbors of two points at the same time (both incrementing, then one incrementing second decrementing)
+   ]twopointsA=:($m) $ (>: nnn22Vals, >: nnn00Vals) (nnn22Ixs, nnn00Ixs) } ,m
+100 101 102 103
+104 107 106 108
+108 109 110 111
+112 114 114 116
+   twopointsA - m
+0 0 0 0
+0 2 0 1
+0 0 0 0
+0 1 0 1
+   ]twopointsB=:($m) $ (>: nnn22Vals, <: nnn00Vals) (nnn22Ixs, nnn00Ixs) } ,m
+100 101 102 103
+104 105 106 108
+108 109 110 111
+112 114 114 116
+   twopointsB - m
+0 0 0 0
+0 0 0 1
+0 0 0 0
+0 1 0 1
+
+   NB. (c) Also show updating simultaneuously the nearest neighbors (incrementing) and second nearest neighbors (decrementing)
+   NB. We are going to reuse the above case and the one from the main text.
+
 
 ```
