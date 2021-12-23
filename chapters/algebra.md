@@ -276,7 +276,7 @@ Use the tensor from Exercise 2
 and finally (e) use combination of those approaches
 
 ## Updating of matrix
-We can update a matrix with new values using a selection:
+We can update a matrix with new values and a selection:
 ```
    sel=: (<(<0 1),(<0 1))
    sel { m
@@ -288,7 +288,7 @@ We can update a matrix with new values using a selection:
 108 109 110 111
 112 113 114 115
 ```
-We need to be sure that the shape of delivered new values is compatible with what selection determines:
+We need to be sure that the shape of the delivered new values is compatible with what selection determines:
 ```
    (2 2 $ 1 2 3 4) sel } m
   1   2 102 103
@@ -335,7 +335,7 @@ pred =: 4 : '(y > x) # (i. # y)'
 ```
 For matrices, as seen above, one can go through linearized form of matrix (*,*) and
 after applying the operation retrieve the shape using (*$*)
-We can use also two predicates and apply different updates for each predicate in one go:
+We can also use two predicates and apply different updates for each predicate in one go:
 ```
    pred1 =: 4 : '((y > (0 { x)) *. (y < (1 { x))) # (i. # y)'
    (101 104 pred1 (,m)) { (,m)
@@ -420,14 +420,14 @@ update 4 points: *(x-1,y)*,*(x+1,y)*,*(x,y-1)*,*(x,y+1)*. The complication that 
 boundary of a matrix. Let's assume that in that case we want to omit the points tresspassing the boundary (in other version
 we could also contemplate including them wrapped up on the oppostite side).
 ```
-   neighbors2D=: 3 : '( ((0{y)-1), (1{y) ),( ((0{y)+1), (1{y) ),( (0{y), ((1{y)-1) ),:( (0{y), ((1{y)+1) )'
+   nn=: 3 : '( ((0{y)-1), (1{y) ),( ((0{y)+1), (1{y) ),( (0{y), ((1{y)-1) ),:( (0{y), ((1{y)+1) )'
 
-   ]nn11=: neighbors2D 1 1
+   ]nn11=: nn 1 1
 0 1
 2 1
 1 0
 1 2
-   ]nn00=: neighbors2D 0 0
+   ]nn00=: nn 0 0
 _1  0
  1  0
  0 _1
@@ -527,7 +527,7 @@ Show capability to update (increment) both diagonals passing through the point.
 [Solution to exercise 11](#solution-to-exercise-11)
 
 
-## Generate random matrix
+## Generating random matrix
 
 ## Elementary operations in matrix
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
@@ -1189,7 +1189,66 @@ _1  1
 0 1 0 1
 
    NB. (c) Also show updating simultaneuously the nearest neighbors (incrementing) and second nearest neighbors (decrementing)
-   NB. We are going to reuse the above case and the one from the main text.
+   NB. We are going to reuse the (a) case and the one from the main text, and then combine them.
+   NB. the nearest neighbors
+   ($m) $ 1 (calcIxs"1 nn22Filtered) } (,($m) $ 0)
+0 0 0 0
+0 0 1 0
+0 1 0 1
+0 0 1 0
+   ($m) $ 1 (calcIxs"1 nn00Filtered) } (,($m) $ 0)
+0 1 0 0
+1 0 0 0
+0 0 0 0
+0 0 0 0
+   ]nn22Ixs=: calcIxs"1 nn22Filtered
+6 14 9 11
+   ]nn00Ixs=: calcIxs"1 nn00Filtered
+4 1
+   ]nn22Vals=: (calcIxs"1 nn22Filtered) { ,m
+106 114 109 111
+   ]nn00Vals=: (calcIxs"1 nn00Filtered) { ,m
+104 101
 
+   NB. the second nearest neighbors
+   ($m) $ 1 (calcIxs"1 nnn00Filtered) } (,($m) $ 0)
+0 0 0 0
+0 1 0 0
+0 0 0 0
+0 0 0 0
+   ($m) $ 1 (calcIxs"1 nnn22Filtered) } (,($m) $ 0)
+0 0 0 0
+0 1 0 1
+0 0 0 0
+0 1 0 1
+   ]nnn00Ixs=: calcIxs"1 nnn00Filtered
+5
+   ]nnn22Ixs=: calcIxs"1 nnn22Filtered
+5 7 13 15
+   ]nnn00Vals=: (calcIxs"1 nnn00Filtered) { ,m
+105
+   ]nnn22Vals=: (calcIxs"1 nnn22Filtered) { ,m
+105 107 113 115
 
+   ]twoneighbors00=:($m) $ ((>: nn00Vals), (<: nnn00Vals)) (nn00Ixs, nnn00Ixs) } ,m
+100 102 102 103
+105 104 106 107
+108 109 110 111
+112 113 114 115
+   twoneighbors00 - m
+0  1 0 0
+1 _1 0 0
+0  0 0 0
+0  0 0 0
+
+   ]twoneighbors22=:($m) $ ((>: nn22Vals), (<: nnn22Vals)) (nn22Ixs, nnn22Ixs) } ,m
+100 101 102 103
+104 104 107 106
+108 110 110 112
+112 112 115 114
+   twoneighbors22 - m
+0  0 0  0
+0 _1 1 _1
+0  1 0  1
+0 _1 1 _1
 ```
