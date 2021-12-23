@@ -19,7 +19,7 @@
 Let's start with fundamental results and operations on matrices
 that are prerequisite for going further. There are topics that I dive into quite deeply,
 others I just stop investigating when accomplishing basic result. This is the reflection
-of my subjective thinking what I regard will be especially important to master in later steps.
+of my subjective thinking what I regard will be especially important to master the later steps.
 
 ## Selecting from matrix
 Generic selector can be defined by specifying both indices, row's or column's. The way the selection
@@ -39,7 +39,7 @@ ie., via enforcing 0 and 1 indices in the selector:
 100 101
 104 105
 ```
-There is a way to choose either whole columns or rows by using *a:*:
+There is a way to choose either whole columns or rows by using *a:* :
 ```
    sel=: (<(<a:),(<0 1))
    sel { m
