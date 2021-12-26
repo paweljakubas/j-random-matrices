@@ -2,6 +2,10 @@ NB. --------------------------------
 NB. -- Algebra - useful functions --
 NB. --------------------------------
 
+NB. How to load the script - an example
+NB. ] scriptdir =: 'PATH-TO-REPO/j-random-matrices/j/'
+NB. 0!:1 < scriptdir,'algebra.ijs'
+
 NB. Decompose each index in a given array into respective coordinates
 toIxs=: 3 : '(#:i.)@$y'
 NB. Examples:

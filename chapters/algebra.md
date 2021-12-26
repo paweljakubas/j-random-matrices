@@ -180,11 +180,12 @@ First let's show how to get handle on them:
 ```
 In order to get diagonal elements one can do the following:
 ```
-   unique=: 3 : '# ({./.~ y)'
-   unique (1 2 3 4 5 6)
-6
-   unique (1 1 1 1 1 1)
-1
+   nub=: 3 : '{./.~ y'
+   nub 1 2 3 4 5 6
+   nub 1 2 3 4 5 6
+1 2 3 4 5 6
+   nub 1 2 3 4 5 6 1 2 3 4
+1 2 3 4 5 6
    < "1 (toIxs m)
 ┌───┬───┬───┬───┐
 │0 0│0 1│0 2│0 3│
@@ -195,7 +196,7 @@ In order to get diagonal elements one can do the following:
 ├───┼───┼───┼───┤
 │3 0│3 1│3 2│3 3│
 └───┴───┴───┴───┘
-   diag=: 3 : '1 = unique y'
+   diag=: 3 : '1 = # nub y'
    diag "1 (toIxs m)
 1 0 0 0
 0 1 0 0
@@ -321,6 +322,27 @@ We need to be sure that the shape of the delivered new values is compatible with
   3   4 106 107
 108 109   5   6
 112 113   7   9
+```
+The question of ovelapping selection arises. The overwriting is deterministic in a sense that
+the selection on the right overwrites the values of the left selection:
+```
+   sel=: ((<(<0 1),(<0 1)),(<(<1 2),(<1 2)))
+   sel { m
+100 101
+104 105
+
+105 106
+109 110
+   ((1 2 2 $ 0 0 0 0), (1 2 2 $ 1 1 1 1)) sel } m
+  0   0 102 103
+  0   1   1 107
+108   1   1 111
+112 113 114 115
+   ((1 2 2 $ 1 1 1 1), (1 2 2 $ 0 0 0 0)) sel } m
+  1   1 102 103
+  1   0   0 107
+108   0   0 111
+112 113 114 115
 ```
 There is also a way to update with predicate function:
 ```
@@ -526,6 +548,13 @@ Show capability to update (increment) both diagonals passing through the point.
 
 [Solution to exercise 11](#solution-to-exercise-11)
 
+**Summary**: As in the case of selecting the updating of a matrix can be realized in a number of ways:
+(a) via J selections which requires rectangular updating values mimicking the shape of the selection,
+(b) negated selections but then we need to work with linearized indices,
+(c) functions acting on both values or indices to filtering out indices to be updated
+(d) on top of indices to be updated we can provide new values independent or dependent
+on the current values
+(e) finally we can extend updating spacially, ie. beyond pointwise updating, and come up with neighborhood updating
 
 ## Generating random matrix
 

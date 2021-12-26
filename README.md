@@ -24,7 +24,7 @@ in correctness of Richard Feynman's famous quote:
 
 The sequel to this tutorial is planned as a continuation and will cover the author's J experiments in network science.
 I plan also trying usefulness of J in the context of high dimensional statistics and probability, probably with examples from computational neuroscience.
-I am definitely considering to experiment with J whe delving into statistical mechanics and quantum physics too.
+I am definitely considering to experiment with J when delving into statistical mechanics and quantum physics too.
 I find this hacking so enjoyable that I hope this will become a multi-year project for me.
 
 Following is the list of books that I found especially useful during the first installement:
