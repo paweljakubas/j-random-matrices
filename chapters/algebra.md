@@ -544,7 +544,7 @@ second nearest neighbors (decrementing)
 [Solution to exercise 10](#solution-to-exercise-10)
 
 **Exercise 11**
-Show capability to update (increment) both diagonals passing through the point.
+Show capability to update (make 0) both diagonals passing through the point.
 
 [Solution to exercise 11](#solution-to-exercise-11)
 
@@ -1280,4 +1280,38 @@ _1  1
 0 _1 1 _1
 0  1 0  1
 0 _1 1 _1
+```
+
+### Solution to exercise 11
+```
+   NB. x is point where diagonals cross, y is matrix where diagonal generation acts
+   diags=: 4 : '( ((0{y) + (1{x)) = ((1{y) + (0{x)) ) +. ( ((0{x)+(1{x)) = ((0{y) + (1{y)) )'
+   2 3 diags"1(toIxs m)
+0 1 0 0
+0 0 1 0
+0 0 0 1
+0 0 1 0
+   1 1 diags"1(toIxs m)
+1 0 1 0
+0 1 0 0
+1 0 1 0
+0 0 0 1
+   0 0 diags"1(toIxs m)
+1 0 0 0
+0 1 0 0
+0 0 1 0
+0 0 0 1
+   1 2 diags"1(toIxs m)
+0 1 0 1
+0 0 1 0
+0 1 0 1
+1 0 0 0
+
+   ]ixsToZero=: (,(1 2 diags"1 (toIxs m))) # (i.#,m)
+1 3 6 9 11 12
+   ($m) $ 0 ixsToZero } ,m
+100   0 102   0
+104 105   0 107
+108   0 110   0
+  0 113 114 115
 ```
