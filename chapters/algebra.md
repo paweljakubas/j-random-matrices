@@ -646,6 +646,9 @@ In both approached 100 has 3-times bigger frequency than the rest elements of th
 
 [Solution to exercise 12](#solution-to-exercise-12)
 
+The exercise 12 is of great importance as it elucidates one of the powerful strategies that we will use later to show that our assumptions are valid.
+Basically the strategy bogs down to repeating million or so times the toss, utilizing the randomness of number generation, proper counting of the resultant
+observations and comparing them. It is great asset of J that such massive experiments are up for grabs for us.
 
 
 ## Elementary operations in matrix
@@ -1404,4 +1407,36 @@ _1  1
 104 105   0 107
 108   0 110   0
   0 113 114 115
+```
+
+### Solution to exercise 12
+```
+   domain=: 1 10 100 100 100 1000
+   runs=: (10000000 ?@$ #domain) { domain
+   discreteHist runs
+┌────┬────────┐
+│elem│freq    │
+├────┼────────┤
+│   1│0.166741│
+│  10│0.166661│
+│ 100│0.499965│
+│1000│0.166633│
+└────┴────────┘
+
+   cumulativeWeights=: +/\ % +/
+   rnd=: ?@#&0
+   rndWeighted=: cumulativeWeights@[ I. rnd@]
+   domain=: 1 10 100 1000
+   runs=: (1 1 3 1 rndWeighted 10000000) { domain
+   discreteHist runs
+┌────┬────────┐
+│elem│freq    │
+├────┼────────┤
+│   1│ 0.16648│
+│  10│0.166672│
+│ 100│0.500081│
+│1000│0.166768│
+└────┴────────┘
+
+  NB. discreteHist is function defined in j/algebra.ijs
 ```

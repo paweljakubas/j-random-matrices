@@ -66,7 +66,58 @@ NB. 2 1 0
 NB. 2 1 1
 
 
-NB. Unique
+NB. Unique elements of vector
 nub=: 3 : '{./.~ y'
 NB.    nub 1 2 3 1 4 5 5
 NB. 1 2 3 4 5
+
+NB. Sort rows of matrix `y` by ascending column `x`
+sortRowsByColumnAsc=: ]/:{"1
+NB.    a=: 2 1 3 ,. 15 6 7
+NB.    a
+NB. 2 15
+NB. 1  6
+NB. 3  7
+NB.    0 sortRowsByColumnAsc a
+NB. 1  6
+NB. 2 15
+NB. 3  7
+NB.    1  a
+NB. 1  6
+NB. 3  7
+NB. 2 15
+NB.
+
+NB. Sort rows of matrix `y` by descending column `x`
+sortRowsByColumnDesc=: ]\:{"1
+NB.    a=: 2 1 3 ,. 15 6 7
+NB.    a
+NB. 2 15
+NB. 1  6
+NB. 3  7
+NB.    0 sortRowsByColumnDesc a
+NB. 3  7
+NB. 2 15
+NB. 1  6
+NB.    1 sortRowsByColumnDesc a
+NB. 2 15
+NB. 3  7
+NB. 1  6
+
+NB. Prepare frequency report of vector 'y' ordered in ascending order by elements
+discreteHist=: 3 : 0
+  freq=. #/.~ y
+  freqRel=.(] % +/) freq
+  elems=. nub y
+  t=. 0 d4 (elems ,. freqRel)
+  2 2 $ 'elem' ; 'freq' ; (,.((<(<a:),(<0)) { t)) ; (,.((<(<a:),(<1)) { t))
+)
+NB.    discreteHist 1 1 2 3 4
+NB. ┌────┬────┐
+NB. │elem│freq│
+NB. ├────┼────┤
+NB. │1   │0.4 │
+NB. │2   │0.2 │
+NB. │3   │0.2 │
+NB. │4   │0.2 │
+NB. └────┴────┘
