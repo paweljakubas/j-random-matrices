@@ -3,7 +3,7 @@
 ## Contents
 1. [Selecting from a matrix](#selecting-from-matrix)
 2. [Updating a matrix](#updating-of-matrix)
-3. [Generate a random matrix](#generate-random-matrix)
+3. [Generate a random matrix](#generating-random-matrix)
 4. [Elementary operations of a matrix](#elementary-operations-in-matrix)
 5. [Transpose of a matrix](#transpose-of-matrix) - TODO
 6. [Inverse of a matrix](#inverse-of-matrix) - TODO
@@ -577,7 +577,7 @@ When we want to pick N natural numbers from 0 up to M-1, then it can be achieved
 ```
 In the first three examples we picked 6 numbers from the set {0,1,2,3,4,5}, the next two 10 numbers from the same set.
 In the last example, we picked 6 numbers from the set {1,2,3,4,5,6}.
-But what if we want to choose the set in completely arbitrary way? Then we can exploit selecting we already mastered:
+But what if we want to choose the set in completely arbitrary way? Well, we can exploit selecting capability we have already mastered:
 ```
    domain=: _1 1
    ( 10 ?@$ #domain) { domain
@@ -592,7 +592,7 @@ _1 1 1 1 1 _1 1 1 _1 _1
 1 1000 1 100 100 1 1 1000 1000 100
 ```
 
-These were *random sampling with replacement*. If we want to pick *without replacement* we can use `?` with
+These were *random sampling with replacement*. If we want to pick a sequence of elements from a given domain *without replacement* we can use `?` with
 the remark that the number of picked numbers cannot exceed the cardinality of the domain:
 ```
    domain=: 1 10 100 1000
@@ -609,6 +609,43 @@ the remark that the number of picked numbers cannot exceed the cardinality of th
 |   (5    ?#domain){domain
 
 ```
+
+Now what if we want to set relative weights to the elements of domain? On the one hand we can replicate accordingly elements in the domain.
+So if we want to have 100 picked 3 times more frequently than any other number in the domain we could set domain the following:
+```
+   domain=: 1 10 100 100 100 1000
+```
+
+The following reference [https://code.jsoftware.com/wiki/Fifty_Shades_of_J/Chapter_28] suggests:
+```
+   cumulativeWeights=: +/\ % +/
+   cumulativeWeights 1 1 3 1
+0.166667 0.333333 0.833333 1
+   rnd=: ?@#&0
+   rnd 5
+0.797844 0.357451 0.817211 0.397167 0.160679
+   rndWeighted=: cumulativeWeights@[ I. rnd@]
+   1 1 3 1 rndWeighted 10
+2 2 2 3 1 2 3 2 3 1
+```
+`rnd` picks random number from (0,1) interval, the the last line picked 10 random numbers from set {0,1,2,3} where
+3 has relative weight 3 with respect to other elements of the domain that has all relative weight equal 1.
+
+Now, let's see how we can use arbitrary domain using both approaches.
+```
+   domain=: 1 10 100 1000
+   (1 1 3 1 rndWeighted 10) { domain
+1000 1 100 100 1000 100 10 1 100 10
+   domain=: 1 10 100 100 100 1000
+   ( 10 ?@$ #domain) { domain
+1000 1000 100 1000 100 100 1000 100 100 100
+```
+**Exercise 12**
+Show that the both above-mentioned approaches give approximately the same result when the number of picks is substantial.
+In both approached 100 has 3-times bigger frequency than the rest elements of the domain.
+
+[Solution to exercise 12](#solution-to-exercise-12)
+
 
 
 ## Elementary operations in matrix
