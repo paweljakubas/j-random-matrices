@@ -1,4 +1,4 @@
-# Linear algebra, probability, statistics and random matrices - J approach
+# Linear algebra, probability, statistical inference and random matrices - J approach
 
 by Pawel Jakubas, PhD
 
@@ -23,9 +23,12 @@ in correctness of Richard Feynman's famous quote:
 *It's the way I study - to understand something by trying to work it out or, in other words, to understand something by creating it.*
 
 The sequel to this tutorial is planned as a continuation and will cover the author's J experiments in network science.
-I plan also trying usefulness of J in the context of high dimensional statistics and probability, probably with examples from computational neuroscience.
+I plan also trying usefulness of J in the context of high dimensional statistics, probability and causal inference,
+probably with examples from computational neuroscience.
 I am definitely considering to experiment with J when delving into statistical mechanics and quantum physics too.
 I find this hacking so enjoyable that I hope this will become a multi-year project for me.
+I bet that investing in J will prove very fuitful as I will not only get extremely powerful calculator at my disposal,
+but also quantitative toolbox massively outperfoming popular approaches.
 
 Following is the list of books that I found especially useful during the first installement:
 ### Linear algebra, optimization and machine learning

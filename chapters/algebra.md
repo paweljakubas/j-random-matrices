@@ -3,7 +3,7 @@
 ## Contents
 1. [Selecting from a matrix](#selecting-from-matrix)
 2. [Updating a matrix](#updating-of-matrix)
-3. [Generate a random matrix](#generate-random-matrix) - TODO
+3. [Generate a random matrix](#generate-random-matrix)
 4. [Elementary operations of a matrix](#elementary-operations-in-matrix)
 5. [Transpose of a matrix](#transpose-of-matrix) - TODO
 6. [Inverse of a matrix](#inverse-of-matrix) - TODO
@@ -557,6 +557,59 @@ on the current values
 (e) finally we can extend updating spacially, ie. beyond pointwise updating, and come up with neighborhood updating
 
 ## Generating random matrix
+Let's start to revisit what are basic functionalities in J when it comes to vector random generation.
+When we want to pick N natural numbers from 0 up to M-1, then it can be achieved via `?N#M`:
+```
+   ?6#6
+1 3 3 2 0 2
+   ?6#6
+5 2 1 5 2 0
+   ?6#6
+2 5 5 0 1 5
+   ?10#6
+2 3 3 1 1 5 4 3 4 4
+   ?10#6
+0 0 3 1 1 1 2 3 5 2
+   1+?6#6
+3 6 6 3 1 4
+   1+?6#6
+3 5 3 6 1 3
+```
+In the first three examples we picked 6 numbers from the set {0,1,2,3,4,5}, the next two 10 numbers from the same set.
+In the last example, we picked 6 numbers from the set {1,2,3,4,5,6}.
+But what if we want to choose the set in completely arbitrary way? Then we can exploit selecting we already mastered:
+```
+   domain=: _1 1
+   ( 10 ?@$ #domain) { domain
+_1 1 1 1 1 _1 1 1 _1 _1
+   ( 10 ?@$ #domain) { domain
+1 1 1 _1 _1 _1 1 _1 _1 1
+
+   domain=: 1 10 100 1000
+   ( 10 ?@$ #domain) { domain
+100 100 10 1 10 1000 100 10 100 10
+   ( 10 ?@$ #domain) { domain
+1 1000 1 100 100 1 1 1000 1000 100
+```
+
+These were *random sampling with replacement*. If we want to pick *without replacement* we can use `?` with
+the remark that the number of picked numbers cannot exceed the cardinality of the domain:
+```
+   domain=: 1 10 100 1000
+   ( 1 ? #domain) { domain
+100
+   ( 2 ? #domain) { domain
+1000 1
+   ( 3 ? #domain) { domain
+10 1000 100
+   ( 4 ? #domain) { domain
+100 10 1 1000
+   ( 5 ? #domain) { domain
+|domain error
+|   (5    ?#domain){domain
+
+```
+
 
 ## Elementary operations in matrix
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
