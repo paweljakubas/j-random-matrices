@@ -109,7 +109,7 @@ discreteHist=: 3 : 0
   freq=. #/.~ y
   freqRel=.(] % +/) freq
   elems=. nub y
-  t=. 0 d4 (elems ,. freqRel)
+  t=. 0 sortRowsByColumnAsc (elems ,. freqRel)
   2 2 $ 'elem' ; 'freq' ; (,.((<(<a:),(<0)) { t)) ; (,.((<(<a:),(<1)) { t))
 )
 NB.    discreteHist 1 1 2 3 4
@@ -121,3 +121,17 @@ NB. │2   │0.2 │
 NB. │3   │0.2 │
 NB. │4   │0.2 │
 NB. └────┴────┘
+
+NB. mean of a vector
+mean=: +/ % #
+NB.    mean 1 1 1 1
+NB. 1
+NB.    mean 1 1 1 2 3
+NB. 1.6
+
+NB. variance of a sample
+var=: (+/@(*:@(] - +/ % #)) % #)"1
+NB.    var 1 1 1 1
+NB. 0
+NB.    var 1 2 1 2
+NB. 0.25
