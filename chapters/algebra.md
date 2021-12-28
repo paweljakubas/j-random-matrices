@@ -4,13 +4,14 @@
 1. [Selecting from a matrix](#selecting-from-matrix)
 2. [Updating a matrix](#updating-of-matrix)
 3. [Generate a random matrix](#generating-random-matrix)
-4. [Elementary operations of a matrix](#elementary-operations-in-matrix)
-5. [Transpose of a matrix](#transpose-of-matrix) - TODO
-6. [Inverse of a matrix](#inverse-of-matrix) - TODO
-7. [Determinant of a matrix](#determinant-of-matrix) - TODO
-8. [Trace of a matrix](#trace-of-matrix) - TODO
-9. [A partitioned matrix](#partitioned-matrix) - TODO
-10. [A matrix decompositions](#matrix-decompositions) - TODO
+4. [Testing a matrix property](#testing-matrix-property) - TODO
+5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
+6. [Transpose of a matrix](#transpose-of-matrix) - TODO
+7. [Inverse of a matrix](#inverse-of-matrix) - TODO
+8. [Determinant of a matrix](#determinant-of-matrix) - TODO
+9. [Trace of a matrix](#trace-of-matrix) - TODO
+10. [A partitioned matrix](#partitioned-matrix) - TODO
+11. [A matrix decompositions](#matrix-decompositions) - TODO
 
 
 [Solutions to exercices](#linear-algebra-solutions-to-exercises)
@@ -647,8 +648,8 @@ approximately 50% time, the rest three elements should be equally frequent.
 
 [Solution to exercise 12](#solution-to-exercise-12)
 
-The exercise 12 is of great importance as it elucidates one of the powerful strategies that we will use later to show that our assumptions are valid
-or confirm the mathematical relations. Basically the strategy bogs down to repeating million or so times the toss, utilizing the randomness of number generation,
+The exercise 12 is of great importance as it elucidates one of the possible powerful strategies that we will use later to show that our assumptions are valid
+or to confirm experimentally the mathematical relations. Basically the strategy bogs down to repeating million or so times the toss, utilizing the randomness of number generation,
 proper counting of the resultant observations, correct aggregation of them and drawing the proper conclusion.
 It is great asset of J that such massive experiments are up for grabs for us. Moreover, we will encounter numerous situations that the simulation act not just as
 a proxy for lemma or theorem or just some finding, which is very reassuring, but sometimes is the only quick way to get to the result as analytical solution
@@ -684,6 +685,96 @@ Moreover, random numbers 0 and 1 in binomial distribution can be obtained via `b
    NB. probability of success=0.2, number of trials 10
    binomialrand 0.2 10
 0 0 0 0 1 0 0 0 0 0
+```
+
+Let's now investigate two continuous distributions: normal and uniform. A normal distribution example is below:
+```
+   NB. rnorm is defined in j/algebra.ijs and takes as x mean and variance, and number of samples as y
+   0 1 rnorm 10
+_0.22246 0.565404 _0.81757 _1.44307 1.37019 1.32798 _0.325787 0.85836 _0.586362 0.751552
+
+   10 2 rnorm 10
+7.79113 7.16799 12.1581 8.78351 10.3067 9.38921 11.7871 11.0787 8.18868 10.8973
+```
+We can now see using intervalHist from j/algebra.ijs how the generated samples are distributed:
+```
+   ]bins=: 0.2*i:15
+_3 _2.8 _2.6 _2.4 _2.2 _2 _1.8 _1.6 _1.4 _1.2 _1 _0.8 _0.6 _0.4 _0.2 0 0.2 0.4 0.6 0.8 1 1.2 1.4 1.6 1.8 2 2.2 2.4 2.6 2.8 3
+   bins intervalHist (0 1 rnorm 100)
+┌────────┬─────┬──────────────┐
+│interval│count│relative count│
+├────────┼─────┼──────────────┤
+│  _3    │ 0   │        0     │
+│_2.8    │ 0   │        0     │
+│_2.6    │ 0   │        0     │
+│_2.4    │ 1   │ 0.010101     │
+│_2.2    │ 2   │ 0.020202     │
+│  _2    │ 0   │        0     │
+│_1.8    │ 0   │        0     │
+│_1.6    │ 1   │ 0.010101     │
+│_1.4    │ 1   │ 0.010101     │
+│_1.2    │ 5   │0.0505051     │
+│  _1    │ 4   │ 0.040404     │
+│_0.8    │ 6   │0.0606061     │
+│_0.6    │ 3   │ 0.030303     │
+│_0.4    │ 5   │0.0505051     │
+│_0.2    │ 5   │0.0505051     │
+│   0    │ 4   │ 0.040404     │
+│ 0.2    │ 7   │0.0707071     │
+│ 0.4    │12   │ 0.121212     │
+│ 0.6    │13   │ 0.131313     │
+│ 0.8    │ 7   │0.0707071     │
+│   1    │10   │  0.10101     │
+│ 1.2    │ 4   │ 0.040404     │
+│ 1.4    │ 6   │0.0606061     │
+│ 1.6    │ 1   │ 0.010101     │
+│ 1.8    │ 1   │ 0.010101     │
+│   2    │ 0   │        0     │
+│ 2.2    │ 0   │        0     │
+│ 2.4    │ 0   │        0     │
+│ 2.6    │ 0   │        0     │
+│ 2.8    │ 0   │        0     │
+│   3    │ 1   │ 0.010101     │
+│        │ 0   │        0     │
+└────────┴─────┴──────────────┘
+
+   bins intervalHist (0 1 rnorm 1e6)
+┌────────┬─────┬──────────────┐
+│interval│count│relative count│
+├────────┼─────┼──────────────┤
+│  _3    │ 1276│  0.001276    │
+│_2.8    │ 1164│  0.001164    │
+│_2.6    │ 2082│  0.002082    │
+│_2.4    │ 3465│  0.003465    │
+│_2.2    │ 5775│0.00577501    │
+│  _2    │ 8761│0.00876101    │
+│_1.8    │13137│  0.013137    │
+│_1.6    │18911│  0.018911    │
+│_1.4    │26121│  0.026121    │
+│_1.2    │34355│  0.034355    │
+│  _1    │44027│  0.044027    │
+│_0.8    │52902│ 0.0529021    │
+│_0.6    │62343│ 0.0623431    │
+│_0.4    │70179│ 0.0701791    │
+│_0.2    │76369│ 0.0763691    │
+│   0    │79153│ 0.0791531    │
+│ 0.2    │78978│ 0.0789781    │
+│ 0.4    │76054│ 0.0760541    │
+│ 0.6    │70375│ 0.0703751    │
+│ 0.8    │62546│ 0.0625461    │
+│   1    │53607│ 0.0536071    │
+│ 1.2    │43289│  0.043289    │
+│ 1.4    │34447│  0.034447    │
+│ 1.6    │25907│  0.025907    │
+│ 1.8    │19034│  0.019034    │
+│   2    │12959│  0.012959    │
+│ 2.2    │ 8945│0.00894501    │
+│ 2.4    │ 5628│0.00562801    │
+│ 2.6    │ 3557│  0.003557    │
+│ 2.8    │ 2131│  0.002131    │
+│   3    │ 1190│   0.00119    │
+│        │ 1332│  0.001332    │
+└────────┴─────┴──────────────┘
 ```
 
 In-depth coverage of both discrete and continuous distribution families will be included in statistics inference chapter.
