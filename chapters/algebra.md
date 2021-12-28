@@ -628,8 +628,8 @@ The following reference [https://code.jsoftware.com/wiki/Fifty_Shades_of_J/Chapt
    1 1 3 1 rndWeighted 10
 2 2 2 3 1 2 3 2 3 1
 ```
-`rnd` picks random number from (0,1) interval, the the last line picked 10 random numbers from set {0,1,2,3} where
-3 has relative weight 3 with respect to other elements of the domain that has all relative weight equal 1.
+`rnd` picks random number from (0,1) interval, the last line picks 10 random numbers from a set {0,1,2,3} where
+element 3 has relative weight 3 with respect to other elements of the domain that all have relative weight equal to 1.
 
 Now, let's see how we can use arbitrary domain using both approaches.
 ```
@@ -642,13 +642,43 @@ Now, let's see how we can use arbitrary domain using both approaches.
 ```
 **Exercise 12**
 Show that the both above-mentioned approaches give approximately the same result when the number of picks is substantial.
-In both approached 100 has 3-times bigger frequency than the rest elements of the domain.
+In the both approaches element 100 has 3 times bigger frequency than the rest elements of the domain, ie., element 100 should occur
+approximately 50% time, the rest three elements should be equally frequent.
 
 [Solution to exercise 12](#solution-to-exercise-12)
 
-The exercise 12 is of great importance as it elucidates one of the powerful strategies that we will use later to show that our assumptions are valid.
-Basically the strategy bogs down to repeating million or so times the toss, utilizing the randomness of number generation, proper counting of the resultant
-observations and comparing them. It is great asset of J that such massive experiments are up for grabs for us.
+The exercise 12 is of great importance as it elucidates one of the powerful strategies that we will use later to show that our assumptions are valid
+or confirm the mathematical relations. Basically the strategy bogs down to repeating million or so times the toss, utilizing the randomness of number generation,
+proper counting of the resultant observations, correct aggregation of them and drawing the proper conclusion.
+It is great asset of J that such massive experiments are up for grabs for us. Moreover, we will encounter numerous situations that the simulation act not just as
+a proxy for lemma or theorem or just some finding, which is very reassuring, but sometimes is the only quick way to get to the result as analytical solution
+is very nontrivial or only intricate approximation can be provided.
+
+Now we are empowered to replicate binomial distribution. We need to set binary domain and weights being probabilities,
+ie. two positive numbers that add up to 1. Traditionally, domain reflects Bernoulli trial which is experiment with two outcomes
+possible, 1 representing success with probability p, 0 representing failure with probability (1-p) [5, page 89-91].
+We can generalize domain though.
+```
+   cumulativeWeights=: +/\ % +/
+   rnd=: ?@#&0
+   rndWeighted=: cumulativeWeights@[ I. rnd@]
+   domain=: 0 1
+   (0.3 0.7 rndWeighted 10) { domain
+1 1 1 0 1 1 0 1 0 1
+   domain=: _1 1
+   (0.15 0.85 rndWeighted 10) { domain
+1 1 1 _1 1 1 1 1 1 1
+```
+**Exercise 13**
+Explore two generalized binomial distributions:
+(a) (1,p) and (0,1-p) where p is (0,1),
+(b) (1, p) and (22, 1-p) where p is (0,1).
+Calculate experimental mean and variance of Bernoulli random variables and compare to the theoretical results.
+
+In depth coverage of discrete distribution families will be included in statistics inference chapter.
+
+[Solution to exercise 12](#solution-to-exercise-12)
+
 
 
 ## Elementary operations in matrix
