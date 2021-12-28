@@ -190,3 +190,16 @@ rnorm=: 4 : 0
   rno=. 3 : '(%:2 rne y)*2 o.(rnd y)*o.2'
   (rno y) #.every <|.x
 )
+NB. 10 samples of N(0,1)
+NB.      0 1 rnorm 10
+NB. 0.583949 0.151037 1.44553 1.18409 _0.53704 1.49066 0.649399 0.569303 0.855299 0.738213
+
+NB. Generation of y samples of uniform distribution having bounds 'from to'=:x
+runiform=: 4 : 0
+  rnd=. ?@#&0
+  relist=. (-/ , {:)@|.
+  > (rnd y) #.each <relist x
+)
+NB. 10 samples of U(0,1)
+NB.      0 1 runiform 10
+0.183411 0.0968962 0.587723 0.165308 0.68218 0.0916652 0.00554653 0.149567 0.340257 0.370271

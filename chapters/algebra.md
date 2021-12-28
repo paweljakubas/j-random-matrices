@@ -4,7 +4,7 @@
 1. [Selecting from a matrix](#selecting-from-matrix)
 2. [Updating a matrix](#updating-of-matrix)
 3. [Generate a random matrix](#generating-random-matrix)
-4. [Testing a matrix property](#testing-matrix-property) - TODO
+4. [Testing a matrix properties](#testing-matrix-properties) - TODO
 5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
 6. [Transpose of a matrix](#transpose-of-matrix) - TODO
 7. [Inverse of a matrix](#inverse-of-matrix) - TODO
@@ -687,7 +687,7 @@ Moreover, random numbers 0 and 1 in binomial distribution can be obtained via `b
 0 0 0 0 1 0 0 0 0 0
 ```
 
-Let's now investigate two continuous distributions: normal and uniform. A normal distribution example is below:
+Let's now investigate two continuous distributions: normal and uniform. A **normal distribution** example is below:
 ```
    NB. rnorm is defined in j/algebra.ijs and takes as x mean and variance, and number of samples as y
    0 1 rnorm 10
@@ -777,8 +777,62 @@ _3 _2.8 _2.6 _2.4 _2.2 _2 _1.8 _1.6 _1.4 _1.2 _1 _0.8 _0.6 _0.4 _0.2 0 0.2 0.4 0
 └────────┴─────┴──────────────┘
 ```
 
-In-depth coverage of both discrete and continuous distribution families will be included in statistics inference chapter.
+Finally, we can look at uniform sample generation (`runiform` is in j/algebra.ijs ):
+```
+   NB. 10 samples of U(0,1)
+   0 1 runiform 10
+0.183411 0.0968962 0.587723 0.165308 0.68218 0.0916652 0.00554653 0.149567 0.340257 0.370271
 
+   ]bins=.(0.2&*) <: i.8
+_0.2 0 0.2 0.4 0.6 0.8 1 1.2
+   bins intervalHist (0 1 runiform 100)
+┌────────┬─────┬──────────────┐
+│interval│count│relative count│
+├────────┼─────┼──────────────┤
+│_0.2    │ 0   │   0          │
+│   0    │ 0   │   0          │
+│ 0.2    │21   │0.21          │
+│ 0.4    │21   │0.21          │
+│ 0.6    │14   │0.14          │
+│ 0.8    │21   │0.21          │
+│   1    │23   │0.23          │
+│ 1.2    │ 0   │   0          │
+└────────┴─────┴──────────────┘
+   bins intervalHist (0 1 runiform 1e6)
+┌────────┬──────┬──────────────┐
+│interval│count │relative count│
+├────────┼──────┼──────────────┤
+│_0.2    │     0│       0      │
+│   0    │     0│       0      │
+│ 0.2    │200197│0.200197      │
+│ 0.4    │200250│ 0.20025      │
+│ 0.6    │199500│  0.1995      │
+│ 0.8    │200180│ 0.20018      │
+│   1    │199873│0.199873      │
+│ 1.2    │     0│       0      │
+└────────┴──────┴──────────────┘
+```
+
+**Exercise 14**
+Generate random upper triangular matrix where elements are N(2,3).
+
+[Solution to exercise 14](#solution-to-exercise-14)
+
+**Exercise 15**
+Generate random diagonal matrix where elements are U(20,30).
+
+[Solution to exercise 15](#solution-to-exercise-15)
+
+**Exercise 16**
+Generate matrix where consecutive columns consist of random and evenly probable pairs: (1,2), (3,4), (5,6),...
+
+[Solution to exercise 16](#solution-to-exercise-16)
+
+In-depth coverage of many both discrete and continuous distribution families will be included in statistics inference chapter.
+
+TODO info about rng and seeds TODO
+
+## Testing matrix properties
 
 ## Elementary operations in matrix
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
