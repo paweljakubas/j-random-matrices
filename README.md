@@ -23,7 +23,7 @@ in correctness of Richard Feynman's famous quote:
 *It's the way I study - to understand something by trying to work it out or, in other words, to understand something by creating it.*
 
 The sequel to this tutorial is planned as a continuation and will cover the author's J experiments in network science.
-I plan also trying usefulness of J in the context of high dimensional statistics, probability and causal inference,
+I plan also trying usefulness of J in the context of high dimensional statistics/probability and causal inference,
 probably with examples from computational neuroscience.
 I am definitely considering to experiment with J when delving into statistical mechanics and quantum physics too.
 I find this hacking so enjoyable that I hope this will become a multi-year project for me.
