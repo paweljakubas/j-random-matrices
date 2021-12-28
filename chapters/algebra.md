@@ -592,7 +592,7 @@ _1 1 1 1 1 _1 1 1 _1 _1
 1 1000 1 100 100 1 1 1000 1000 100
 ```
 
-These were *random sampling with replacement*. If we want to pick a sequence of elements from a given domain *without replacement* we can use `?` with
+These were **random sampling with replacement**. If we want to pick a sequence of elements from a given domain **without replacement** we can use `?` with
 the remark that the number of picked numbers cannot exceed the cardinality of the domain:
 ```
    domain=: 1 10 100 1000
@@ -654,8 +654,8 @@ It is great asset of J that such massive experiments are up for grabs for us. Mo
 a proxy for lemma or theorem or just some finding, which is very reassuring, but sometimes is the only quick way to get to the result as analytical solution
 is very nontrivial or only intricate approximation can be provided.
 
-Now we are empowered to replicate binomial distribution. We need to set binary domain and weights being probabilities,
-ie. two positive numbers that add up to 1. Traditionally, domain reflects Bernoulli trial which is experiment with two outcomes
+Now we are empowered to replicate **binomial distribution**. We need to set binary domain and weights being probabilities,
+ie. two positive numbers that add up to 1. Traditionally, domain reflects **Bernoulli trial** which is experiment with two outcomes
 possible, 1 representing success with probability p, 0 representing failure with probability (1-p) [5, page 89-91].
 We can generalize domain though.
 ```
@@ -673,12 +673,20 @@ We can generalize domain though.
 Explore two generalized binomial distributions:
 (a) (1,p) and (0,1-p) where p is (0,1),
 (b) (1, p) and (22, 1-p) where p is (0,1).
+Demonstrate that if the number of tials is big enough the weights (ie. probabilities) are replicated.
 Calculate experimental mean and variance of Bernoulli random variables and compare to the theoretical results.
 
-In depth coverage of discrete distribution families will be included in statistics inference chapter.
+[Solution to exercise 13](#solution-to-exercise-13)
 
-[Solution to exercise 12](#solution-to-exercise-12)
+Moreover, random numbers 0 and 1 in binomial distribution can be obtained via `binomialrand` - see [https://code.jsoftware.com/wiki/Addons/stats/base/random]
+```
+   load 'stats/base/random'
+   NB. probability of success=0.2, number of trials 10
+   binomialrand 0.2 10
+0 0 0 0 1 0 0 0 0 0
+```
 
+In-depth coverage of both discrete and continuous distribution families will be included in statistics inference chapter.
 
 
 ## Elementary operations in matrix
@@ -1469,4 +1477,52 @@ _1  1
 └────┴────────┘
 
   NB. discreteHist is function defined in j/algebra.ijs
+```
+
+### Solution to exercise 13
+```
+   domain=: 0 1
+   discreteHist ((0.15 0.85 rndWeighted 1e6) { domain)
+┌────┬────────┐
+│elem│freq    │
+├────┼────────┤
+│0   │0.149227│
+│1   │0.850773│
+└────┴────────┘
+
+   domain=: 1 22
+   discreteHist ((0.35 0.65 rndWeighted 1e6) { domain)
+┌────┬────────┐
+│elem│freq    │
+├────┼────────┤
+│ 1  │0.349786│
+│22  │0.650214│
+└────┴────────┘
+
+   NB. mean of Bernoulli trial for {(val1, p),(val2,p)} is (val1*p + val2(1-p))
+   NB. When {(1,p),(0,1-p)} then mean is p
+   NB. mean is defined in j/algebra.ijs
+
+   domain=: 0 1
+   mean ((0.15 0.85 rndWeighted 1e6) { domain)
+0.850207
+
+   domain=: 1 22
+   mean ((0.35 0.65 rndWeighted 1e6) { domain)
+14.6405
+   (0.35*1) + (0.65*22)
+14.65
+
+   NB. variance of Bernoulli trial for {(1, p),(0,p)} is p(1-p)
+   NB. var is defined in j/algebra.ijs
+
+   domain=: 0 1
+   var ((0.15 0.85 rndWeighted 1e6) { domain)
+0.127708
+   0.15*(1-0.15)
+0.1275
+
+   domain=: 1 22
+   var ((0.35 0.65 rndWeighted 1e6) { domain)
+100.414
 ```
