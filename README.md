@@ -35,16 +35,17 @@ Following is the list of books that I found especially useful during the first i
 1. Linear Algebra and Optimization for Machine Learning. A Textbook, Charu C. Aggarwal, Springer 2020
 2. Matrix Differential Calculus with Applications in Statistics and Econometrics, 3rd Edition, Jan R. Magnus, Heinz Neudecker, Wiley 2019
 3. Fundamentals of Machine Learning for Predictive Data Analytics, 2nd Edition, John D. Kelleher, Brian Mac Namee and Aoife D'Arcy, MIT Press 2020
+4. Scalar, Vector, and Matrix Mathematics: Theory, Facts, and Formulas - Revised and Expanded Edition, Dennis S. Bernstein , Princeton University Press 2018
 ### Probability
-4. Introduction to Probability Models, 12th Edition, Sheldon Ross, Elsevier 2019
+5. Introduction to Probability Models, 12th Edition, Sheldon Ross, Elsevier 2019
 ### Statistics
-5. Statistical inference, 2nd Edition, George Cassela, Roger L. Berger, Cengage Learning 2001
+6. Statistical inference, 2nd Edition, George Cassela, Roger L. Berger, Cengage Learning 2001
 ### Random matrices
-6. A First Course in Random Matrix Theory for Physicists, Engineers and Data Scientists, Marc Potters, Jean-Philippe Bouchaud, Cambridge University Press 2021
+7. A First Course in Random Matrix Theory for Physicists, Engineers and Data Scientists, Marc Potters, Jean-Philippe Bouchaud, Cambridge University Press 2021
 ### J language
-7. Learning J. An Introduction to the J Programming Language, Roger Stokes, [https://www.jsoftware.com/help/learning/contents.htm#toc]
-8. Fractals, Visualization & J, 4th ed. (2 Parts), Clifford A. Reiter 2016
-9. Fifty Shades of J, Norman Thomson, [https://code.jsoftware.com/wiki/Fifty_Shades_of_J]
+8. Learning J. An Introduction to the J Programming Language, Roger Stokes, [https://www.jsoftware.com/help/learning/contents.htm#toc]
+9. Fractals, Visualization & J, 4th ed. (2 Parts), Clifford A. Reiter 2016
+10. Fifty Shades of J, Norman Thomson, [https://code.jsoftware.com/wiki/Fifty_Shades_of_J]
 
    *Throughout the code J902 version of J lang was used.*
 

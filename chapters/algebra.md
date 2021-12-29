@@ -657,7 +657,7 @@ is very nontrivial or only intricate approximation can be provided.
 
 Now we are empowered to replicate **binomial distribution**. We need to set binary domain and weights being probabilities,
 ie. two positive numbers that add up to 1. Traditionally, domain reflects **Bernoulli trial** which is experiment with two outcomes
-possible, 1 representing success with probability p, 0 representing failure with probability (1-p) [5, page 89-91].
+possible, 1 representing success with probability p, 0 representing failure with probability (1-p) [6, page 89-91].
 We can generalize domain though.
 ```
    cumulativeWeights=: +/\ % +/
@@ -776,6 +776,12 @@ _3 _2.8 _2.6 _2.4 _2.2 _2 _1.8 _1.6 _1.4 _1.2 _1 _0.8 _0.6 _0.4 _0.2 0 0.2 0.4 0
 └────────┴─────┴──────────┘
 ```
 
+**Exercise 14**
+Show that 1-,2-, 3- sigma interval probabilities can be reasonable assessed using `rnorm`.
+
+[Solution to exercise 14](#solution-to-exercise-14)
+
+
 Finally, we can look at **uniform distribution* sample generation (`runiform` is in j/algebra.ijs ):
 ```
    NB. 10 samples of U(0,1)
@@ -813,20 +819,20 @@ _0.2 0 0.2 0.4 0.6 0.8 1 1.2
 └────────┴──────┴────────┘
 ```
 
-**Exercise 14**
-Generate random upper triangular matrix where elements are N(2,3).
-
-[Solution to exercise 14](#solution-to-exercise-14)
-
 **Exercise 15**
-Generate random diagonal matrix where elements are U(20,30).
+Generate random upper triangular matrix where elements are N(2,3).
 
 [Solution to exercise 15](#solution-to-exercise-15)
 
 **Exercise 16**
-Generate matrix where consecutive columns consist of random and evenly probable pairs: (1,2), (3,4), (5,6),...
+Generate random diagonal matrix where elements are U(20,30).
 
 [Solution to exercise 16](#solution-to-exercise-16)
+
+**Exercise 17**
+Generate matrix where consecutive columns consist of random and evenly probable pairs: (1,2), (3,4), (5,6),...
+
+[Solution to exercise 17](#solution-to-exercise-17)
 
 In-depth coverage of many both discrete and continuous distribution families will be included in statistics inference chapter.
 
@@ -1670,4 +1676,38 @@ _1  1
    domain=: 1 22
    var ((0.35 0.65 rndWeighted 1e6) { domain)
 100.414
+```
+
+### Solution to exercise 14
+```
+   ]bins=: _1 1
+_1 1
+   bins intervalHist (0 1 rnorm 1e6)
+┌────────┬──────┬────────┐
+│interval│count │freq    │
+├────────┼──────┼────────┤
+│_1      │158765│0.158765│
+│ 1      │682634│0.682635│
+│        │158600│  0.1586│
+└────────┴──────┴────────┘
+   ]bins=: _2 2
+_2 2
+   bins intervalHist (0 1 rnorm 1e6)
+┌────────┬──────┬────────┐
+│interval│count │freq    │
+├────────┼──────┼────────┤
+│_2      │ 23235│0.023235│
+│ 2      │954106│0.954107│
+│        │ 22658│0.022658│
+└────────┴──────┴────────┘
+   ]bins=: _3 3
+_3 3
+   bins intervalHist (0 1 rnorm 1e6)
+┌────────┬──────┬────────┐
+│interval│count │freq    │
+├────────┼──────┼────────┤
+│_3      │  1316│0.001316│
+│ 3      │997328│0.997329│
+│        │  1355│0.001355│
+└────────┴──────┴────────┘
 ```
