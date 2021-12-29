@@ -13,11 +13,11 @@ I also omit discussing the performance optimisations that could be adopted, once
 as much as possible. The aim of this tutorial is to document my adventures and experiments with J that I found interesting when exploring a number of topics
 culminating in random matrices, which although used in physics for decades with many successes, only relatively recently have started to play
 an important role in other areas of science like biology, computational statistics or machine learning.
-The aim of these notes is to document of my efforts for future myself, but there is a chance they could prove useful for someone,
+The aim of these notes is to document my efforts for the future myself, but there is a chance they could prove useful for someone,
 and some potential J user will find them inspiring and get interested in this powerful array programming language.
 For J experts it will be rather very far from what they would write down, maybe not interesting at all,
 but for beginning J programmers, like myself, presumably the proof that this array language, as in the current form, is very
-useful, powerful and intellectually attractive. I attached a number of examples, along with the solutions,
+useful, powerful and intellectually attractive. I attach a number of examples, along with the solutions,
 as a documentation of my hacking, also for anyone that would be eager to learn through reading. I strongly believe
 in correctness of Richard Feynman's famous quote:
 *It's the way I study - to understand something by trying to work it out or, in other words, to understand something by creating it.*
@@ -35,7 +35,7 @@ Following is the list of books that I found especially useful during the first i
 1. Linear Algebra and Optimization for Machine Learning. A Textbook, Charu C. Aggarwal, Springer 2020
 2. Matrix Differential Calculus with Applications in Statistics and Econometrics, 3rd Edition, Jan R. Magnus, Heinz Neudecker, Wiley 2019
 3. Fundamentals of Machine Learning for Predictive Data Analytics, 2nd Edition, John D. Kelleher, Brian Mac Namee and Aoife D'Arcy, MIT Press 2020
-4. Scalar, Vector, and Matrix Mathematics: Theory, Facts, and Formulas - Revised and Expanded Edition, Dennis S. Bernstein , Princeton University Press 2018
+4. Scalar, Vector, and Matrix Mathematics: Theory, Facts, and Formulas - Revised and Expanded Edition, Dennis S. Bernstein, Princeton University Press 2018
 ### Probability
 5. Introduction to Probability Models, 12th Edition, Sheldon Ross, Elsevier 2019
 ### Statistics
