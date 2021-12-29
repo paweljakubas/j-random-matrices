@@ -836,7 +836,59 @@ Generate matrix where consecutive columns consist of random and evenly probable 
 
 In-depth coverage of many both discrete and continuous distribution families will be included in statistics inference chapter.
 
-TODO info about rng and seeds TODO
+The last topics to cover when introducing basic random generation are **random generators** and **seeds**.
+We have the following random generators at our disposal (adapted from [https://code.jsoftware.com/wiki/Vocabulary/query])
+
+|     code      |      rng           | relative cost  |
+| ------------- |:------------------:| --------------:|
+|       1       |    GB_Flip         |        1       |
+|       2       | Mersenne Twister   |        1       |
+|       3       |    DX-1597-4d      |        3       |
+|       4       |     MRG32k3a       |        8       |
+|       0       | combination of all |       12       |
+
+Below is self-explanatory code snippet.
+```
+   NB. show current rng (Mersenne Twister is default)
+   9!:42 ''
+2
+   NB. set new rng
+   9!:43 ]1
+
+   9!:42 ''
+1
+
+   rng=.9!:42
+   rng ''
+1
+   NB. set seed=2000 to current rng
+   rngWithSeed2000=. 2{.2000,rng ''
+   9!:43 {:rngWithSeed2000
+
+   NB. reset the state of rng with seed
+   9!:1  {.rngWithSeed2000
+
+   NB. generating 5 samples of N(0,1)
+   0 1 rnorm 5
+_1.42716 _0.353494 0.0569464 _0.300366 0.752976
+   0 1 rnorm 5
+0.58307 _1.25819 1.05434 1.09644 _0.294877
+
+   NB. reset the state of rng with seed
+   9!:1  {.rngWithSeed2000
+
+   NB. now 5 sample of N(0,1) should be the same as immediately after previous rng's state reset
+   0 1 rnorm 5
+_1.42716 _0.353494 0.0569464 _0.300366 0.752976
+```
+
+**Summary**: The basic random generation capabilities of J were covered. We know how
+(a) to toss with repetition and without repetition,
+(b) set arbitrary domain and give weights to elements of domain,
+(c) pick random samples from normal and uniform distributions,
+(d) get frequency report of the generated samples,
+(e) use substantial number generation to reason about properties of distributions, like mean or variance,
+(f) set random number generator with default or arbitrary seed, and how to reset the state of the generator.
 
 ## Testing matrix properties
 
