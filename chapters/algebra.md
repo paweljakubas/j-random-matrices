@@ -883,15 +883,16 @@ _1.42716 _0.353494 0.0569464 _0.300366 0.752976
 ```
 
 The above is functionality is enough to have a basic control of random generation.
-More information can be found [https://code.jsoftware.com/wiki/Essays/RNG].
+More information can be found here [https://code.jsoftware.com/wiki/Essays/RNG].
 
-**Summary**: The basic random generation capabilities of J were covered. We know how
-(a) to toss with repetition and without repetition,
-(b) set arbitrary domain and give weights to elements of domain,
+**Summary**: The basic random generation capabilities of J were covered. We know how to
+(a) toss with repetition and without repetition,
+(b) set arbitrary domain and give weights to elements of the domain,
 (c) pick random samples from normal and uniform distributions,
 (d) get frequency report of the generated samples,
 (e) use substantial number generation to reason about properties of distributions, like mean or variance,
-(f) set random number generator with default or arbitrary seed, and how to reset the state of the generator.
+(f) set random number generator with default or arbitrary seed,
+(g) reset the state of the generator.
 
 ## Testing matrix properties
 
@@ -1735,6 +1736,7 @@ _1  1
 
 ### Solution to exercise 14
 ```
+   NB. 1-sigma, 2-sigma and 3-sigma for N(0,1)
    bins=: _1 1 _
    bins intervalHist (0 1 rnorm 1e6)
 ┌────────┬──────┬────────┐
@@ -1761,6 +1763,34 @@ _1  1
 │_3      │  1316│0.001316│
 │ 3      │997328│0.997329│
 │ _      │  1355│0.001355│
+└────────┴──────┴────────┘
+
+    NB. 1-sigma, 2-sigma and 3-sigma for N(10,4)
+    bins=: 6 14 _
+┌────────┬──────┬────────┐
+│interval│count │freq    │
+├────────┼──────┼────────┤
+│ 6      │159015│0.159015│
+│14      │682149│ 0.68215│
+│_       │158835│0.158835│
+└────────┴──────┴────────┘
+   bins=: 2 18 _
+   bins intervalHist (10 4 rnorm 1e6)
+┌────────┬──────┬────────┐
+│interval│count │freq    │
+├────────┼──────┼────────┤
+│ 2      │ 22878│0.022878│
+│18      │954398│0.954398│
+│ _      │ 22724│0.022724│
+└────────┴──────┴────────┘
+   bins=: _2 22 _
+   bins intervalHist (10 4 rnorm 1e6)
+┌────────┬──────┬────────┐
+│interval│count │freq    │
+├────────┼──────┼────────┤
+│_2      │  1318│0.001318│
+│22      │997293│0.997293│
+│ _      │  1389│0.001389│
 └────────┴──────┴────────┘
 ```
 
@@ -1815,29 +1845,19 @@ _1  1
 0 0 0 0 0 0 0 1 0 0
 0 0 0 0 0 0 0 0 1 0
 0 0 0 0 0 0 0 0 0 1
-   ]runif=: 10 10 $ 20 30 runiform 100
-21.5562  22.203 28.9582  22.368 23.3863 24.9102 29.6812  20.042    24.6 22.2726
-27.1041 24.2962 29.6856 24.5906 24.0955  21.401 23.6232 25.4918 27.1374 20.9753
-23.0307 24.8497 24.6181  26.193 29.6772 23.8026  20.589 25.6035 23.1995 27.1264
-27.7145 22.9116  28.252 24.3939 28.1002 29.5742 29.9656 21.7927 25.6336 23.7968
-26.2327 24.7915  25.997 24.1127 20.4808 22.6166 25.3201 25.9134 20.6864 22.5924
-28.8134 23.2909 29.6179 26.9315 25.3423 20.8344 22.6266 25.7457 22.7251  24.359
-23.4213 20.6337 24.1306 26.7458 29.1118 29.0946 20.1834 25.1471 24.2252 21.6188
-23.7184  28.017 20.2824 25.0039 22.4853 22.2265 22.0248 20.3894 24.1249 28.4732
-20.3689   27.25  29.231 20.2635 29.1832 26.3408 25.9392 28.6962 20.3896  24.407
-23.3565 29.3234 28.8073 20.3316 21.0444 28.8078 24.4317 28.5896  26.583 20.3769
-
+   ]runif=: 20 30 runiform 10
+26.2247 23.2471 29.0782 20.6316 23.8662 23.386 20.9577 26.0148 22.8566 29.2672
    diag * runif
-21.5562       0       0       0       0       0       0       0       0       0
-      0 24.2962       0       0       0       0       0       0       0       0
-      0       0 24.6181       0       0       0       0       0       0       0
-      0       0       0 24.3939       0       0       0       0       0       0
-      0       0       0       0 20.4808       0       0       0       0       0
-      0       0       0       0       0 20.8344       0       0       0       0
-      0       0       0       0       0       0 20.1834       0       0       0
-      0       0       0       0       0       0       0 20.3894       0       0
-      0       0       0       0       0       0       0       0 20.3896       0
-      0       0       0       0       0       0       0       0       0 20.3769
+26.2247       0       0       0       0      0       0       0       0       0
+      0 23.2471       0       0       0      0       0       0       0       0
+      0       0 29.0782       0       0      0       0       0       0       0
+      0       0       0 20.6316       0      0       0       0       0       0
+      0       0       0       0 23.8662      0       0       0       0       0
+      0       0       0       0       0 23.386       0       0       0       0
+      0       0       0       0       0      0 20.9577       0       0       0
+      0       0       0       0       0      0       0 26.0148       0       0
+      0       0       0       0       0      0       0       0 22.8566       0
+      0       0       0       0       0      0       0       0       0 29.2672
 ```
 
 ### Solution to exercise 17
