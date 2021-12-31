@@ -915,16 +915,14 @@ the required approach I will adopt it as well here.
 We have the following basic properties [2, pages 5].
 
 ### Matrix addition:
-Let's have matrices of the same order: $A$, $B$, $C$ and scalars $s_1$ and $s_2$:
+Let's have matrices of the same order: A, B, C and scalars s<sub>1</sub> and s<sub>2</sub>:
 
-$A + B = B + A$
-$(A + B) + C = A + (B + C)$
-$(s_1 + s_2)A = s_1 A + s_2 A$
-$s_1 (A + B) = s_1 A + s_1 B$
-$s_1 (s_2 A) = (s_1 s_2)A$
-$A + (-1)A = 0$
-
-
+- <img src="https://latex.codecogs.com/gif.latex?A + B = B + A" />
+- <img src="https://latex.codecogs.com/gif.latex?(A + B) + C = A + (B + C)" />
+- <img src="https://latex.codecogs.com/gif.latex?(s_1 + s_2)A = s_1 A + s_2 A" />
+- <img src="https://latex.codecogs.com/gif.latex?s_1 (A + B) = s_1 A + s_1 B" />
+- <img src="https://latex.codecogs.com/gif.latex?s_1 (s_2 A) = (s_1 s_2)A" />
+- <img src="https://latex.codecogs.com/gif.latex?A + (-1)A = 0" />
 
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
 Let's start with **interchange** elementary operations.
