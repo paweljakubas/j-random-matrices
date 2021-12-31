@@ -4,7 +4,7 @@
 1. [Selecting from a matrix](#selecting-from-matrix)
 2. [Updating a matrix](#updating-of-matrix)
 3. [Generate a random matrix](#generating-random-matrix)
-4. [Testing a matrix properties](#testing-matrix-properties) - TODO
+4. [Testing a matrix properties](#testing-matrix-properties)
 5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
 6. [Transpose of a matrix](#transpose-of-matrix) - TODO
 7. [Inverse of a matrix](#inverse-of-matrix) - TODO
@@ -899,9 +899,9 @@ More information can be found here [https://code.jsoftware.com/wiki/Essays/RNG].
 In the coming chapters we will develop many techniques and recipies, and to have reasonable confidence the proposed
 solution is correct we will adapt **property testing**. The scheme I will adopt is following:
 1. Implement a concept **C** (eg. transpose, SVD, ...)
-2. Refer to the facts, formulas, lemmas and proofs of mathematics and construct **leftEq R rightEq**
-Here both leftEq and rightEq can contain the concept **C** (and possibly others) and establish relation **R** (eg. =, <=, ...)
-3. As both **leftEq** and **rightEq**, in general, act on sequence of arrays we will need to deliver it. Very often they will need to be special
+2. Refer to the facts, formulas, lemmas and proofs of mathematics and construct **leftR R rightR**
+Here both leftR and rightR can contain the concept **C** (and possibly others) and establish relation **R** (eg. =, <=, ...)
+3. As both **leftR** and **rightR**, in general, act on sequence of arrays we will need to deliver it. Very often they will need to be special
 arrays, due to the shape or the array type constraints
 4. Rather than handcrafting the arrays we will rely on the generated array instances. The developments of previous section will be very useful indeed
 5. We will repeat the experiment many times, with the expectation that in every experiment the property we are verifying
@@ -912,17 +912,73 @@ upon property testing, proper array instances are generated and the property is 
 the required approach I will adopt it as well here.
 
 ## Elementary operations in matrix
-We have the following basic properties [2, pages 5].
+We have the following basic results.
 
 ### Matrix addition:
-Let's have matrices of the same order: A, B, C and scalars s<sub>1</sub> and s<sub>2</sub>:
+Let's have matrices of the same order: A, B, C and scalars s<sub>1</sub> and s<sub>2</sub>. Then we have [2, pages 5]:
+<img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;B&space;=&space;B&space;&plus;&space;A" title="A + B = B + A" />
+<img src="https://latex.codecogs.com/svg.image?(A&space;&plus;&space;B)&space;&plus;&space;C&space;=&space;A&space;&plus;&space;(B&space;&plus;&space;C)" title="(A + B) + C = A + (B + C)" />
+<img src="https://latex.codecogs.com/svg.image?(s_1&space;&plus;&space;s_2)A&space;=&space;s_1&space;A&space;&plus;&space;s_2&space;A" title="(s_1 + s_2)A = s_1 A + s_2 A" />
+<img src="https://latex.codecogs.com/svg.image?s_1&space;(A&space;&plus;&space;B)&space;=&space;s_1&space;A&space;&plus;&space;s_1&space;B" title="s_1 (A + B) = s_1 A + s_1 B" />
+<img src="https://latex.codecogs.com/svg.image?s_1&space;(s_2&space;A)&space;=&space;(s_1&space;s_2)A" title="s_1 (s_2 A) = (s_1 s_2)A" />
+<img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;(-1)A&space;=&space;0&space;" title="A + (-1)A = 0 " />
 
-- <img src="https://latex.codecogs.com/gif.latex?A + B = B + A" />
-- <img src="https://latex.codecogs.com/gif.latex?(A + B) + C = A + (B + C)" />
-- <img src="https://latex.codecogs.com/gif.latex?(s_1 + s_2)A = s_1 A + s_2 A" />
-- <img src="https://latex.codecogs.com/gif.latex?s_1 (A + B) = s_1 A + s_1 B" />
-- <img src="https://latex.codecogs.com/gif.latex?s_1 (s_2 A) = (s_1 s_2)A" />
-- <img src="https://latex.codecogs.com/gif.latex?A + (-1)A = 0" />
+Let's develop how we can property test the first equality. According to the scheme proposed above we need to:
+1. have a way to generate two arbitrary matrices of the same shape
+```
+genUniformMatrix=: 3 : 'y $ _1000 1000 runiform ((0{y) * (1{y))'
+   genUniformMatrix 2 2
+ _226.76 _322.805
+_808.466  202.957
+   genUniformMatrix 4 2
+_428.685  853.433
+_400.652 _164.792
+ 375.372  675.547
+ 584.175 _69.8546
+```
+2. have a way to check **leftR R rightR** with the generated matrices
+```
+   leftR=: 4 : 'x + y'
+   rightR=: 4 : 'y + x'
+   relation=: leftR`rightR
+      relation@.0
+4 : 'x + y'
+      relation@.1
+4 : 'y + x'
+
+   checkEqTwoMatrices=: 4 : '( (0{y) x@.0 (1{y) ) = ( (0{y) x@.1 (1{y) )'
+   ]matrices=: (genUniformMatrix 4 2),:(genUniformMatrix 4 2)
+ 783.326  777.188
+ 433.257  992.401
+_44.5578   892.71
+ 850.185   636.44
+
+ 211.161 _619.827
+ 464.316 _601.967
+ 309.364  851.114
+_181.237  238.782
+   NB. all elements the same
+   relation checkEqTwoMatrices matrices
+1 1
+1 1
+1 1
+1 1
+   (0{matrices) (relation@.0) (1{matrices)
+994.487  157.36
+897.573 390.434
+264.806 1743.82
+668.948 875.221
+   (0{matrices) (relation@.1) (1{matrices)
+994.487  157.36
+897.573 390.434
+264.806 1743.82
+668.948 875.221
+   NB. let's redefine check in such a way that it returns 1 only if all elements are the same,
+   NB. ie. we have perfect matching
+   checkEqTwoMatrices=: 4 : '( (0{y) x@.0 (1{y) ) -: ( (0{y) x@.1 (1{y) )'
+   relation checkEqTwoMatrices matrices
+1
+```
 
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
 Let's start with **interchange** elementary operations.

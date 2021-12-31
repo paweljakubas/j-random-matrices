@@ -202,4 +202,35 @@ runiform=: 4 : 0
 )
 NB. 10 samples of U(0,1)
 NB.      0 1 runiform 10
-0.183411 0.0968962 0.587723 0.165308 0.68218 0.0916652 0.00554653 0.149567 0.340257 0.370271
+NB. 0.183411 0.0968962 0.587723 0.165308 0.68218 0.0916652 0.00554653 0.149567 0.340257 0.370271
+
+NB. --------------------
+NB. - Property testing -
+NB. --------------------
+
+NB. Check equality for the property requiring two matrices
+NB. x is gerund having leftR`rightR and both
+NB  M1 leftR M2
+NB. M1 rightR M2
+NB. are expected to work
+NB. y is M1,:M2
+NB. checkEqTwoMatrices=: 4 : '( (0{y) x@.0 (1{y) ) -: ( (0{y) x@.1 (1{y) )'
+NB.    leftR=: 4 : 'x + y'
+NB.    rightR=: 4 : 'y + x'
+NB.    relation=: leftR`rightR
+NB.       relation@.0
+NB. 4 : 'x + y'
+NB.       relation@.1
+NB. 4 : 'y + x'
+NB.    ]matrices=: (genUniformMatrix 4 2),:(genUniformMatrix 4 2)
+NB.  783.326  777.188
+NB.  433.257  992.401
+NB. _44.5578   892.71
+NB.  850.185   636.44
+NB.
+NB.  211.161 _619.827
+NB.  464.316 _601.967
+NB.  309.364  851.114
+NB. _181.237  238.782
+NB. relation checkEqTwoMatrices matrices
+NB. 1
