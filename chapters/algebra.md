@@ -878,6 +878,7 @@ _1.42716 _0.353494 0.0569464 _0.300366 0.752976
    9!:1  {.rngWithSeed2000
 
    NB. now 5 sample of N(0,1) should be the same as immediately after previous rng's state reset
+   NB. the rng's state reset functionality will be important later for experiment's reproducibility
    0 1 rnorm 5
 _1.42716 _0.353494 0.0569464 _0.300366 0.752976
 ```
@@ -895,6 +896,20 @@ More information can be found here [https://code.jsoftware.com/wiki/Essays/RNG].
 (g) reset the state of the generator.
 
 ## Testing matrix properties
+In the coming chapters we will develop many techniques and recipies, and to have reasonable confidence the proposed
+solution is correct we will adapt **property testing**. The scheme I will adopt is following:
+1. Implement a concept **C** (eg. transpose, SVD, ...)
+2. Refer to the facts, formulas, lemmas and proofs of mathematics and construct **leftEq R rightEq **
+Here both leftEq and rightEq can contain the concept C (and possibly others) and establish relation R (eg. =, <=, ...)
+3. As both leftEq and rightEq, in general, act on sequence of arrays we will need to deliver it. Very often they will need to be special
+arrays, due to the shape or the array type constraints
+4. Rather than handcrafting the arrays we will rely on the generated array instances. The developments of previous section will be very useful indeed
+5. We will repeat the experiment many times, with the expectation that in every experiment the property we are verifying
+holds
+
+This is a standard procedure, for example in Haskell development, were we construct a property, implement `Arbitrary` instances, and then
+upon property testing, proper array instances are generated and the property is tried with them. As I am convinced this is the proper and
+the required approach I will adopt it as well here.
 
 ## Elementary operations in matrix
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
