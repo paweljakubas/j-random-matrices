@@ -899,9 +899,9 @@ More information can be found here [https://code.jsoftware.com/wiki/Essays/RNG].
 In the coming chapters we will develop many techniques and recipies, and to have reasonable confidence the proposed
 solution is correct we will adapt **property testing**. The scheme I will adopt is following:
 1. Implement a concept **C** (eg. transpose, SVD, ...)
-2. Refer to the facts, formulas, lemmas and proofs of mathematics and construct **leftEq R rightEq **
-Here both leftEq and rightEq can contain the concept C (and possibly others) and establish relation R (eg. =, <=, ...)
-3. As both leftEq and rightEq, in general, act on sequence of arrays we will need to deliver it. Very often they will need to be special
+2. Refer to the facts, formulas, lemmas and proofs of mathematics and construct **leftEq R rightEq**
+Here both leftEq and rightEq can contain the concept **C** (and possibly others) and establish relation **R** (eg. =, <=, ...)
+3. As both **leftEq** and **rightEq**, in general, act on sequence of arrays we will need to deliver it. Very often they will need to be special
 arrays, due to the shape or the array type constraints
 4. Rather than handcrafting the arrays we will rely on the generated array instances. The developments of previous section will be very useful indeed
 5. We will repeat the experiment many times, with the expectation that in every experiment the property we are verifying
@@ -912,6 +912,20 @@ upon property testing, proper array instances are generated and the property is 
 the required approach I will adopt it as well here.
 
 ## Elementary operations in matrix
+We have the following basic properties [2, pages 5].
+
+### Matrix addition:
+Let's have matrices of the same order: $A$, $B$, $C$ and scalars $s_1$ and $s_2$:
+
+$A + B = B + A$
+$(A + B) + C = A + (B + C)$
+$(s_1 + s_2)A = s_1 A + s_2 A$
+$s_1 (A + B) = s_1 A + s_1 B$
+$s_1 (s_2 A) = (s_1 s_2)A$
+$A + (-1)A = 0$
+
+
+
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
 Let's start with **interchange** elementary operations.
 For column case we define two selection for each column we want to interchange, then use the pair selection in 'view'
