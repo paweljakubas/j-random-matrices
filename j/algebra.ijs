@@ -68,11 +68,13 @@ NB. 2 1 1
 
 NB. Unique elements of vector
 nub=: 3 : '{./.~ y'
+NB. Examples:
 NB.    nub 1 2 3 1 4 5 5
 NB. 1 2 3 4 5
 
 NB. Sort rows of matrix `y` by ascending column `x`
 sortRowsByColumnAsc=: ]/:{"1
+NB. Examples:
 NB.    a=: 2 1 3 ,. 15 6 7
 NB.    a
 NB. 2 15
@@ -90,6 +92,7 @@ NB.
 
 NB. Sort rows of matrix `y` by descending column `x`
 sortRowsByColumnDesc=: ]\:{"1
+NB. Examples:
 NB.    a=: 2 1 3 ,. 15 6 7
 NB.    a
 NB. 2 15
@@ -112,6 +115,7 @@ discreteHist=: 3 : 0
   t=. 0 sortRowsByColumnAsc (elems ,. freqRel)
   2 2 $ 'elem' ; 'freq' ; (,.((<(<a:),(<0)) { t)) ; (,.((<(<a:),(<1)) { t))
 )
+NB. Examples:
 NB.    discreteHist 1 1 2 3 4
 NB. ┌────┬────┐
 NB. │elem│freq│
@@ -129,6 +133,7 @@ intervalHist=: 4 : 0
   freq=. (% +/) count
   2 3 $ 'interval' ; 'count' ; 'freq' ; (,.x) ; (,.count) ; (,.freq)
 )
+NB. Examples:
 NB.    ]bins=: 0.2*i:15
 NB. _3 _2.8 _2.6 _2.4 _2.2 _2 _1.8 _1.6 _1.4 _1.2 _1 _0.8 _0.6 _0.4 _0.2 0 0.2 0.4 0.6 0.8 1 1.2 1.4 1.6 1.8 2 2.2 2.4 2.6 2.8 3
 NB.    bins intervalHist (0 1 rnorm 100)
@@ -170,6 +175,7 @@ NB. └────────┴─────┴────┘
 
 NB. mean of a vector
 mean=: +/ % #
+NB. Examples:
 NB.    mean 1 1 1 1
 NB. 1
 NB.    mean 1 1 1 2 3
@@ -177,6 +183,7 @@ NB. 1.6
 
 NB. variance of a sample
 var=: (+/@(*:@(] - +/ % #)) % #)"1
+NB. Examples:
 NB.    var 1 1 1 1
 NB. 0
 NB.    var 1 2 1 2
@@ -190,6 +197,7 @@ NB. Generation of y samples of normal distribution having 'mean var'=:x
 rnorm=: 4 : 0
   (rno y) #.every <|.x
 )
+NB. Examples:
 NB. 10 samples of N(0,1)
 NB.      0 1 rnorm 10
 NB. 0.583949 0.151037 1.44553 1.18409 _0.53704 1.49066 0.649399 0.569303 0.855299 0.738213
@@ -200,6 +208,7 @@ runiform=: 4 : 0
   relist=. (-/ , {:)@|.
   > (rnd y) #.each <relist x
 )
+NB. Examples:
 NB. 10 samples of U(0,1)
 NB.      0 1 runiform 10
 NB. 0.183411 0.0968962 0.587723 0.165308 0.68218 0.0916652 0.00554653 0.149567 0.340257 0.370271
@@ -210,11 +219,12 @@ NB. --------------------
 
 NB. Check equality for the property requiring two matrices
 NB. x is gerund having leftR`rightR and both
-NB  M1 leftR M2
+NB.  M1 leftR M2
 NB. M1 rightR M2
 NB. are expected to work
 NB. y is M1,:M2
-NB. checkEqTwoMatrices=: 4 : '( (0{y) x@.0 (1{y) ) -: ( (0{y) x@.1 (1{y) )'
+checkEqTwoMatrices=: 4 : '( (0{y) x@.0 (1{y) ) -: ( (0{y) x@.1 (1{y) )'
+NB. Examples:
 NB.    leftR=: 4 : 'x + y'
 NB.    rightR=: 4 : 'y + x'
 NB.    relation=: leftR`rightR
