@@ -916,12 +916,12 @@ We have the following basic results.
 
 ### Matrix addition:
 Let's have matrices of the same order: A, B, C and scalars s<sub>1</sub> and s<sub>2</sub>. Then we have [2, pages 5]:
-<img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;B&space;=&space;B&space;&plus;&space;A" title="A + B = B + A" />
-<img src="https://latex.codecogs.com/svg.image?(A&space;&plus;&space;B)&space;&plus;&space;C&space;=&space;A&space;&plus;&space;(B&space;&plus;&space;C)" title="(A + B) + C = A + (B + C)" />
-<img src="https://latex.codecogs.com/svg.image?(s_1&space;&plus;&space;s_2)A&space;=&space;s_1&space;A&space;&plus;&space;s_2&space;A" title="(s_1 + s_2)A = s_1 A + s_2 A" />
-<img src="https://latex.codecogs.com/svg.image?s_1&space;(A&space;&plus;&space;B)&space;=&space;s_1&space;A&space;&plus;&space;s_1&space;B" title="s_1 (A + B) = s_1 A + s_1 B" />
-<img src="https://latex.codecogs.com/svg.image?s_1&space;(s_2&space;A)&space;=&space;(s_1&space;s_2)A" title="s_1 (s_2 A) = (s_1 s_2)A" />
-<img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;(-1)A&space;=&space;0&space;" title="A + (-1)A = 0 " />
+- <img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;B&space;=&space;B&space;&plus;&space;A" title="A + B = B + A" />
+- <img src="https://latex.codecogs.com/svg.image?(A&space;&plus;&space;B)&space;&plus;&space;C&space;=&space;A&space;&plus;&space;(B&space;&plus;&space;C)" title="(A + B) + C = A + (B + C)" />
+- <img src="https://latex.codecogs.com/svg.image?(s_1&space;&plus;&space;s_2)A&space;=&space;s_1&space;A&space;&plus;&space;s_2&space;A" title="(s_1 + s_2)A = s_1 A + s_2 A" />
+- <img src="https://latex.codecogs.com/svg.image?s_1&space;(A&space;&plus;&space;B)&space;=&space;s_1&space;A&space;&plus;&space;s_1&space;B" title="s_1 (A + B) = s_1 A + s_1 B" />
+- <img src="https://latex.codecogs.com/svg.image?s_1&space;(s_2&space;A)&space;=&space;(s_1&space;s_2)A" title="s_1 (s_2 A) = (s_1 s_2)A" />
+- <img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;(-1)A&space;=&space;0&space;" title="A + (-1)A = 0 " />
 
 Let's develop how we can property test the first equality. According to the scheme proposed above we need to:
 1. have a way to generate two arbitrary matrices of the same shape
@@ -979,6 +979,24 @@ _181.237  238.782
    relation checkEqTwoMatrices matrices
 1
 ```
+3. finally, repeat the check many times for different shapes (dimensions are independently picked from 1 ... 100 domain)
+```
+   run=: 3 : 0
+shape=.1+?2#100
+m=.(genUniformMatrix shape),:(genUniformMatrix shape)
+relation checkEqTwoMatrices m
+)
+   NB. now let's run it 100 times
+   (+/)(run"0)100#0
+100
+```
+Now, I am reasonably confident that matrix addition as implemented in J is distributive, ie. <img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;B&space;=&space;B&space;&plus;&space;A" title="A + B = B + A" /> holds.
+
+**Exercise 18**
+Perform property testing for the rest addition properties specified above
+
+[Solution to exercise 18](#solution-to-exercise-18)
+
 
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
 Let's start with **interchange** elementary operations.
