@@ -8,7 +8,7 @@ for fully comprehending the examples below is *Learning J* which is the recommen
 introductory material when learning J. The great example how beautifully and effciently J can be used in a specific domain is
 presented in a wonderful *Fractals, Visualization and J*. Besides that a list of high quality book references is specified.
 This tutorial is supposed to be very practical and, I hope, has an educational flavour. I do not enforce a tacit representation as I think,
-although undoubtly very elegant, can be difficult to appreciate for a beginner J enthusiast and could steepen learning curve for them.
+although undoubtly very elegant, can be difficult to appreciate for beginner J enthusiasts and could steepen learning curve for them.
 I also omit discussing the performance optimisations that could be adopted, once again for the sake of clarity and for being user-friendly
 as much as possible. The aim of this tutorial is to document my adventures and experiments with J that I found interesting when exploring a number of topics
 culminating in random matrices, which although used in physics for decades with many successes, only relatively recently have started to play
@@ -40,12 +40,13 @@ Following is the list of books that I found especially useful during the first i
 5. Introduction to Probability Models, 12th Edition, Sheldon Ross, Elsevier 2019
 ### Statistics
 6. Statistical inference, 2nd Edition, George Cassela, Roger L. Berger, Cengage Learning 2001
+7. Linear Models and the Relevant Distributions and Matrix Algebra, D.A. Harville, CRC Press 2018
 ### Random matrices
-7. A First Course in Random Matrix Theory for Physicists, Engineers and Data Scientists, Marc Potters, Jean-Philippe Bouchaud, Cambridge University Press 2021
+8. A First Course in Random Matrix Theory for Physicists, Engineers and Data Scientists, Marc Potters, Jean-Philippe Bouchaud, Cambridge University Press 2021
 ### J language
-8. Learning J. An Introduction to the J Programming Language, Roger Stokes, [https://www.jsoftware.com/help/learning/contents.htm#toc]
-9. Fractals, Visualization & J, 4th ed. (2 Parts), Clifford A. Reiter 2016
-10. Fifty Shades of J, Norman Thomson, [https://code.jsoftware.com/wiki/Fifty_Shades_of_J]
+9. Learning J. An Introduction to the J Programming Language, Roger Stokes, [https://www.jsoftware.com/help/learning/contents.htm#toc]
+10. Fractals, Visualization & J, 4th ed. (2 Parts), Clifford A. Reiter 2016
+11. Fifty Shades of J, Norman Thomson, [https://code.jsoftware.com/wiki/Fifty_Shades_of_J]
 
    *Throughout the code J902 version of J lang was used.*
 

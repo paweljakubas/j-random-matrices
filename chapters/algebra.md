@@ -4,14 +4,14 @@
 1. [Selecting from a matrix](#selecting-from-matrix)
 2. [Updating a matrix](#updating-of-matrix)
 3. [Generate a random matrix](#generating-random-matrix)
-4. [Testing a matrix properties](#testing-matrix-properties)
+4. [Testing matrix properties](#testing-matrix-properties)
 5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
 6. [Transpose of a matrix](#transpose-of-matrix) - TODO
 7. [Inverse of a matrix](#inverse-of-matrix) - TODO
 8. [Determinant of a matrix](#determinant-of-matrix) - TODO
 9. [Trace of a matrix](#trace-of-matrix) - TODO
 10. [A partitioned matrix](#partitioned-matrix) - TODO
-11. [A matrix decompositions](#matrix-decompositions) - TODO
+11. [Matrix decompositions](#matrix-decompositions) - TODO
 
 
 [Solutions to exercices](#linear-algebra-solutions-to-exercises)
