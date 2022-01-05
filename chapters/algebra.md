@@ -1000,6 +1000,9 @@ Perform property testing for the rest addition properties specified above
 
 ### Matrix multiplication
 
+**Exercise 19**
+Compute the n-th Fibonacci number by using the matrix form [https://en.wikipedia.org/wiki/Fibonacci_number#Matrix_form]
+
 ### Matrix elementary row and column operations
 
 There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
@@ -1991,4 +1994,15 @@ _1  1
 1 3 6 7 10
 2 4 6 7  9
 2 4 6 7  9
+```
+
+### Solution to exercise 19
+```
+    m=: 2 2 $ 0 1 1 1
+    mp=: +/ .*
+    f=: 3 : 'y mp m'
+    fibb=: 3 : '(<(<0),(<1)) { (f^:y m)'
+    fibb"0 i.30
+1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946 17711 28657 46368 75025 121393 196418 317811 514229 832040
+    NB. this is very efficient implementation
 ```
