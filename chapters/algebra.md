@@ -1024,8 +1024,12 @@ The matrix multiplcation is defined as
 **Exercise 19**
 Compute the n-th Fibonacci number by using the matrix form [https://en.wikipedia.org/wiki/Fibonacci_number#Matrix_form]
 
+[Solution to exercise 19](#solution-to-exercise-19)
+
 **Exercise 20**
 Perform property testing for the multiplication properties specified above
+
+[Solution to exercise 20](#solution-to-exercise-20)
 
 ### Matrix elementary row and column operations
 
@@ -2018,6 +2022,40 @@ _1  1
 1 3 6 7 10
 2 4 6 7  9
 2 4 6 7  9
+```
+
+### Solution to exercise 18
+- <img src="https://latex.codecogs.com/svg.image?(A&space;&plus;&space;B)&space;&plus;&space;C&space;=&space;A&space;&plus;&space;(B&space;&plus;&space;C)" title="(A + B) + C = A + (B + C)" />
+```
+   leftR=: 3 : '( (0{y) + (1{y) ) + (2{y)'
+   rightR=: 3 : '(0{y) + ( (1{y) + (2{y) )'
+   relation=: leftR`rightR
+   checkEqOfMatrices=: 4 : '( x@.0 y ) -: ( x@.1 y )'
+   genUniformMatrix=: 3 : 'y $ _1000 1000 runiform ((0{y) * (1{y))'
+   ]matrices=: (genUniformMatrix 4 2),(genUniformMatrix 4 2),:(genUniformMatrix 4 2)
+ 211.161 _619.827
+ 464.316 _601.967
+ 309.364  851.114
+_181.237  238.782
+
+_428.685  853.433
+_400.652 _164.792
+ 375.372  675.547
+ 584.175 _69.8546
+
+ 244.943 _350.586
+  815.65 _873.687
+ _226.76 _322.805
+_808.466  202.957
+   relation checkEqOfMatrices matrices
+1
+   run=: 3 : 0
+shape=.1+?2#100
+m=.(genUniformMatrix shape),(genUniformMatrix shape),:(genUniformMatrix shape)
+relation checkEqOfMatrices m
+)
+   (+/)(run"0)100#0
+100
 ```
 
 ### Solution to exercise 19

@@ -244,3 +244,33 @@ NB.  309.364  851.114
 NB. _181.237  238.782
 NB. relation checkEqTwoMatrices matrices
 NB. 1
+
+NB. Check equality for the property requiring more than 1 matrices
+NB. x is gerund having leftR`rightR and both
+NB. leftR M
+NB. rightR M
+NB. are expected to work with
+NB. y is M=,M1,M2,:M3 and so on
+checkEqOfMatrices=: 4 : '( x@.0 y ) -: ( x@.1 y )'
+NB. Examples:
+NB.    leftR=: 3 : '( (0{y) + (1{y) ) + (2{y)'
+NB.    rightR=: 3 : '(0{y) + ( (1{y) + (2{y) )'
+NB.    relation=: leftR`rightR
+NB.    genUniformMatrix=: 3 : 'y $ _1000 1000 runiform ((0{y) * (1{y))'
+NB.    ]matrices=: (genUniformMatrix 4 2),(genUniformMatrix 4 2),:(genUniformMatrix 4 2)
+NB.  211.161 _619.827
+NB.  464.316 _601.967
+NB.  309.364  851.114
+NB. _181.237  238.782
+NB.
+NB. _428.685  853.433
+NB. _400.652 _164.792
+NB.  375.372  675.547
+NB.  584.175 _69.8546
+NB.
+NB.  244.943 _350.586
+NB.   815.65 _873.687
+NB.  _226.76 _322.805
+NB. _808.466  202.957
+NB.    relation checkEqOfMatrices matrices
+NB. 1
