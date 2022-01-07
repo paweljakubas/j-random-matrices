@@ -2057,6 +2057,30 @@ relation checkEqOfMatrices m
    (+/)(run"0)100#0
 100
 ```
+- <img src="https://latex.codecogs.com/svg.image?(s_1&space;&plus;&space;s_2)A&space;=&space;s_1&space;A&space;&plus;&space;s_2&space;A" title="(s_1 + s_2)A = s_1 A + s_2 A" />
+```
+   leftR=: 4 : '( (0{x) + (1{x) ) * y'
+   rightR=: 4 : '( (0{x) * y ) + ( (1{x) * y )'
+   relation=: leftR`rightR
+   ]scalars=: _100 100 runiform 2
+61.2493 16.9455
+   ]matrix=: genUniformMatrix 4 2
+ 472.662  94.5818
+ _267.82 _744.562
+ 181.815 _345.643
+_141.425  45.4723
+   checkEqOfMatricesWithScalars=: 4 : '(x relation@.0 y) -: (x relation@.1 y)'
+   scalars checkEqOfMatricesWithScalars matrix
+1
+      run=: 3 : 0
+shape=.1+?2#100
+m=.genUniformMatrix shape
+s=. _100 100 runiform 2
+s checkEqOfMatricesWithScalars m
+)
+   (+/)(run"0)100#0
+100
+```
 
 ### Solution to exercise 19
 ```
