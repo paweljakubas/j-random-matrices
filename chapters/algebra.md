@@ -1000,8 +1000,32 @@ Perform property testing for the rest addition properties specified above
 
 ### Matrix multiplication
 
+We have the following basic properties of matrix multiplication:
+- <img src="https://latex.codecogs.com/svg.image?(AB)C=A(BC)" title="(AB)C=A(BC)" />
+- <img src="https://latex.codecogs.com/svg.image?A(B&plus;C)=AB&plus;AC" title="A(B+C)=AB+AC" />
+- <img src="https://latex.codecogs.com/svg.image?(A&plus;B)C=AC&plus;BC" title="(A+B)C=AC+BC" />
+
+The matrix multiplcation is defined as
+```
+   mult=: +/ .*
+   ]a=: 2 2 $ 1 2 3 4
+1 2
+3 4
+   ]b=: 2 4 $ 1 2
+1 2 1 2
+1 2 1 2
+   ]c=: a mult b
+3  6 3  6
+7 14 7 14
+   $c
+2 4
+```
+
 **Exercise 19**
 Compute the n-th Fibonacci number by using the matrix form [https://en.wikipedia.org/wiki/Fibonacci_number#Matrix_form]
+
+**Exercise 20**
+Perform property testing for the multiplication properties specified above
 
 ### Matrix elementary row and column operations
 
