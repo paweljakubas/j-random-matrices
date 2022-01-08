@@ -2081,6 +2081,43 @@ s checkEqOfMatricesWithScalars m
    (+/)(run"0)100#0
 100
 ```
+- <img src="https://latex.codecogs.com/svg.image?s_1&space;(A&space;&plus;&space;B)&space;=&space;s_1&space;A&space;&plus;&space;s_1&space;B" title="s_1 (A + B) = s_1 A + s_1 B" />
+```
+   ]scalars=: _100 100 runiform 1
+24.4943
+   ]matrices=: (genUniformMatrix 4 2),:(genUniformMatrix 4 2)
+ 853.433 _400.652
+_164.792  375.372
+ 675.547  584.175
+_69.8546  211.161
+
+_350.586   815.65
+_873.687  _226.76
+_322.805 _808.466
+ 202.957 _428.685
+   data=:scalars;matrices
+   >0{data
+24.4943
+   >1{data
+ 853.433 _400.652
+_164.792  375.372
+ 675.547  584.175
+_69.8546  211.161
+
+_350.586   815.65
+_873.687  _226.76
+_322.805 _808.466
+ 202.957 _428.685
+
+   leftR=: 4 : '(0{x) * ( (0{y) + (1{y) )'
+   rightR=: 4 : '( (0{x) * (0{y) ) + ( (0{x) * (1{y) )'
+   relation=: leftR`rightR
+
+   checkEqOfMatricesScalarsRel=: 4 : '( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )'
+   relation checkEqOfMatricesScalarsRel data
+1
+
+```
 
 ### Solution to exercise 19
 ```
