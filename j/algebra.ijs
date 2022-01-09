@@ -6,6 +6,30 @@ NB. How to load the script - an example
 NB. ]scriptdir=: 'PATH-TO-REPO/j-random-matrices/j/'
 NB. 0!:1 < scriptdir,'algebra.ijs'
 
+NB. Transpose of a matrix
+tr=: |:
+NB.    tr (2 3 $ 1 2 3 4 5 6)
+NB. 1 4
+NB. 2 5
+NB. 3 6
+NB.    tr (tr (2 3 $ 1 2 3 4 5 6))
+NB. 1 2 3
+NB. 4 5 6
+
+NB. Multiplication of matrices x and y
+mult=: +/ .*
+NB.    ]a=: 2 2 $ 1 2 3 4
+NB. 1 2
+NB. 3 4
+NB.    ]b=: 2 4 $ 1 2
+NB. 1 2 1 2
+NB. 1 2 1 2
+NB.    ]c=: a mult b
+NB. 3  6 3  6
+NB. 7 14 7 14
+NB.    $c
+NB. 2 4
+
 NB. Decompose each index in a given array into respective coordinates
 toIxs=: 3 : '(#:i.)@$y'
 NB. Examples:

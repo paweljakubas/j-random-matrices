@@ -6,7 +6,7 @@
 3. [Generate a random matrix](#generating-random-matrix)
 4. [Testing matrix properties](#testing-matrix-properties)
 5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
-6. [Transpose of a matrix](#transpose-of-matrix) - TODO
+6. [Transpose of a matrix](#transpose-of-matrix)
 7. [Inverse of a matrix](#inverse-of-matrix) - TODO
 8. [Determinant of a matrix](#determinant-of-matrix) - TODO
 9. [Trace of a matrix](#trace-of-matrix) - TODO
@@ -1116,10 +1116,32 @@ with selectors. Then we do the same for the row 0:
 215 216 217 218
 ```
 
-**Exercise 12**
+**Exercise 21**
 Show that the three basic operations can be realized by multiplication of transformed identity matrices.
 
-[Solution to exercise 12](#solution-to-exercise-12)
+[Solution to exercise 21](#solution-to-exercise-21)
+
+### Transpose of matrix
+The transpose is defined as follows:
+```
+   tr=: |:
+   tr (2 3 $ 1 2 3 4 5 6)
+1 4
+2 5
+3 6
+   tr (tr (2 3 $ 1 2 3 4 5 6))
+1 2 3
+4 5 6
+```
+We have also the following properties
+- <img src="https://latex.codecogs.com/svg.image?(A^T)^T=A" title="(A^T)^T=A" />
+- <img src="https://latex.codecogs.com/svg.image?(A&plus;B)^T=A^T&plus;B^T" title="(A+B)^T=A^T+B^T" />
+- <img src="https://latex.codecogs.com/svg.image?(AB)^T=B^TA^T" title="(AB)^T=B^TA^T" />
+
+**Exercise 22**
+Perform property testing for transpose properties.
+
+[Solution to exercise 22](#solution-to-exercise-22)
 
 ## Linear algebra. Solutions to exercises
 ### Solution to exercise 1
