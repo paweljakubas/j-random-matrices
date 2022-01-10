@@ -2135,10 +2135,38 @@ _322.805 _808.466
    rightR=: 4 : '( (0{x) * (0{y) ) + ( (0{x) * (1{y) )'
    relation=: leftR`rightR
 
+   NB. it is important here to set tolerance to the least strict value - floating point arithmetic
+   9!:18 ''
+1e_11
+
    checkEqOfMatricesScalarsRel=: 4 : '( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )'
    relation checkEqOfMatricesScalarsRel data
 1
 
+   run=: 3 : 0
+shape=.1+?2#100
+m=.(genUniformMatrix shape),:(genUniformMatrix shape)
+s=. _100 100 runiform 1
+data=.s;m
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
+```
+- <img src="https://latex.codecogs.com/svg.image?s_1&space;(s_2&space;A)&space;=&space;(s_1&space;s_2)A" title="s_1 (s_2 A) = (s_1 s_2)A" />
+```
+   leftR=: 4 : '(0{x) * ( (1{x) * (0{y) )'
+   rightR=: 4 : '( (0{x) * (1{x) ) * (0{y)'
+   relation=: leftR`rightR
+   run=: 3 : 0
+shape=.1+?2#100
+m=.genUniformMatrix shape
+s=. _100 100 runiform 2
+data=.s;m
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
 ```
 
 ### Solution to exercise 19
