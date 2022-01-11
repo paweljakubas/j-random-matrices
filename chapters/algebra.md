@@ -2168,6 +2168,21 @@ relation checkEqOfMatricesScalarsRel data
    (+/)(run"0)100#0
 100
 ```
+- <img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;(-1)A&space;=&space;0&space;" title="A + (-1)A = 0 " />
+```
+   leftR=: 4 : '(0{y) + ( (0{x) * (0{y) )'
+   rightR=: 4 : '1{y'
+   relation=: leftR`rightR
+   run=: 3 : 0
+shape=.1+?2#100
+m=.(genUniformMatrix shape),:(shape $ 0)
+s=. _1
+data=.s;m
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)1000#0
+1000
+```
 
 ### Solution to exercise 19
 ```

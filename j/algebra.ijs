@@ -298,3 +298,43 @@ NB.  _226.76 _322.805
 NB. _808.466  202.957
 NB.    relation checkEqOfMatrices matrices
 NB. 1
+
+NB. Check equality for the property requiring matrices and scalars
+NB. x is gerund relation having leftR`rightR and both
+NB. S leftR M
+NB. S rightR M
+NB. are expected to work with
+NB. y is data=:S;M
+checkEqOfMatricesScalarsRel=: 4 : '( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )'
+NB. Examples:
+NB.    ]scalars=: _100 100 runiform 1
+NB. 24.4943
+NB.    ]matrices=: (genUniformMatrix 4 2),:(genUniformMatrix 4 2)
+NB.  853.433 _400.652
+NB. _164.792  375.372
+NB.  675.547  584.175
+NB. _69.8546  211.161
+NB.
+NB. _350.586   815.65
+NB. _873.687  _226.76
+NB. _322.805 _808.466
+NB.  202.957 _428.685
+NB.    data=:scalars;matrices
+NB.    >0{data
+NB. 24.4943
+NB.    >1{data
+NB.  853.433 _400.652
+NB. _164.792  375.372
+NB.  675.547  584.175
+NB. _69.8546  211.161
+NB.
+NB. _350.586   815.65
+NB. _873.687  _226.76
+NB. _322.805 _808.466
+NB.  202.957 _428.685
+NB.
+NB.    leftR=: 4 : '(0{x) * ( (0{y) + (1{y) )'
+NB.    rightR=: 4 : '( (0{x) * (0{y) ) + ( (0{x) * (1{y) )'
+NB.    relation=: leftR`rightR
+NB.    relation checkEqOfMatricesScalarsRel data
+NB. 1
