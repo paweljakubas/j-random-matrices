@@ -1020,12 +1020,40 @@ relation checkEqOfMatricesScalarsRel data
    (+/)(run"0)100#0
 43
 ```
-This means in this batch run 57 sample cases failed to validate this property. The reason is that floating-point addition is not associative or distributive.
+The last result is equivalent to saying that 57 out of 100 sample cases failed to validate this property. This is due  to floating-point addition that is not associative or distributive.
 When testing the properties we would like to have a way to (1) detect the failing cases, (2) avoid the floating point deficiencies.
 
-TODO detect failing cases
+Let's see how to detect the failing cases for inspection - adapted basing on [http://jsoftware.com/pipermail/programming/2022-January/059566.html].
+```
+   data=.(_100 100 runiform 1);((genUniformMatrix 50 50),:(genUniformMatrix 50 50))
+   relation checkEqOfMatricesScalarsRel data
+1
+   data=.(_100 100 runiform 1);((genUniformMatrix 50 50),:(genUniformMatrix 50 50))
+   relation checkEqOfMatricesScalarsRel data
+1
+   data=.(_100 100 runiform 1);((genUniformMatrix 50 50),:(genUniformMatrix 50 50))
+   relation checkEqOfMatricesScalarsRel data
+0
+   showmismatch=: 4 : '($#:I.@,) ((0{::y) x@.0 (1{::y)) ~: (0{::y)x@.1(1{::y)'
+   relation showmismatch data
+20 39
+42 31
+   A=: 0 {:: data
+   s=: 0 {:: data
+   'A B'=: (<20 39)&{"2]1{:: data
+   s*(A + B)
+23.8806
+   (s*A) + (s*B)
+23.8806
+   (s*(A + B)) - ((s*A) + (s*B))
+2.77467e_12
+   NB. We inspected that this is due to floating-point arithmetic errors
+```
 
-In order to harness floating point we will try two approaches. In the first we will make decrease strictness of tolerance.
+In order to harness the deficiencies of floating point arithmetic we will try two approaches. In the first one we will decrease strictness of comparison tolerance.
+The comparison tolerance determines what is the minimum number difference that is assumed to treat the compared numbers as the same. This influence the `=` so also
+`-:`. If the comparison tolerance is smaller than the floating point errors then we experience floating-point inequality although we should have equality. So one
+approach would be to increase comparison tolerance:
 ```
    9!:18 ''
 5.68434e_14
@@ -1038,7 +1066,7 @@ In order to harness floating point we will try two approaches. In the first we w
    (+/)(run"0)1000#0
 991
 ```
-Making equal tolerance less strict helped a lot, but we are still not perfect.
+Making comparison tolerance less strict helped a lot, but we are still not perfect.
 Next, we will try to use `x:` ie., enforcing rational represention of y.
 ```
    toRational=:x:
@@ -1057,7 +1085,7 @@ relation checkEqOfMatricesScalarsRel data
    (+/)(run"0)1000#0
 1000
 ```
-We are perfect now, but with a caveat. The execution cost is substantial - order of magnitude difference with respect to previous approach.
+We are perfect now, but with a caveat. The additional execution cost is substantial - tests run an order of magnitude longer than corresponding the previous approach.
 
 ### Matrix multiplication
 
