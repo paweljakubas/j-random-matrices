@@ -274,7 +274,7 @@ NB. x is gerund having leftR`rightR and both
 NB. leftR M
 NB. rightR M
 NB. are expected to work with
-NB. y is M=,M1,M2,:M3 and so on
+NB. y is M=:M1,M2,:M3 and so on
 checkEqOfMatrices=: 4 : '( x@.0 y ) -: ( x@.1 y )'
 NB. Examples:
 NB.    leftR=: 3 : '( (0{y) + (1{y) ) + (2{y)'
@@ -303,8 +303,8 @@ NB. Check equality for the property requiring matrices and scalars
 NB. x is gerund relation having leftR`rightR and both
 NB. S leftR M
 NB. S rightR M
-NB. are expected to work with
-NB. y is data=:S;M
+NB. where S=:S1,S2,..,:SI and M=:M1,M2,..,:MI
+NB. and y is data=:S;M
 checkEqOfMatricesScalarsRel=: 4 : '( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )'
 NB. Examples:
 NB.    ]scalars=: _100 100 runiform 1

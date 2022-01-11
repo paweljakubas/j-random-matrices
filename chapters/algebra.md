@@ -997,6 +997,48 @@ Perform property testing for the rest addition properties specified above
 
 [Solution to exercise 18](#solution-to-exercise-18)
 
+#### Note on floating point arithmetics.
+
+Let's revisit the following property <img src="https://latex.codecogs.com/svg.image?s_1&space;(A&space;&plus;&space;B)&space;=&space;s_1&space;A&space;&plus;&space;s_1&space;B" title="s_1 (A + B) = s_1 A + s_1 B" />
+
+
+```
+   leftR=: 4 : '(0{x) * ( (0{y) + (1{y) )'
+   rightR=: 4 : '( (0{x) * (0{y) ) + ( (0{x) * (1{y) )'
+   relation=: leftR`rightR
+
+   checkEqOfMatricesScalarsRel=: 4 : '( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )'
+
+   run=: 3 : 0
+shape=.1+?2#100
+m=.(genUniformMatrix shape),:(genUniformMatrix shape)
+s=. _100 100 runiform 1
+data=.s;m
+relation checkEqOfMatricesScalarsRel data
+)
+
+   (+/)(run"0)100#0
+43
+```
+This means in this batch run 57 sample cases failed to validate this property. The reason is that floating-point addition is not associative or distributive.
+When testing the properties we would like to have a way to (1) detect the failing cases, (2) avoid the floating point deficiencies.
+
+TODO detect failing cases
+
+In order to harness floating point we will try two approaches. In the first we will make decrease strictness of tolerance.
+```
+   9!:18 ''
+5.68434e_14
+   9!:19 ]1e_11
+
+   9!:18 ''
+1e_11
+   (+/)(run"0)100#0
+100
+   (+/)(run"0)1000#0
+991
+```
+Making equal tolerance less strict helped a lot, but we are still not perfect.
 
 ### Matrix multiplication
 
