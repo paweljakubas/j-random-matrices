@@ -1039,6 +1039,25 @@ In order to harness floating point we will try two approaches. In the first we w
 991
 ```
 Making equal tolerance less strict helped a lot, but we are still not perfect.
+Next, we will try to use `x:` ie., enforcing rational represention of y.
+```
+   toRational=:x:
+   leftR=: 4 : '(toRational (0{x)) * ((toRational (0{y)) + (toRational (1{y)) )'
+   rightR=: 4 : '( (toRational (0{x)) * (toRational (0{y)) ) + ( (toRational (0{x)) * (toRational (1{y)) )'
+   relation=: leftR`rightR
+   run=: 3 : 0
+shape=.1+?2#100
+m=.(genUniformMatrix shape),:(genUniformMatrix shape)
+s=. _100 100 runiform 1
+data=.s;m
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
+   (+/)(run"0)1000#0
+1000
+```
+We are perfect now, but with a caveat. The execution cost is substantial - order of magnitude difference with respect to previous approach.
 
 ### Matrix multiplication
 
@@ -1047,7 +1066,7 @@ We have the following basic properties of matrix multiplication:
 - <img src="https://latex.codecogs.com/svg.image?A(B&plus;C)=AB&plus;AC" title="A(B+C)=AB+AC" />
 - <img src="https://latex.codecogs.com/svg.image?(A&plus;B)C=AC&plus;BC" title="(A+B)C=AC+BC" />
 
-The matrix multiplcation is defined as
+The matrix multiplication is defined as
 ```
    mult=: +/ .*
    ]a=: 2 2 $ 1 2 3 4
