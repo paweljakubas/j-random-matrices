@@ -2479,3 +2479,18 @@ relation checkEqOfMatricesScalarsRel data
 22  7  8
 31 10 11
 ```
+
+### Solution to exercise 23
+- <img src="https://latex.codecogs.com/svg.image?(A^T)^T=A" title="(A^T)^T=A" />
+```
+   leftR=: 4 : 'tr ( tr (0{y) )'
+   rightR=: 4 : '0{y'
+   relation=: leftR`rightR
+   run=: 3 : 0
+shape=.1+?2#100
+data=._1;(genUniformMatrix shape)
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)1000#0
+1000
+```
