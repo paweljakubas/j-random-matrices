@@ -1220,7 +1220,11 @@ Show the case for a following matrix
 Show that the three basic operations can be realized by matrix multiplication of the transformed identity matrices.
 Show the case for a following matrix
 ```
-   m=: 3 4 $ i.12
+    ]m=: 4 3 $ i.12
+0  1  2
+3  4  5
+6  7  8
+9 10 11
 ```
 
 [Solution to exercise 22](#solution-to-exercise-22)
@@ -2402,4 +2406,76 @@ relation checkEqOfMatricesScalarsRel data
  4 1 2
 13 4 5
 22 7 8
+```
+
+### Solution to exercise 22
+```
+    ]m=: 4 3 $ i.12
+0  1  2
+3  4  5
+6  7  8
+9 10 11
+   NB. exchange between row 0 and 2
+   ]e=: 4 4 $ 0 0 1 0 0 1 0 0 1 0 0 0 0 0 0 1
+0 0 1 0
+0 1 0 0
+1 0 0 0
+0 0 0 1
+   e mult m
+6  7  8
+3  4  5
+0  1  2
+9 10 11
+   NB. exchange between column 0 and 2 - other basic matrix is needed here
+   ]e=: 3 3 $ 0 0 1 0 1 0 1 0 0
+0 0 1
+0 1 0
+1 0 0
+   m mult e
+ 2  1 0
+ 5  4 3
+ 8  7 6
+11 10 9
+
+  NB. scaling rows and column needs different basic matrices
+   ]s=: 4 4 $ 2 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+2 0 0 0
+0 1 0 0
+0 0 1 0
+0 0 0 1
+   s mult m
+0  2  4
+3  4  5
+6  7  8
+9 10 11
+   ]s=: 3 3 $ 2 0 0 0 1 0 0 0 1
+2 0 0
+0 1 0
+0 0 1
+   m mult s
+ 0  1  2
+ 6  4  5
+12  7  8
+18 10 11
+
+  NB. addition of rows and column needs also different matrices
+   ]a=: 4 4 $ 1 0 2 0 0 1 0 0 0 0 1 0 0 0 0 1
+1 0 2 0
+0 1 0 0
+0 0 1 0
+0 0 0 1
+   a mult m
+12 15 18
+ 3  4  5
+ 6  7  8
+ 9 10 11
+   ]a=: 3 3 $ 1 0 2 0 1 0 0 0 1
+1 0 2
+0 1 0
+0 0 1
+   m mult (|: a)
+ 4  1  2
+13  4  5
+22  7  8
+31 10 11
 ```
