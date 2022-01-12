@@ -2301,6 +2301,19 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?A(B&plus;C)=AB&plus;AC" title="A(B+C)=AB+AC" />
 ```
+   toRational=:x:
+   leftR=: 4 : '(toRational (0{y)) * ( (toRational (1{y)) + (toRational (2{y)) )'
+   rightR=: 4 : '( (toRational (0{y)) * (toRational (1{y)) ) + ( (toRational (0{y)) * (toRational (2{y)) )'
+   relation=: leftR`rightR
+      run=: 3 : 0
+'d1 d2 d3'=.1+?3#100
+m=.(genUniformMatrix (d1, d2)),(genUniformMatrix (d2, d3)),:(genUniformMatrix (d2, d3))
+data=._1;m
+relation checkEqOfMatricesScalarsRel data
+)
+
+   (+/)(run"0)100#0
+100
 ```
 - <img src="https://latex.codecogs.com/svg.image?(A&plus;B)C=AC&plus;BC" title="(A+B)C=AC+BC" />
 ```
