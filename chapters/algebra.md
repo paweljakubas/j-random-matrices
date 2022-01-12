@@ -997,7 +997,7 @@ Perform property testing for the rest addition properties specified above
 
 [Solution to exercise 18](#solution-to-exercise-18)
 
-#### Note on floating point arithmetics.
+### Note on floating point arithmetics.
 
 Let's revisit the following property <img src="https://latex.codecogs.com/svg.image?s_1&space;(A&space;&plus;&space;B)&space;=&space;s_1&space;A&space;&plus;&space;s_1&space;B" title="s_1 (A + B) = s_1 A + s_1 B" />
 
@@ -1021,7 +1021,7 @@ relation checkEqOfMatricesScalarsRel data
 43
 ```
 The last result is equivalent to saying that 57 out of 100 sample cases failed to validate this property. This is due  to floating-point addition that is not associative or distributive.
-When testing the properties we would like to have a way to (1) detect the failing cases, (2) avoid the floating point deficiencies.
+When testing the properties we would like to have a way to (1) detect and inspect the failing cases, (2) control the limitations of floating point arithmetics.
 
 Let's see how to detect the failing cases for inspection - adapted basing on [http://jsoftware.com/pipermail/programming/2022-January/059566.html].
 ```
@@ -1038,7 +1038,6 @@ Let's see how to detect the failing cases for inspection - adapted basing on [ht
    relation showmismatch data
 20 39
 42 31
-   A=: 0 {:: data
    s=: 0 {:: data
    'A B'=: (<20 39)&{"2]1{:: data
    s*(A + B)
@@ -2282,4 +2281,27 @@ relation checkEqOfMatricesScalarsRel data
     fibb"0 i.30
 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946 17711 28657 46368 75025 121393 196418 317811 514229 832040
     NB. this is very efficient implementation
+```
+
+### Solution to exercise 20
+- <img src="https://latex.codecogs.com/svg.image?(AB)C=A(BC)" title="(AB)C=A(BC)" />
+```
+   leftR=: 4 : '( (0{y) * (1{y) ) * (2{y)'
+   rightR=: 4 : '(0{y) * ( (1{y) * (2{y) )'
+   relation=: leftR`rightR
+   run=: 3 : 0
+'d1 d2 d3 d4'=.1+?4#100
+m=.(genUniformMatrix (d1, d2)),(genUniformMatrix (d2, d3)),:(genUniformMatrix (d3, d4))
+data=._1;m
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
+
+```
+- <img src="https://latex.codecogs.com/svg.image?A(B&plus;C)=AB&plus;AC" title="A(B+C)=AB+AC" />
+```
+```
+- <img src="https://latex.codecogs.com/svg.image?(A&plus;B)C=AC&plus;BC" title="(A+B)C=AC+BC" />
+```
 ```
