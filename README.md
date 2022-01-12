@@ -52,4 +52,4 @@ Following is the list of books that I found especially useful during the first i
 
 
 ## Contents
-### [Linear algebra](chapters/algebra.md)
+### [Basic linear algebra](chapters/basic-algebra.md)

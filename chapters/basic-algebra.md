@@ -1,4 +1,4 @@
-# Linear algebra
+# Basic linear algebra
 
 ## Contents
 1. [Selecting from a matrix](#selecting-from-matrix)
@@ -14,9 +14,9 @@
 11. [Matrix decompositions](#matrix-decompositions) - TODO
 
 
-[Solutions to exercices](#linear-algebra-solutions-to-exercises)
+[Solutions to exercices](#basic-linear-algebra-solutions-to-exercises)
 
-# Linear algebra
+# Basic linear algebra
 Let's start with fundamental results and operations on matrices
 that are prerequisite for going further. There are topics that I dive into quite deeply,
 others I just stop investigating when accomplishing basic result. This is the reflection
@@ -1161,7 +1161,7 @@ For a row case we do analogically but we choose corresponding row selections:
 112 113 114 115
 ```
 
-In **scaling** elementary operation each element in a give column (row) is multiplied
+In **scaling** elementary operation each element in a given column (row) is multiplied
 by the provided factor. For both column and row cases this could be realized as follows:
 ```
 f =: 4 : '(y * x)'
@@ -1180,9 +1180,9 @@ f =: 4 : '(y * x)'
 112 113 114 115
 ```
 
-The **addition** elementary operation in a column case entails adding element-wise to some column
-another column scaled by some factor. The case for the row varies with the choice of the row selector
-rather than column selector. Following we are replacing column 0 with the result of the
+The **addition** elementary operation in a column case entails adding column scaled by some factor
+,element-wise, to other column. The case for the row varies with the choice of a row selector
+instead of the column selector. Following we are replacing column 0 with the result of the
 addition of column 0 and column 2 that was scaled by factor 5. Once again we use update operation
 with selectors. Then we do the same for the row 0:
 ```
@@ -1205,9 +1205,25 @@ with selectors. Then we do the same for the row 0:
 ```
 
 **Exercise 21**
-Show that the three basic operations can be realized by multiplication of transformed identity matrices.
+Show that the three basic operations can be realized by matrix multiplication of the transformed identity matrices.
+Show the case for a following matrix
+```
+    ]m=: 3 3 $ i.9
+0 1 2
+3 4 5
+6 7 8
+```
 
 [Solution to exercise 21](#solution-to-exercise-21)
+
+**Exercise 22**
+Show that the three basic operations can be realized by matrix multiplication of the transformed identity matrices.
+Show the case for a following matrix
+```
+   m=: 3 4 $ i.12
+```
+
+[Solution to exercise 22](#solution-to-exercise-22)
 
 ### Transpose of matrix
 The transpose is defined as follows:
@@ -1221,17 +1237,17 @@ The transpose is defined as follows:
 1 2 3
 4 5 6
 ```
-We have also the following properties
+We have also the following properties [2, page 6]
 - <img src="https://latex.codecogs.com/svg.image?(A^T)^T=A" title="(A^T)^T=A" />
 - <img src="https://latex.codecogs.com/svg.image?(A&plus;B)^T=A^T&plus;B^T" title="(A+B)^T=A^T+B^T" />
 - <img src="https://latex.codecogs.com/svg.image?(AB)^T=B^TA^T" title="(AB)^T=B^TA^T" />
 
-**Exercise 22**
+**Exercise 23**
 Perform property testing for transpose properties.
 
-[Solution to exercise 22](#solution-to-exercise-22)
+[Solution to exercise 23](#solution-to-exercise-23)
 
-## Linear algebra. Solutions to exercises
+## Basic linear algebra. Solutions to exercises
 ### Solution to exercise 1
 ```
    m
@@ -2329,4 +2345,61 @@ relation checkEqOfMatricesScalarsRel data
 )
    (+/)(run"0)100#0
 100
+```
+
+### Solution to exercise 21
+```
+    ]m=: 3 3 $ i.9
+0 1 2
+3 4 5
+6 7 8
+    NB. exchange between row 0 and 2
+   ]e=: 3 3 $ 0 0 1 0 1 0 1 0 0
+0 0 1
+0 1 0
+1 0 0
+   e mult m
+6 7 8
+3 4 5
+0 1 2
+
+   NB. add 2 x (row 2) to row 0
+   ]a=: 3 3 $ 1 0 2 0 1 0 0 0 1
+1 0 2
+0 1 0
+0 0 1
+   a mult m
+12 15 18
+ 3  4  5
+ 6  7  8
+
+   NB. scale row 0 by factor 2
+   ]s=: 3 3 $ 2 0 0 0 1 0 0 0 1
+2 0 0
+0 1 0
+0 0 1
+   s mult m
+0 2 4
+3 4 5
+6 7 8
+
+   NB. reuse e, a, s to column operations
+   m mult e
+2 1 0
+5 4 3
+8 7 6
+   m mult a
+0 1  2
+3 4 11
+6 7 20
+   m mult s
+ 0 1 2
+ 6 4 5
+12 7 8
+
+   NB. exchange and scaling works fine except addition, it act on column 2 rather than column 0, so transpose is needed
+   m mult (|: a)
+ 4 1 2
+13 4 5
+22 7 8
 ```
