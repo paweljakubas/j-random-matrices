@@ -7,7 +7,7 @@
 4. [Testing matrix properties](#testing-matrix-properties)
 5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
 6. [Transpose of a matrix](#transpose-of-matrix)
-7. [Inverse of a matrix](#inverse-of-matrix) - TODO
+7. [Inverse of a matrix](#inverse-of-matrix)
 8. [Determinant of a matrix](#determinant-of-matrix) - TODO
 9. [Trace of a matrix](#trace-of-matrix) - TODO
 10. [A partitioned matrix](#partitioned-matrix) - TODO
@@ -1268,6 +1268,54 @@ We have also the following properties [2, page 6]
 Perform property testing for transpose properties.
 
 [Solution to exercise 23](#solution-to-exercise-23)
+
+### Inverse of matrix
+
+When a square matrix A is nonsingular (ie., its rank is equal to its row/column dimension) then there exists
+matrix B (called the inverse of A) of the same shape that satisfies:
+
+<img src="https://latex.codecogs.com/svg.image?BA=AB=I" title="BA=AB=I" />
+
+Inverse of a square matrix is defined as `%.`
+```
+   NB. nonsingular matrix has an inverse (each row, so also the column, is linearly independent)
+   ]m=: 3 3 $ 1 2 3 5 4 6 9 7 8
+1 2 3
+5 4 6
+9 7 8
+   ]inv=: %. m
+ _0.666667 0.333333    0
+  0.933333 _1.26667  0.6
+_0.0666667 0.733333 _0.4
+   inv mult m
+           1            0 0
+           0            1 0
+_4.44089e_16 _4.44089e_16 1
+   (toRational inv) mult m
+1 0 0
+0 1 0
+0 0 1
+
+   NB. singular matrix does not an inverse (row 1 is twice row 0)
+   ]m=: 3 3 $ 1 2 3 2 4 6 9 7 8
+1 2 3
+2 4 6
+9 7 8
+   ]inv=: %. m
+_. _. _.
+_. _. _.
+_. _. _.
+
+```
+
+Worth noting properties of the matrix inverse are following:
+- <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
+- <img src="https://latex.codecogs.com/svg.image?(AB)^{-1}=B^{-1}A^{-1}" title="(AB)^{-1}=B^{-1}A^{-1}" />
+
+**Exercise 24**
+Add property testing for inverse properties.
+
+[Solution to exercise 24](#solution-to-exercise-24)
 
 ## Basic linear algebra. Solutions to exercises
 ### Solution to exercise 1
