@@ -243,10 +243,10 @@ NB. --------------------
 
 NB. Check equality for the property requiring matrices and scalars
 NB. x is gerund relation having leftR`rightR and both
-NB. S leftR M
-NB. S rightR M
-NB. where S=:S1,S2,..,:SI and M=:M1,M2,..,:MI
-NB. and y is data=:S;M
+NB. S leftR (<M)
+NB. S rightR (<M)
+NB. where S=:S1,S2,..,SI and M=:M1;M2;..;MI
+NB. and y is data=:S;<M
 NB. Please notice that M is also boxed as it can assume a sequence of
 NB. matrices with different shapes
 checkEqOfMatricesScalarsRel=: {{

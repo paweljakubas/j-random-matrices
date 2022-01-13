@@ -1003,35 +1003,41 @@ Let's revisit the following property <img src="https://latex.codecogs.com/svg.im
 
 
 ```
-   leftR=: 4 : '(0{x) * ( (0{y) + (1{y) )'
-   rightR=: 4 : '( (0{x) * (0{y) ) + ( (0{x) * (1{y) )'
+   leftR=: {{
+s=.0{x
+A=.>(0{y)
+B=.>(1{y)
+s*(A + B)
+}}
+   rightR=: {{
+s=.0{x
+A=.>(0{y)
+B=.>(1{y)
+(s*A) + (s*B)
+}}
    relation=: leftR`rightR
-
-   checkEqOfMatricesScalarsRel=: 4 : '( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )'
-
    run=: 3 : 0
 shape=.1+?2#100
-m=.(genUniformMatrix shape),:(genUniformMatrix shape)
+m=.(genUniformMatrix shape);(genUniformMatrix shape)
 s=. _100 100 runiform 1
-data=.s;m
+data=.s;<m
 relation checkEqOfMatricesScalarsRel data
 )
-
    (+/)(run"0)100#0
-43
+37
 ```
 The last result is equivalent to saying that 57 out of 100 sample cases failed to validate this property. This is due  to floating-point addition that is not associative or distributive.
 When testing the properties we would like to have a way to (1) detect and inspect the failing cases, (2) control the limitations of floating point arithmetics.
 
 Let's see how to detect the failing cases for inspection - adapted basing on [http://jsoftware.com/pipermail/programming/2022-January/059566.html].
 ```
-   data=.(_100 100 runiform 1);((genUniformMatrix 50 50),:(genUniformMatrix 50 50))
+   data=.(_100 100 runiform 1);<((genUniformMatrix 50 50);(genUniformMatrix 50 50))
    relation checkEqOfMatricesScalarsRel data
 1
-   data=.(_100 100 runiform 1);((genUniformMatrix 50 50),:(genUniformMatrix 50 50))
+   data=.(_100 100 runiform 1);<((genUniformMatrix 50 50);(genUniformMatrix 50 50))
    relation checkEqOfMatricesScalarsRel data
 1
-   data=.(_100 100 runiform 1);((genUniformMatrix 50 50),:(genUniformMatrix 50 50))
+   data=.(_100 100 runiform 1);<((genUniformMatrix 50 50);(genUniformMatrix 50 50))
    relation checkEqOfMatricesScalarsRel data
 0
    showmismatch=: 4 : '($#:I.@,) ((0{::y) x@.0 (1{::y)) ~: (0{::y)x@.1(1{::y)'
@@ -1039,7 +1045,7 @@ Let's see how to detect the failing cases for inspection - adapted basing on [ht
 20 39
 42 31
    s=: 0 {:: data
-   'A B'=: (<20 39)&{"2]1{:: data
+   'A B'=: (<20 39)&{"2]>1{:: data
    s*(A + B)
 23.8806
    (s*A) + (s*B)
@@ -1069,14 +1075,24 @@ Making comparison tolerance less strict helped a lot, but we are still not perfe
 Next, we will try to use `x:` ie., enforcing rational represention of y.
 ```
    toRational=:x:
-   leftR=: 4 : '(toRational (0{x)) * ((toRational (0{y)) + (toRational (1{y)) )'
-   rightR=: 4 : '( (toRational (0{x)) * (toRational (0{y)) ) + ( (toRational (0{x)) * (toRational (1{y)) )'
-   relation=: leftR`rightR
-   run=: 3 : 0
+   leftR=: {{
+s=.0{x
+A=.>(0{y)
+B=.>(1{y)
+(toRational s)*( (toRational A) + (toRational B) )
+}}
+   rightR=: {{
+s=.0{x
+A=.>(0{y)
+B=.>(1{y)
+( (toRational s)*(toRational A) ) + ( (toRational s)*(toRational B) )
+}}
+         relation=: leftR`rightR
+         run=: 3 : 0
 shape=.1+?2#100
-m=.(genUniformMatrix shape),:(genUniformMatrix shape)
+m=.(genUniformMatrix shape);(genUniformMatrix shape)
 s=. _100 100 runiform 1
-data=.s;m
+data=.s;<m
 relation checkEqOfMatricesScalarsRel data
 )
    (+/)(run"0)100#0
@@ -1085,6 +1101,8 @@ relation checkEqOfMatricesScalarsRel data
 1000
 ```
 We are perfect now, but with a caveat. The additional execution cost is substantial - tests run an order of magnitude longer than corresponding the previous approach.
+So the control over floating-point arithmetic bogs down to trying another approach unless we get 1000 out of 1000 tries. If using rational conversion does not help then we
+need to reconsider the property itself.
 
 ### Matrix multiplication
 
@@ -2207,56 +2225,6 @@ shape=.1+?2#100
 m=.genUniformMatrix shape
 s=. _100 100 runiform 2
 s checkEqOfMatricesWithScalars m
-)
-   (+/)(run"0)100#0
-100
-```
-- <img src="https://latex.codecogs.com/svg.image?s_1&space;(A&space;&plus;&space;B)&space;=&space;s_1&space;A&space;&plus;&space;s_1&space;B" title="s_1 (A + B) = s_1 A + s_1 B" />
-```
-   ]scalars=: _100 100 runiform 1
-24.4943
-   ]matrices=: (genUniformMatrix 4 2),:(genUniformMatrix 4 2)
- 853.433 _400.652
-_164.792  375.372
- 675.547  584.175
-_69.8546  211.161
-
-_350.586   815.65
-_873.687  _226.76
-_322.805 _808.466
- 202.957 _428.685
-   data=:scalars;matrices
-   >0{data
-24.4943
-   >1{data
- 853.433 _400.652
-_164.792  375.372
- 675.547  584.175
-_69.8546  211.161
-
-_350.586   815.65
-_873.687  _226.76
-_322.805 _808.466
- 202.957 _428.685
-
-   leftR=: 4 : '(0{x) * ( (0{y) + (1{y) )'
-   rightR=: 4 : '( (0{x) * (0{y) ) + ( (0{x) * (1{y) )'
-   relation=: leftR`rightR
-
-   NB. it is important here to set tolerance to the least strict value - floating point arithmetic
-   9!:18 ''
-1e_11
-
-   checkEqOfMatricesScalarsRel=: 4 : '( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )'
-   relation checkEqOfMatricesScalarsRel data
-1
-
-   run=: 3 : 0
-shape=.1+?2#100
-m=.(genUniformMatrix shape),:(genUniformMatrix shape)
-s=. _100 100 runiform 1
-data=.s;m
-relation checkEqOfMatricesScalarsRel data
 )
    (+/)(run"0)100#0
 100
