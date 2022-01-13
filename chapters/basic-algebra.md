@@ -2324,16 +2324,17 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?(A&plus;B)C=AC&plus;BC" title="(A+B)C=AC+BC" />
 ```
-   toRational=:x:
-   leftR=: 4 : '( (toRational (0{y)) + (toRational (1{y)) ) * (toRational (2{y))'
-   rightR=: 4 : '( (toRational (0{y)) * (toRational (2{y)) ) + ( (toRational (1{y)) * (toRational (2{y)) )'
+   leftR=: 4 : '( (toRational >0{y) + (toRational >1{y) ) mult (toRational >2{y)'
+   rightR=: 4 : '( (toRational >0{y) mult (toRational >2{y) ) + ( (toRational >1{y) mult (toRational >2{y) )'
    relation=: leftR`rightR
    run=: 3 : 0
-'d1 d2 d3'=.1+?3#100
-m=.(genUniformMatrix (d1, d2)),(genUniformMatrix (d1, d2)),:(genUniformMatrix (d2, d3))
-data=._1;m
+'d1 d2 d3'=.1+?3#20
+m=.(genUniformMatrix (d1, d2));(genUniformMatrix (d1, d2));(genUniformMatrix (d2, d3))
+data=._1;<m
 relation checkEqOfMatricesScalarsRel data
 )
+   run 0
+1
    (+/)(run"0)100#0
 100
 ```
@@ -2470,25 +2471,25 @@ relation checkEqOfMatricesScalarsRel data
 ### Solution to exercise 23
 - <img src="https://latex.codecogs.com/svg.image?(A^T)^T=A" title="(A^T)^T=A" />
 ```
-   leftR=: 4 : 'tr ( tr (0{y) )'
-   rightR=: 4 : '0{y'
+   leftR=: 4 : 'tr ( tr (>0{y) )'
+   rightR=: 4 : '>0{y'
    relation=: leftR`rightR
-   run=: 3 : 0
+      run=: 3 : 0
 shape=.1+?2#100
-data=._1;(genUniformMatrix shape)
+data=._1;<(genUniformMatrix shape)
 relation checkEqOfMatricesScalarsRel data
 )
-   (+/)(run"0)1000#0
+      (+/)(run"0)1000#0
 1000
 ```
 - <img src="https://latex.codecogs.com/svg.image?(A&plus;B)^T=A^T&plus;B^T" title="(A+B)^T=A^T+B^T" />
 ```
-   leftR=: 4 : 'tr ( (0{y) + (1{y) )'
-   rightR=: 4 : '( tr (0{y) ) + ( tr (1{y) )'
+   leftR=: 4 : 'tr ( (>0{y) + (>1{y) )'
+   rightR=: 4 : '( tr (>0{y) ) + ( tr (>1{y) )'
    relation=: leftR`rightR
    run=: 3 : 0
 shape=.1+?2#100
-data=._1;((genUniformMatrix shape),:(genUniformMatrix shape))
+data=._1;<((genUniformMatrix shape);(genUniformMatrix shape))
 relation checkEqOfMatricesScalarsRel data
 )
    (+/)(run"0)1000#0
@@ -2496,17 +2497,16 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?(AB)^T=B^TA^T" title="(AB)^T=B^TA^T" />
 ```
-   leftR=: 4 : 'tr ( (0{y) mult (1{y) )'
-   rightR=: 4 : '( tr (1{y) ) mult ( tr (0{y) )'
+   leftR=: 4 : 'tr ( (>0{y) mult (>1{y) )'
+   rightR=: 4 : '( tr (>1{y) ) mult ( tr (>0{y) )'
    relation=: leftR`rightR
    run=: 3 : 0
-d=.1+?1#100
-shape=.d,d
-data=._1;( (genUniformMatrix shape),:(genUniformMatrix shape) )
+'d1 d2'=.1+?2#30
+data=._1;<( (genUniformMatrix (d1,d2));(genUniformMatrix (d2,d1)) )
 relation checkEqOfMatricesScalarsRel data
 )
    (+/)(run"0)1000#0
-922
+960
    9!:19 ]1e_11
 
    (+/)(run"0)1000#0
