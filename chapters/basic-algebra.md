@@ -2231,14 +2231,24 @@ s checkEqOfMatricesWithScalars m
 ```
 - <img src="https://latex.codecogs.com/svg.image?s_1&space;(s_2&space;A)&space;=&space;(s_1&space;s_2)A" title="s_1 (s_2 A) = (s_1 s_2)A" />
 ```
-   leftR=: 4 : '(0{x) * ( (1{x) * (0{y) )'
-   rightR=: 4 : '( (0{x) * (1{x) ) * (0{y)'
+   leftR=: {{
+s1=.0{x
+s2=.1{x
+A=.>(0{y)
+s1*(s2*A)
+}}
+   rightR=: {{
+s1=.0{x
+s2=.1{x
+A=.>(0{y)
+(s1*s2)*A
+}}
    relation=: leftR`rightR
    run=: 3 : 0
 shape=.1+?2#100
 m=.genUniformMatrix shape
 s=. _100 100 runiform 2
-data=.s;m
+data=.s;<m
 relation checkEqOfMatricesScalarsRel data
 )
    (+/)(run"0)100#0
@@ -2246,14 +2256,13 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?A&space;&plus;&space;(-1)A&space;=&space;0&space;" title="A + (-1)A = 0 " />
 ```
-   leftR=: 4 : '(0{y) + ( (0{x) * (0{y) )'
-   rightR=: 4 : '1{y'
+   leftR=: 4 : '(>0{y) + ( (0{x) * (>0{y) )'
+   rightR=: 4 : '>1{y'
    relation=: leftR`rightR
    run=: 3 : 0
 shape=.1+?2#100
-m=.(genUniformMatrix shape),:(shape $ 0)
-s=. _1
-data=.s;m
+m=.(genUniformMatrix shape);(shape $ 0)
+data=._1;<m
 relation checkEqOfMatricesScalarsRel data
 )
    (+/)(run"0)1000#0
