@@ -241,100 +241,42 @@ NB. --------------------
 NB. - Property testing -
 NB. --------------------
 
-NB. Check equality for the property requiring two matrices
-NB. x is gerund having leftR`rightR and both
-NB.  M1 leftR M2
-NB. M1 rightR M2
-NB. are expected to work
-NB. y is M1,:M2
-checkEqTwoMatrices=: 4 : '( (0{y) x@.0 (1{y) ) -: ( (0{y) x@.1 (1{y) )'
-NB. Examples:
-NB.    leftR=: 4 : 'x + y'
-NB.    rightR=: 4 : 'y + x'
-NB.    relation=: leftR`rightR
-NB.       relation@.0
-NB. 4 : 'x + y'
-NB.       relation@.1
-NB. 4 : 'y + x'
-NB.    ]matrices=: (genUniformMatrix 4 2),:(genUniformMatrix 4 2)
-NB.  783.326  777.188
-NB.  433.257  992.401
-NB. _44.5578   892.71
-NB.  850.185   636.44
-NB.
-NB.  211.161 _619.827
-NB.  464.316 _601.967
-NB.  309.364  851.114
-NB. _181.237  238.782
-NB. relation checkEqTwoMatrices matrices
-NB. 1
-
-NB. Check equality for the property requiring more than 1 matrices
-NB. x is gerund having leftR`rightR and both
-NB. leftR M
-NB. rightR M
-NB. are expected to work with
-NB. y is M=:M1,M2,:M3 and so on
-checkEqOfMatrices=: 4 : '( x@.0 y ) -: ( x@.1 y )'
-NB. Examples:
-NB.    leftR=: 3 : '( (0{y) + (1{y) ) + (2{y)'
-NB.    rightR=: 3 : '(0{y) + ( (1{y) + (2{y) )'
-NB.    relation=: leftR`rightR
-NB.    genUniformMatrix=: 3 : 'y $ _1000 1000 runiform ((0{y) * (1{y))'
-NB.    ]matrices=: (genUniformMatrix 4 2),(genUniformMatrix 4 2),:(genUniformMatrix 4 2)
-NB.  211.161 _619.827
-NB.  464.316 _601.967
-NB.  309.364  851.114
-NB. _181.237  238.782
-NB.
-NB. _428.685  853.433
-NB. _400.652 _164.792
-NB.  375.372  675.547
-NB.  584.175 _69.8546
-NB.
-NB.  244.943 _350.586
-NB.   815.65 _873.687
-NB.  _226.76 _322.805
-NB. _808.466  202.957
-NB.    relation checkEqOfMatrices matrices
-NB. 1
-
 NB. Check equality for the property requiring matrices and scalars
 NB. x is gerund relation having leftR`rightR and both
 NB. S leftR M
 NB. S rightR M
 NB. where S=:S1,S2,..,:SI and M=:M1,M2,..,:MI
 NB. and y is data=:S;M
-checkEqOfMatricesScalarsRel=: 4 : '( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )'
+NB. Please notice that M is also boxed as it can assume a sequence of
+NB. matrices with different shapes
+checkEqOfMatricesScalarsRel=: {{
+  ( (>0{y) x@.0 (>1{y) ) -: ( (>0{y) x@.1 (>1{y) )
+}}
 NB. Examples:
-NB.    ]scalars=: _100 100 runiform 1
-NB. 24.4943
-NB.    ]matrices=: (genUniformMatrix 4 2),:(genUniformMatrix 4 2)
-NB.  853.433 _400.652
-NB. _164.792  375.372
-NB.  675.547  584.175
-NB. _69.8546  211.161
+NB.    scalars=: _100 100 runiform 1
+NB.    matrices=: (genUniformMatrix 4 2);(genUniformMatrix 2 6)
+NB.    ]data=:scalars;<matrices
+NB. ┌───────┬──────────────────────────────────────────────────────────────────────┐
+NB. │24.4943│┌─────────────────┬──────────────────────────────────────────────────┐│
+NB. │       ││  892.71  850.185│_619.827 464.316 _601.967 309.364 851.114 _181.237││
+NB. │       ││  636.44  248.583│ 238.782 783.326  777.188 433.257 992.401 _44.5578││
+NB. │       ││_714.152 _577.337│                                                  ││
+NB. │       ││_556.986 _412.428│                                                  ││
+NB. │       │└─────────────────┴──────────────────────────────────────────────────┘│
+NB. └───────┴──────────────────────────────────────────────────────────────────────┘
 NB.
-NB. _350.586   815.65
-NB. _873.687  _226.76
-NB. _322.805 _808.466
-NB.  202.957 _428.685
-NB.    data=:scalars;matrices
-NB.    >0{data
-NB. 24.4943
-NB.    >1{data
-NB.  853.433 _400.652
-NB. _164.792  375.372
-NB.  675.547  584.175
-NB. _69.8546  211.161
-NB.
-NB. _350.586   815.65
-NB. _873.687  _226.76
-NB. _322.805 _808.466
-NB.  202.957 _428.685
-NB.
-NB.    leftR=: 4 : '(0{x) * ( (0{y) + (1{y) )'
-NB.    rightR=: 4 : '( (0{x) * (0{y) ) + ( (0{x) * (1{y) )'
+NB.    rightR=: {{
+NB. s=.0{x
+NB. A=.>(0{y)
+NB. B=.>(1{y)
+NB. A mult (s*B)
+NB. }}
+NB.       leftR=: {{
+NB. s=:0{x
+NB. A=:>(0{y)
+NB. B=:>(1{y)
+NB. s*(A mult B)
+NB. }}
 NB.    relation=: leftR`rightR
 NB.    relation checkEqOfMatricesScalarsRel data
 NB. 1
