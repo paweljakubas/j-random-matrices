@@ -1276,6 +1276,10 @@ matrix B (called the inverse of A) of the same shape that satisfies:
 
 <img src="https://latex.codecogs.com/svg.image?BA=AB=I" title="BA=AB=I" />
 
+The calculation of rank and its properties will be covered after introducing SVD decomposition as
+the numerical rank can be determined as a side effect of the decomposition (also possible using QR or LU although
+so reliable as in caseof SVD).
+
 Inverse of a square matrix is defined as `%.`
 ```
    NB. nonsingular matrix has an inverse (each row, so also the column, is linearly independent)
@@ -2559,4 +2563,23 @@ relation checkEqOfMatricesScalarsRel data
 
    (+/)(run"0)1000#0
 1000
+```
+
+### Solution to exercise 23
+- <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
+```
+   leftR=: 4 : 'tr ( %. (>0{y) )'
+   rightR=: 4 : '%. ( tr (>0{y) )'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#30
+data=._1;<( genUniformMatrix (d,d) )
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)1000#0
+1000
+```
+- <img src="https://latex.codecogs.com/svg.image?(AB)^{-1}=B^{-1}A^{-1}" title="(AB)^{-1}=B^{-1}A^{-1}" />
+```
+
 ```
