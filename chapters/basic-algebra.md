@@ -1271,8 +1271,8 @@ Perform property testing for transpose properties.
 
 ### Inverse of matrix
 
-When a square matrix A is nonsingular (ie., its rank is equal to its row/column dimension) then there exists
-matrix B (called the inverse of A) of the same shape that satisfies:
+When a **square matrix A** is nonsingular (ie., its rank is equal to its row/column dimension) then there exists
+matrix **B** (called the inverse of A) of the same shape that satisfies:
 
 <img src="https://latex.codecogs.com/svg.image?BA=AB=I" title="BA=AB=I" />
 
@@ -1311,6 +1311,85 @@ _. _. _.
 _. _. _.
 
 ```
+
+Let's investigate the main property. First we will property test
+- <img src="https://latex.codecogs.com/svg.image?A^{-1}A&space;=&space;AA^{-1}" title="A^{-1}A = AA^{-1}" />
+```
+   leftR=: 4 : '(%. (>0{y) ) mult (>0{y)'
+   rightR=: 4 : '(>0{y) mult (%. (>0{y) )'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#30
+data=._1;<(genUniformMatrix (d,d))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)1000#0
+1000
+```
+Now, we will test
+- <img src="https://latex.codecogs.com/svg.image?A^{-1}A&space;=&space;I" title="A^{-1}A = I" />
+```
+   leftR=: 4 : '(%. (>0{y) ) mult (>0{y)'
+   rightR=: 4 : '>1{y'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#30
+data=._1;<( (genUniformMatrix (d,d)); (=/~ (i.d)) )
+relation checkEqOfMatricesScalarsRel data
+)
+   run 0
+0
+   ]d=.1+?1#30
+6
+   ]data=._1;<((genUniformMatrix (d,d));(=/~ (i.d)) )
+┌──┬───────────────────────────────────────────────────────────────────┐
+│_1│┌─────────────────────────────────────────────────────┬───────────┐│
+│  ││ 44.3295  591.303  430.928  421.416 _695.587  666.632│1 0 0 0 0 0││
+│  ││_721.179  _867.88  599.228 _197.815  _771.76  201.802│0 1 0 0 0 0││
+│  ││ 885.758   _438.9  417.417 _294.439  58.2094 _474.602│0 0 1 0 0 0││
+│  ││_198.792 _849.979  131.914  613.662 _173.348 _319.625│0 0 0 1 0 0││
+│  ││_862.958  532.931 _122.465 _738.311 _128.379  956.947│0 0 0 0 1 0││
+│  ││_322.232 _402.396  _341.93 _561.943  721.986 _13.3718│0 0 0 0 0 1││
+│  │└─────────────────────────────────────────────────────┴───────────┘│
+└──┴───────────────────────────────────────────────────────────────────┘
+   (_1 leftR (>1{data))
+           1 _3.68594e_14  3.19744e_14  1.68754e_14 _1.63203e_14 _3.81917e_14
+_4.09672e_14            1 _2.73115e_14  _1.5099e_14  1.27676e_14  3.33067e_14
+_9.14824e_14  7.19425e_14            1  _3.4639e_14  3.28626e_14  7.54952e_14
+_1.11577e_14  7.88258e_15 _7.93809e_15            1  4.66988e_15  8.32667e_15
+_5.57332e_14  4.17444e_14 _3.90799e_14 _2.08722e_14            1  4.39648e_14
+ 3.88023e_14 _3.28626e_14  2.62568e_14  1.45439e_14 _1.14353e_14            1
+   NB. We have inconsistency that is of order e_14 which is bigger than minimal comparison tolerance which is 5e_15
+   NB. Using rational also does not help. We will need a way to remove those residue values.
+   NB. Let's reuse the techniques developed in update matrix section
+   NB. We will filter out all values less than threshold=1e_10
+   pred=: 4 : '(y < x) # (i. # y)'
+   filterOut=: 4 : '($y) $ 0 (x pred (,y)) } ,y'
+   pred=: 4 : '(y < x) # (i. # y)'
+   filterOut=: 4 : '($y) $ 0 (x pred (,y)) } ,y'
+   1e_10 filterOut (_1 leftR (>1{data))
+1 0 0 0 0 0
+0 1 0 0 0 0
+0 0 1 0 0 0
+0 0 0 1 0 0
+0 0 0 0 1 0
+0 0 0 0 0 1
+   leftR=: 4 : '1e_10 filterOut ((%. (>0{y) ) mult (>0{y))'
+   rightR=: 4 : '>1{y'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#30
+data=._1;<( (genUniformMatrix (d,d)); (=/~ (i.d)) )
+relation checkEqOfMatricesScalarsRel data
+)
+   run 0
+1
+   (+/)(run"0)1000#0
+988
+```
+
+We are still not perfect. Let's try LAPACK impl and see if we can be better.
+
 
 Worth noting properties of the matrix inverse are following:
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
@@ -2568,7 +2647,7 @@ relation checkEqOfMatricesScalarsRel data
 1000
 ```
 
-### Solution to exercise 23
+### Solution to exercise 24
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 ```
    leftR=: 4 : 'tr ( %. (>0{y) )'
@@ -2587,7 +2666,7 @@ relation checkEqOfMatricesScalarsRel data
       leftR=: 4 : '%. ( (>0{y) mult (>1{y) )'
       rightR=: 4 : '(%. (>1{y) ) mult (%. (>0{y) )'
       relation=: leftR`rightR
-         run=: 3 : 0
+      run=: 3 : 0
 d=.1+?1#30
 data=._1;<( (genUniformMatrix (d,d));(genUniformMatrix (d,d)) )
 relation checkEqOfMatricesScalarsRel data
