@@ -8,7 +8,7 @@
 5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
 6. [Transpose of a matrix](#transpose-of-matrix)
 7. [Inverse of a matrix](#inverse-of-matrix)
-8. [Determinant of a matrix](#determinant-of-matrix) - TODO
+8. [Determinant of a matrix](#determinant-of-matrix)
 9. [Trace of a matrix](#trace-of-matrix) - TODO
 10. [A partitioned matrix](#partitioned-matrix) - TODO
 11. [Matrix decompositions](#matrix-decompositions) - TODO
@@ -1278,7 +1278,7 @@ matrix B (called the inverse of A) of the same shape that satisfies:
 
 The calculation of rank and its properties will be covered after introducing SVD decomposition as
 the numerical rank can be determined as a side effect of the decomposition (also possible using QR or LU although
-so reliable as in caseof SVD).
+not so reliable as in case of SVD).
 
 Inverse of a square matrix is defined as `%.`
 ```
@@ -1300,7 +1300,7 @@ _4.44089e_16 _4.44089e_16 1
 0 1 0
 0 0 1
 
-   NB. singular matrix does not an inverse (row 1 is twice row 0)
+   NB. singular matrix does not an inverse (row 1 is twice of row 0)
    ]m=: 3 3 $ 1 2 3 2 4 6 9 7 8
 1 2 3
 2 4 6
@@ -1320,6 +1320,9 @@ Worth noting properties of the matrix inverse are following:
 Add property testing for inverse properties.
 
 [Solution to exercise 24](#solution-to-exercise-24)
+
+### Determinant of matrix
+
 
 ## Basic linear algebra. Solutions to exercises
 ### Solution to exercise 1
@@ -2581,5 +2584,61 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?(AB)^{-1}=B^{-1}A^{-1}" title="(AB)^{-1}=B^{-1}A^{-1}" />
 ```
+      leftR=: 4 : '%. ( (>0{y) mult (>1{y) )'
+      rightR=: 4 : '(%. (>1{y) ) mult (%. (>0{y) )'
+      relation=: leftR`rightR
+         run=: 3 : 0
+d=.1+?1#30
+data=._1;<( (genUniformMatrix (d,d));(genUniformMatrix (d,d)) )
+relation checkEqOfMatricesScalarsRel data
+)
+   9!:19 ]5e_11
 
+   (+/)(run"0)1000#0
+722
+
+   ]d=.1+?1#30
+27
+   data=._1;<( (genUniformMatrix (d,d));(genUniformMatrix (d,d)) )
+   relation checkEqOfMatricesScalarsRel data
+0
+   showmismatch=: 4 : '($#:I.@,) ((0{::y) x@.0 (1{::y)) ~: (0{::y)x@.1(1{::y)'
+   relation showmismatch data
+11 9
+   'A B'=: (<11 9)&{"2]>1{:: data
+   (_1 leftR (>1{data)) = (_1 rightR (>1{data))
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+   A
+_774.097
+   B
+810.135
+
+  NB. Looks like we have quite substantial inconsistency.
+  NB. Next move would be to look at `%.` in contrast to LAPACK's implementation. TODO
 ```
