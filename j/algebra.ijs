@@ -89,7 +89,6 @@ NB.
 NB. 2 1 0
 NB. 2 1 1
 
-
 NB. Unique elements of vector
 nub=: 3 : '{./.~ y'
 NB. Examples:
@@ -112,7 +111,6 @@ NB.    1  a
 NB. 1  6
 NB. 3  7
 NB. 2 15
-NB.
 
 NB. Sort rows of matrix `y` by descending column `x`
 sortRowsByColumnDesc=: ]\:{"1
@@ -130,6 +128,95 @@ NB.    1 sortRowsByColumnDesc a
 NB. 2 15
 NB. 3  7
 NB. 1  6
+
+NB. Get all minors of a square matrix, consecutive planes contain row-wise minors
+minors =: 3 : 0
+'r c' =. ,"0 $ y
+assert. (r = c)
+1 |:\."2^:2 ] y
+)
+NB.    ]m=: i. 3 3
+NB. 0 1 2
+NB. 3 4 5
+NB. 6 7 8
+NB.    minors (i. 3 3)
+NB. 4 5
+NB. 7 8
+NB.
+NB. 3 5
+NB. 6 8
+NB.
+NB. 3 4
+NB. 6 7
+NB.
+NB.
+NB. 1 2
+NB. 7 8
+NB.
+NB. 0 2
+NB. 6 8
+NB.
+NB. 0 1
+NB. 6 7
+NB.
+NB.
+NB. 1 2
+NB. 4 5
+NB.
+NB. 0 2
+NB. 3 5
+NB.
+NB. 0 1
+NB. 3 4
+
+NB. Get a minor specified by x of a square matrix y
+minor=: 4 : 0
+i=. 0 { x
+j=. 1 { x
+'r c' =. ,"0 $ y
+assert. (r = c)
+assert. ( (i >: 0) *. (i < r) )
+assert. ( (j >: 0) *. (j < c) )
+(<(<i),(<j)) { (minors y)
+)
+NB.    ]m=: i. 3 3
+NB. 0 1 2
+NB. 3 4 5
+NB. 6 7 8
+NB.    0 1 minor m
+NB. 3 5
+NB. 6 8
+NB.    3 3 minor m
+NB. |assertion failure: minor
+NB. |       ((i>:0)*.(i<r))
+NB.    2 2 minor m
+NB. 0 1
+NB. 3 4
+NB.    ]m=: i. 2 3
+NB. 0 1 2
+NB. 3 4 5
+NB.    0 1 minor m
+NB. |assertion failure: minor
+NB. |       (r=c)
+
+NB. Determinant of a square matrix y
+det=: 3 : 0
+'r c' =. ,"0 $ y
+assert. (r = c)
+-/ .* y
+)
+NB.    ]m=: i. 3 3
+NB. 0 1 2
+NB. 3 4 5
+NB. 6 7 8
+NB.    det m
+NB. 0
+NB.    ]m=: i. 2 3
+NB. 0 1 2
+NB. 3 4 5
+NB.    det m
+NB. |assertion failure: det
+NB. |       (r=c)
 
 NB. Prepare frequency report of vector 'y' ordered in ascending order by elements
 discreteHist=: 3 : 0

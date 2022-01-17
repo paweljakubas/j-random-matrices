@@ -12,9 +12,9 @@
 9. [Trace of a matrix](#trace-of-matrix) - TODO
 10. [A partitioned matrix](#partitioned-matrix) - TODO
 11. [Matrix decompositions](#matrix-decompositions) - TODO
-    11.1. [SVD decomposition](#svd) - TODO
-    11.2. [LU decomposition](#lu) - TODO
-    11.3. [QR decomposition](#qr) - TODO
+  11.1. [SVD decomposition](#svd) - TODO
+  11.2. [LU decomposition](#lu) - TODO
+  11.3. [QR decomposition](#qr) - TODO
 
 [Solutions to exercices](#basic-linear-algebra-solutions-to-exercises)
 
@@ -1272,6 +1272,7 @@ Perform property testing for transpose properties.
 [Solution to exercise 23](#solution-to-exercise-23)
 
 ### Determinant and adjoint of matrix
+
 Let's first look at a **minor** of a matrix. For a given matrix **A** a minor (i,j) which (i,j) denotes a valid pair of indices in the **A** is
 a submatrix of **A** formed by deleting the i-th row and j-th column. The following function [see https://code.jsoftware.com/wiki/Essays/Matrix_Inverse]
 shows all minors of a given matrix organized by rows (each row is in plane). So for the following example in the first plane we have minors (0,0), (0,1) and (0,2).
@@ -1310,7 +1311,41 @@ shows all minors of a given matrix organized by rows (each row is in plane). So 
 
 0 1
 3 4
+
+  NB. minor x of y
+  minor=: 4 : 0
+i=. 0 { x
+j=. 1 { x
+'r c' =. ,"0 $ y
+assert. ( (i >: 0) *. (i < r) )
+assert. ( (j >: 0) *. (j < c) )
+(<(<i),(<j)) { (minors y)
+)
+
+   0 1 minor m
+3 5
+6 8
+   3 3 minor m
+|assertion failure: minor
+|       ((i>:0)*.(i<r))
+   2 2 minor m
+0 1
+3 4
 ```
+
+Determinant of a matrix is specified as below:
+```
+   det=: -/ .*
+   det m
+0
+```
+
+**Exercise 24**
+Show for 4x4 random matrix with integer elements from 0 to 20 that determinant of this matrix is a sum
+of determinants of minors (row-wise or column-wise) multiplied by elements at (i,j) (and negated when (i+j) is odd)
+
+[Solution to exercise 24](#solution-to-exercise-24)
+
 
 ### Inverse of matrix
 
@@ -1431,26 +1466,28 @@ relation checkEqOfMatricesScalarsRel data
 988
 ```
 
-We are still not perfect. Let's try LAPACK impl and see if we can be better.
-We are going to call [https://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga56d9c860ce4ce42ded7f914fdb0683ff.html]
-It is important to understand how to work with LAPACK functions. Most LAPACK functions were implemented in Fortran 77 which lacked dynamic allocation of resources.
-As some routines needs additional resources it was routine's user responsibility to deliver them. Those additional resources could be
-static arrays, arrays allocated on the stack or array allocated on the heap. The straightforward question is how much resources to provide. The user
-can specify and deliver too much resources or not enough. LAPACK helps in determining the optimal resources to provide via a preemptive call with
-`LWORK=-1` and other parameters as intended. After that the `WORK` variable will be updated with the optimal matrix to instantiate and to provided to the routine upon the main call.
-
+We are still not perfect. We will have another try with LAPACK implementation. This will be tackled in decomposition section though.
 
 
 Worth noting properties of the matrix inverse are following:
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 - <img src="https://latex.codecogs.com/svg.image?(AB)^{-1}=B^{-1}A^{-1}" title="(AB)^{-1}=B^{-1}A^{-1}" />
 
-**Exercise 24**
+**Exercise 25**
 Add property testing for inverse properties.
 
-[Solution to exercise 24](#solution-to-exercise-24)
+[Solution to exercise 25](#solution-to-exercise-25)
 
-### Determinant of matrix
+
+### Matrix decompositions
+
+Let's try LAPACK impl and see if we can be better.
+We are going to call [https://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga56d9c860ce4ce42ded7f914fdb0683ff.html]
+It is important to understand how to work with LAPACK functions. Most LAPACK functions were implemented in Fortran 77 which lacked dynamic allocation of resources.
+As some routines needs additional resources it was routine's user responsibility to deliver them. Those additional resources could be
+static arrays, arrays allocated on the stack or array allocated on the heap. The straightforward question is how much resources to provide. The user
+can specify and deliver too much resources or not enough. LAPACK helps in determining the optimal resources to provide via a preemptive call with
+`LWORK=-1` and other parameters as intended. After that the `WORK` variable will be updated with the optimal matrix to instantiate and to provided to the routine upon the main call.
 
 
 ## Basic linear algebra. Solutions to exercises
@@ -2698,6 +2735,10 @@ relation checkEqOfMatricesScalarsRel data
 ```
 
 ### Solution to exercise 24
+```
+
+```
+### Solution to exercise 25
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 ```
    leftR=: 4 : 'tr ( %. (>0{y) )'
@@ -2769,5 +2810,4 @@ _774.097
 810.135
 
   NB. Looks like we have quite substantial inconsistency.
-  NB. Next move would be to look at `%.` in contrast to LAPACK's implementation. TODO
 ```
