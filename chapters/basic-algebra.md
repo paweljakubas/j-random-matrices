@@ -12,9 +12,9 @@
 9. [Trace of a matrix](#trace-of-matrix) - TODO
 10. [A partitioned matrix](#partitioned-matrix) - TODO
 11. [Matrix decompositions](#matrix-decompositions) - TODO
-  11.1. [SVD decomposition](#svd) - TODO
-  11.2. [LU decomposition](#lu) - TODO
-  11.3. [QR decomposition](#qr) - TODO
+    - [SVD decomposition](#svd) - TODO
+    - [LU decomposition](#lu) - TODO
+    - [QR decomposition](#qr) - TODO
 
 [Solutions to exercices](#basic-linear-algebra-solutions-to-exercises)
 
@@ -1168,8 +1168,8 @@ For a row case we do analogically but we choose corresponding row selections:
    row0=:(<(<0),(<a:))
    row0 { m
 100 101 102 103
-   row2=:(<(<2),(<a:))
-   row2 { m
+   Row2=:(<(<2),(<A:))
+   Row2 { m
 108 109 110 111
    (row0, row2) { m
 100 101 102 103
@@ -1273,9 +1273,9 @@ Perform property testing for transpose properties.
 
 ### Determinant and adjoint of matrix
 
-Let's first look at a **minor** of a matrix. For a given matrix **A** a minor (i,j) which (i,j) denotes a valid pair of indices in the **A** is
-a submatrix of **A** formed by deleting the i-th row and j-th column. The following function [see https://code.jsoftware.com/wiki/Essays/Matrix_Inverse]
-shows all minors of a given matrix organized by rows (each row is in plane). So for the following example in the first plane we have minors (0,0), (0,1) and (0,2).
+Let's first look at a **minor** of a square matrix. For a given square matrix **A** a minor (i,j) which (i,j) denotes a valid pair of indices in the **A** is
+a square submatrix of **A** formed by deleting the i-th row and j-th column. The following function [see https://code.jsoftware.com/wiki/Essays/Matrix_Inverse]
+shows all minors of a given matrix organized by rows (each row is in each 2D plane). So in the following example in the first plane we have minors (0,0), (0,1) and (0,2).
 ```
    minors =: 1 |:\."2^:2 ]
    ]m=: i. 3 3
@@ -1317,6 +1317,7 @@ shows all minors of a given matrix organized by rows (each row is in plane). So 
 i=. 0 { x
 j=. 1 { x
 'r c' =. ,"0 $ y
+assert. (r = c)
 assert. ( (i >: 0) *. (i < r) )
 assert. ( (j >: 0) *. (j < c) )
 (<(<i),(<j)) { (minors y)
@@ -1333,7 +1334,7 @@ assert. ( (j >: 0) *. (j < c) )
 3 4
 ```
 
-Determinant of a matrix is specified as below:
+Determinant of a square matrix is specified as below:
 ```
    det=: -/ .*
    det m
@@ -2736,7 +2737,28 @@ relation checkEqOfMatricesScalarsRel data
 
 ### Solution to exercise 24
 ```
-
+   domain=: i. 21
+   ]m=: 4 4 $ ( 16 ?@$ #domain) { domain
+17 12 13 20
+ 4  2  2  3
+19 10 16  6
+ 5 11 14  9
+   det m
+939
+   NB. Let's take the first row
+   get=: 4 : 0
+i=. 0 {x
+j=. 1 {x
+((<(<i),(<j)) { y)*(det(x minor y))
+)
+   ( (0 0 get m) - (0 1 get m) ) + ( (0 2 get m) - (0 3 get m) )
+939
+   NB. Let's take the second column
+   - ( (0 1 get m) - (1 1 get m) ) + ( (2 1 get m) - (3 1 get m) )
+939
+   NB. Let's take the first column
+   ( (0 0 get m) - (1 0 get m) ) + ( (2 0 get m) - (3 0 get m) )
+939
 ```
 ### Solution to exercise 25
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
