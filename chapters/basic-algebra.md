@@ -7,12 +7,14 @@
 4. [Testing matrix properties](#testing-matrix-properties)
 5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
 6. [Transpose of a matrix](#transpose-of-matrix)
-7. [Inverse of a matrix](#inverse-of-matrix)
-8. [Determinant of a matrix](#determinant-of-matrix)
+7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
+8. [Inverse of a matrix](#inverse-of-matrix)
 9. [Trace of a matrix](#trace-of-matrix) - TODO
 10. [A partitioned matrix](#partitioned-matrix) - TODO
 11. [Matrix decompositions](#matrix-decompositions) - TODO
-
+    11.1. [SVD decomposition](#svd) - TODO
+    11.2. [LU decomposition](#lu) - TODO
+    11.3. [QR decomposition](#qr) - TODO
 
 [Solutions to exercices](#basic-linear-algebra-solutions-to-exercises)
 
@@ -1269,6 +1271,47 @@ Perform property testing for transpose properties.
 
 [Solution to exercise 23](#solution-to-exercise-23)
 
+### Determinant and adjoint of matrix
+Let's first look at a **minor** of a matrix. For a given matrix **A** a minor (i,j) which (i,j) denotes a valid pair of indices in the **A** is
+a submatrix of **A** formed by deleting the i-th row and j-th column. The following function [see https://code.jsoftware.com/wiki/Essays/Matrix_Inverse]
+shows all minors of a given matrix organized by rows (each row is in plane). So for the following example in the first plane we have minors (0,0), (0,1) and (0,2).
+```
+   minors =: 1 |:\."2^:2 ]
+   ]m=: i. 3 3
+0 1 2
+3 4 5
+6 7 8
+   minors (i. 3 3)
+4 5
+7 8
+
+3 5
+6 8
+
+3 4
+6 7
+
+
+1 2
+7 8
+
+0 2
+6 8
+
+0 1
+6 7
+
+
+1 2
+4 5
+
+0 2
+3 5
+
+0 1
+3 4
+```
+
 ### Inverse of matrix
 
 When a **square matrix A** is nonsingular (ie., its rank is equal to its row/column dimension) then there exists
@@ -1389,6 +1432,13 @@ relation checkEqOfMatricesScalarsRel data
 ```
 
 We are still not perfect. Let's try LAPACK impl and see if we can be better.
+We are going to call [https://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga56d9c860ce4ce42ded7f914fdb0683ff.html]
+It is important to understand how to work with LAPACK functions. Most LAPACK functions were implemented in Fortran 77 which lacked dynamic allocation of resources.
+As some routines needs additional resources it was routine's user responsibility to deliver them. Those additional resources could be
+static arrays, arrays allocated on the stack or array allocated on the heap. The straightforward question is how much resources to provide. The user
+can specify and deliver too much resources or not enough. LAPACK helps in determining the optimal resources to provide via a preemptive call with
+`LWORK=-1` and other parameters as intended. After that the `WORK` variable will be updated with the optimal matrix to instantiate and to provided to the routine upon the main call.
+
 
 
 Worth noting properties of the matrix inverse are following:
