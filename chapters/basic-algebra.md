@@ -1369,7 +1369,7 @@ For the record, **minor** of an element <img src="https://latex.codecogs.com/svg
 that is obtained from a matrix *A* by deleting the i-th row and j-th column.
 The **cofactor** of <img src="https://latex.codecogs.com/svg.image?a_{ij}" title="a_{ij}" /> is the minor of <img src="https://latex.codecogs.com/svg.image?a_{ij}" title="a_{ij}" /> times <img src="https://latex.codecogs.com/svg.image?(-1)^{i&plus;j}" title="(-1)^{i+j}" />.
 The **cofactor matrix** is matrix composed of all cofactors in a given matrix.
-The **adjoint** of *A*, , is transpose of cofactor matrix.
+The **adjoint** of *A*, <img src="https://latex.codecogs.com/svg.image?A^{adj}" title="A^{adj}" /> , is a transpose of the cofactor matrix of *A*.
 
 ```
    adjoint=: [: |: */~@($&1 _1)@# * det@principalSubmatrices
@@ -1386,7 +1386,7 @@ _3   6 _3
    NB. Product of first column of m and first column of adjoint of m is determinant.
    (_3*0)+(3*6)+(6*_3)
 0
-   NB. the same for all other columns and rows
+   NB. the same for all other columns and rows as was checked in Exercise 24.
 ```
 
 The adjoint matrix has a number of interesting properties [2, page 11]:
@@ -1401,6 +1401,21 @@ Add property testing for the adjoint relations.
 For nonsingular *A* have also an important relation <img src="https://latex.codecogs.com/svg.image?(A)^{adj}=|A|A^{-1}" title="(A)^{adj}=|A|A^{-1}" />
 ```
   inv=: adjoint % det
+   domain=: 1 2 3 5 8 11
+   ]m=: 3 3 $ ( 9 ?@$ #domain) { domain
+5 2 11
+1 3  3
+1 5  2
+   NB. conversion to rational
+   toR=: x:
+   ]invm=: toR (inv m)
+  3r7 _17r7    9r7
+_1r21  1r21   4r21
+_2r21 23r21 _13r21
+   invm mult m
+1 0 0
+0 1 0
+0 0 1
 ```
 
 ### Inverse of matrix
@@ -1414,7 +1429,7 @@ The calculation of rank and its properties will be covered after introducing SVD
 the numerical rank can be determined as a side effect of the decomposition (also possible using QR or LU although
 not so reliable as in case of SVD).
 
-Inverse of a square matrix is defined as `%.`
+More performant than above the inverse of a square matrix is defined as `%.`
 ```
    NB. nonsingular matrix has an inverse (each row, so also the column, is linearly independent)
    ]m=: 3 3 $ 1 2 3 5 4 6 9 7 8
@@ -1434,7 +1449,7 @@ _4.44089e_16 _4.44089e_16 1
 0 1 0
 0 0 1
 
-   NB. singular matrix does not an inverse (row 1 is twice of row 0)
+   NB. singular matrix does not an inverse (notice that row 1 is twice of row 0)
    ]m=: 3 3 $ 1 2 3 2 4 6 9 7 8
 1 2 3
 2 4 6
@@ -1528,18 +1543,12 @@ We are still not perfect. We will have another try with LAPACK implementation. T
 Worth noting properties of the matrix inverse are following:
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 - <img src="https://latex.codecogs.com/svg.image?(AB)^{-1}=B^{-1}A^{-1}" title="(AB)^{-1}=B^{-1}A^{-1}" />
+- <img src="https://latex.codecogs.com/svg.image?|A^{-1}|=1/|A|" title="|A^{-1}|=1/|A|" />
 
-**Exercise 25**
+**Exercise 27**
 Add property testing for inverse properties.
 
-[Solution to exercise 25](#solution-to-exercise-25)
-
-
-**Exercise 25**
-Show the below property holds.
-- <img src="https://latex.codecogs.com/svg.image?|A^{-1}|=1/|A|" title="|A^{-1}|=1/|A|" /> for A nonsingular
-
-[Solution to exercise 25](#solution-to-exercise-25)
+[Solution to exercise 27](#solution-to-exercise-27)
 
 
 ### Matrix decompositions
