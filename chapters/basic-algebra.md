@@ -1353,6 +1353,17 @@ of determinants of minors (row-wise or column-wise) multiplied by elements at (i
 
 [Solution to exercise 24](#solution-to-exercise-24)
 
+Noteworthy properties of determinant [2, page 10]
+- <img src="https://latex.codecogs.com/svg.image?|AB|=|A||B|" title="|AB|=|A||B|" />
+- <img src="https://latex.codecogs.com/svg.image?|A^{T}|=|A|" title="|A^{T}|=|A|" />
+- <img src="https://latex.codecogs.com/svg.image?|sA|=s^{n}|A|" title="|sA|=s^{n}|A|" /> for any scalar `s`
+- <img src="https://latex.codecogs.com/svg.image?|A^{-1}|=1/|A|" title="|A^{-1}|=1/|A|" /> for A nonsingular
+
+**Exercise 25**
+Add property testing for the determinant properties.
+
+[Solution to exercise 25](#solution-to-exercise-25)
+
 
 ### Inverse of matrix
 
