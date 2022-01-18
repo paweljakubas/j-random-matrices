@@ -169,8 +169,8 @@ NB.
 NB. 0 1
 NB. 3 4
 
-NB. Get a minor specified by x of a square matrix y
-minor=: 4 : 0
+NB. Get a principal submatrix specified by x of a square matrix y
+principalSubmatrix=: 4 : 0
 i=. 0 { x
 j=. 1 { x
 'r c' =. ,"0 $ y
@@ -183,20 +183,20 @@ NB.    ]m=: i. 3 3
 NB. 0 1 2
 NB. 3 4 5
 NB. 6 7 8
-NB.    0 1 minor m
+NB.    0 1 principalSubmatrix m
 NB. 3 5
 NB. 6 8
-NB.    3 3 minor m
-NB. |assertion failure: minor
+NB.    3 3 principalSubmatrix m
+NB. |assertion failure: principalSubmatrix
 NB. |       ((i>:0)*.(i<r))
-NB.    2 2 minor m
+NB.    2 2 principalSubmatrix m
 NB. 0 1
 NB. 3 4
 NB.    ]m=: i. 2 3
 NB. 0 1 2
 NB. 3 4 5
-NB.    0 1 minor m
-NB. |assertion failure: minor
+NB.    0 1 principalSubmatrix m
+NB. |assertion failure: principalSubmatrix
 NB. |       (r=c)
 
 NB. Determinant of a square matrix y
@@ -217,6 +217,22 @@ NB. 3 4 5
 NB.    det m
 NB. |assertion failure: det
 NB. |       (r=c)
+
+NB. Adjoint of matrix y
+adjoint=: 3 : 0
+'r c' =. ,"0 $ y
+assert. (r = c)
+det=.-/ .*
+([: |: */~@($&1 _1)@# * det@principalSubmatrices) y
+)
+NB.    ]m=: i. 3 3
+NB. 0 1 2
+NB. 3 4 5
+NB. 6 7 8
+NB.    adjoint m
+NB. _3   6 _3
+NB.  6 _12  6
+NB. _3   6 _3
 
 NB. Prepare frequency report of vector 'y' ordered in ascending order by elements
 discreteHist=: 3 : 0

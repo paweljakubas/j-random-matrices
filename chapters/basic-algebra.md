@@ -1351,7 +1351,7 @@ Determinant of a square matrix is specified as below:
 
 **Exercise 24**
 Show for 4x4 random matrix with integer elements from 0 to 20 that determinant of this matrix is a sum
-of determinants of principal submatrices (row-wise or column-wise) multiplied by elements at (i,j) (and negated when (i+j) is odd)
+of determinants of principal submatrices (row-wise or column-wise), called *minors*, multiplied by elements at (i,j) (and negated when (i+j) is odd)
 
 [Solution to exercise 24](#solution-to-exercise-24)
 
@@ -1359,13 +1359,49 @@ Noteworthy properties of determinant [2, page 10]
 - <img src="https://latex.codecogs.com/svg.image?|AB|=|A||B|" title="|AB|=|A||B|" />
 - <img src="https://latex.codecogs.com/svg.image?|A^{T}|=|A|" title="|A^{T}|=|A|" />
 - <img src="https://latex.codecogs.com/svg.image?|sA|=s^{n}|A|" title="|sA|=s^{n}|A|" /> for any scalar `s`
-- <img src="https://latex.codecogs.com/svg.image?|A^{-1}|=1/|A|" title="|A^{-1}|=1/|A|" /> for A nonsingular
 
 **Exercise 25**
 Add property testing for the determinant properties.
 
 [Solution to exercise 25](#solution-to-exercise-25)
 
+For the record, **minor** of an element <img src="https://latex.codecogs.com/svg.image?a_{ij}" title="a_{ij}" />  is the determinant of a square submatrix
+that is obtained from a matrix *A* by deleting the i-th row and j-th column.
+The **cofactor** of <img src="https://latex.codecogs.com/svg.image?a_{ij}" title="a_{ij}" /> is the minor of <img src="https://latex.codecogs.com/svg.image?a_{ij}" title="a_{ij}" /> times <img src="https://latex.codecogs.com/svg.image?(-1)^{i&plus;j}" title="(-1)^{i+j}" />.
+The **cofactor matrix** is matrix composed of all cofactors in a given matrix.
+The **adjoint** of *A*, , is transpose of cofactor matrix.
+
+```
+   adjoint=: [: |: */~@($&1 _1)@# * det@principalSubmatrices
+   ]m=: i. 3 3
+0 1 2
+3 4 5
+6 7 8
+   adjoint m
+_3   6 _3
+ 6 _12  6
+_3   6 _3
+   det m
+0
+   NB. Product of first column of m and first column of adjoint of m is determinant.
+   (_3*0)+(3*6)+(6*_3)
+0
+   NB. the same for all other columns and rows
+```
+
+The adjoint matrix has a number of interesting properties [2, page 11]:
+- <img src="https://latex.codecogs.com/svg.image?A^{adj}A=AA^{adj}=|A|I" title="A^{adj}A=AA^{adj}=|A|I" />
+- <img src="https://latex.codecogs.com/svg.image?(AB)^{adj}=B^{adj}A^{adj}" title="(AB)^{adj}=B^{adj}A^{adj}" />
+
+**Exercise 26**
+Add property testing for the adjoint relations.
+
+[Solution to exercise 26](#solution-to-exercise-26)
+
+For nonsingular *A* have also an important relation <img src="https://latex.codecogs.com/svg.image?(A)^{adj}=|A|A^{-1}" title="(A)^{adj}=|A|A^{-1}" />
+```
+  inv=: adjoint % det
+```
 
 ### Inverse of matrix
 
@@ -1495,6 +1531,13 @@ Worth noting properties of the matrix inverse are following:
 
 **Exercise 25**
 Add property testing for inverse properties.
+
+[Solution to exercise 25](#solution-to-exercise-25)
+
+
+**Exercise 25**
+Show the below property holds.
+- <img src="https://latex.codecogs.com/svg.image?|A^{-1}|=1/|A|" title="|A^{-1}|=1/|A|" /> for A nonsingular
 
 [Solution to exercise 25](#solution-to-exercise-25)
 
