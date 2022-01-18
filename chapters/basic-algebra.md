@@ -11,10 +11,12 @@
 8. [Inverse of a matrix](#inverse-of-matrix)
 9. [Trace of a matrix](#trace-of-matrix) - TODO
 10. [A partitioned matrix](#partitioned-matrix) - TODO
-11. [Matrix decompositions](#matrix-decompositions) - TODO
+11. [Basic matrix decompositions](#matrix-decompositions) - TODO
     - [SVD decomposition](#svd) - TODO
     - [LU decomposition](#lu) - TODO
     - [QR decomposition](#qr) - TODO
+12. [Rank of a matrix](#rank-of-matrix) - TODO
+
 
 [Solutions to exercices](#basic-linear-algebra-solutions-to-exercises)
 
@@ -1313,25 +1315,29 @@ shows all minors of a given matrix organized by rows (each row is in each 2D pla
 3 4
 
   NB. minor x of y
-  minor=: 4 : 0
-i=. 0 { x
-j=. 1 { x
-'r c' =. ,"0 $ y
-assert. (r = c)
-assert. ( (i >: 0) *. (i < r) )
-assert. ( (j >: 0) *. (j < c) )
-(<(<i),(<j)) { (minors y)
-)
+  minor=: 4 : '(<(<(0{x)),(<(1{x))) { (minors y)'
 
    0 1 minor m
 3 5
 6 8
-   3 3 minor m
-|assertion failure: minor
-|       ((i>:0)*.(i<r))
    2 2 minor m
 0 1
 3 4
+```
+We can also utilize the technique developed in the section covering selecting from matrix. It is
+expected to be more performant than the above one basing on retrieving all minors.
+```
+   ]m=: i. 3 3
+0 1 2
+3 4 5
+6 7 8
+   minor=: 4 : '(<(<<(0{x)),(<<(1{x))) { y'
+   0 0 minor m
+4 5
+7 8
+   1 0 minor m
+1 2
+7 8
 ```
 
 Determinant of a square matrix is specified as below:

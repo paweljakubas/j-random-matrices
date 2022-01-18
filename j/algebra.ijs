@@ -177,7 +177,7 @@ j=. 1 { x
 assert. (r = c)
 assert. ( (i >: 0) *. (i < r) )
 assert. ( (j >: 0) *. (j < c) )
-(<(<i),(<j)) { (minors y)
+(<(<<i),(<<j)) { y
 )
 NB.    ]m=: i. 3 3
 NB. 0 1 2
