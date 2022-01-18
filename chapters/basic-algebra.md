@@ -1275,16 +1275,18 @@ Perform property testing for transpose properties.
 
 ### Determinant and adjoint of matrix
 
-Let's first look at a **minor** of a square matrix. For a given square matrix **A** a minor (i,j) which (i,j) denotes a valid pair of indices in the **A** is
-a square submatrix of **A** formed by deleting the i-th row and j-th column. The following function [see https://code.jsoftware.com/wiki/Essays/Matrix_Inverse]
-shows all minors of a given matrix organized by rows (each row is in each 2D plane). So in the following example in the first plane we have minors (0,0), (0,1) and (0,2).
+Let's first look at a **principal submatrix** of a square matrix. For a given square matrix **A** a principle matrix specified by (i,j)
+which (i,j) denotes a valid pair of indices in the **A** is a square submatrix of **A** formed by deleting the i-th row and j-th column.
+The following function [see https://code.jsoftware.com/wiki/Essays/Matrix_Inverse] shows all principal submatrices of a given matrix
+organized by rows (each row is in each 2D plane). So in the following example in the first plane we have principal submatrices specified by
+(0,0), (0,1) and (0,2).
 ```
-   minors =: 1 |:\."2^:2 ]
+   principalSubmatrices =: 1 |:\."2^:2 ]
    ]m=: i. 3 3
 0 1 2
 3 4 5
 6 7 8
-   minors (i. 3 3)
+   principalSubmatrices (i. 3 3)
 4 5
 7 8
 
@@ -1314,28 +1316,28 @@ shows all minors of a given matrix organized by rows (each row is in each 2D pla
 0 1
 3 4
 
-  NB. minor x of y
-  minor=: 4 : '(<(<(0{x)),(<(1{x))) { (minors y)'
+  NB. principal submatrix x of y
+  principalSubmatrix=: 4 : '(<(<(0{x)),(<(1{x))) { (principalSubmatrices y)'
 
-   0 1 minor m
+   0 1 principalSubmatrix m
 3 5
 6 8
-   2 2 minor m
+   2 2 principalSubmatrix m
 0 1
 3 4
 ```
 We can also utilize the technique developed in the section covering selecting from matrix. It is
-expected to be more performant than the above one basing on retrieving all minors.
+expected to be more performant than the above one basing on retrieving all principal submatrices.
 ```
    ]m=: i. 3 3
 0 1 2
 3 4 5
 6 7 8
-   minor=: 4 : '(<(<<(0{x)),(<<(1{x))) { y'
-   0 0 minor m
+   principalSubmatrix=: 4 : '(<(<<(0{x)),(<<(1{x))) { y'
+   0 0 principalSubmatrix m
 4 5
 7 8
-   1 0 minor m
+   1 0 principalSubmatrix m
 1 2
 7 8
 ```
@@ -1349,7 +1351,7 @@ Determinant of a square matrix is specified as below:
 
 **Exercise 24**
 Show for 4x4 random matrix with integer elements from 0 to 20 that determinant of this matrix is a sum
-of determinants of minors (row-wise or column-wise) multiplied by elements at (i,j) (and negated when (i+j) is odd)
+of determinants of principal submatrices (row-wise or column-wise) multiplied by elements at (i,j) (and negated when (i+j) is odd)
 
 [Solution to exercise 24](#solution-to-exercise-24)
 
@@ -2766,7 +2768,7 @@ relation checkEqOfMatricesScalarsRel data
    get=: 4 : 0
 i=. 0 {x
 j=. 1 {x
-((<(<i),(<j)) { y)*(det(x minor y))
+((<(<i),(<j)) { y)*(det(x principalSubmatrix y))
 )
    ( (0 0 get m) - (0 1 get m) ) + ( (0 2 get m) - (0 3 get m) )
 939

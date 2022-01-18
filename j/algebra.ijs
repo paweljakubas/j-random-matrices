@@ -129,8 +129,8 @@ NB. 2 15
 NB. 3  7
 NB. 1  6
 
-NB. Get all minors of a square matrix, consecutive planes contain row-wise minors
-minors =: 3 : 0
+NB. Get all principal submatrices of a square matrix, consecutive planes contain row-wise principal submatrices
+principalSubmatrices =: 3 : 0
 'r c' =. ,"0 $ y
 assert. (r = c)
 1 |:\."2^:2 ] y
@@ -139,7 +139,7 @@ NB.    ]m=: i. 3 3
 NB. 0 1 2
 NB. 3 4 5
 NB. 6 7 8
-NB.    minors (i. 3 3)
+NB.    principalSubmatrices (i. 3 3)
 NB. 4 5
 NB. 7 8
 NB.
