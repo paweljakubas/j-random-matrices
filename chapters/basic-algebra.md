@@ -2896,6 +2896,38 @@ relation checkEqOfMatricesScalarsRel data
 100
 ```
 
+### Solution to exercise 26
+- <img src="https://latex.codecogs.com/svg.image?A^{adj}A=AA^{adj}=|A|I" title="A^{adj}A=AA^{adj}=|A|I" />
+```
+   NB. Checking to equalities and relying on equality transivity relation
+   leftR=: 4 : '(adjoint (>y)) mult (>y)'
+   rightR=: 4 : '(>y) mult (adjoint (>y))'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#10
+data=._1;<(genUniformMatrix (d, d))
+relation checkEqOfMatricesScalarsRel data
+)
+   run 0
+1
+   (+/)(run"0)100#0
+100
+
+   leftR=: 4 : '(adjoint (>y)) mult (>y)'
+   rightR=: 4 : '(=/~ (i.(#(>y)))) * (det (>y))'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#10
+data=._1;<(genUniformMatrix (d, d))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
+```
+- <img src="https://latex.codecogs.com/svg.image?(AB)^{adj}=B^{adj}A^{adj}" title="(AB)^{adj}=B^{adj}A^{adj}" />
+```
+```
+
 ### Solution to exercise 27
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 ```
@@ -2912,10 +2944,10 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?(AB)^{-1}=B^{-1}A^{-1}" title="(AB)^{-1}=B^{-1}A^{-1}" />
 ```
-      leftR=: 4 : '%. ( (>0{y) mult (>1{y) )'
-      rightR=: 4 : '(%. (>1{y) ) mult (%. (>0{y) )'
-      relation=: leftR`rightR
-      run=: 3 : 0
+   leftR=: 4 : '%. ( (>0{y) mult (>1{y) )'
+   rightR=: 4 : '(%. (>1{y) ) mult (%. (>0{y) )'
+   relation=: leftR`rightR
+   run=: 3 : 0
 d=.1+?1#30
 data=._1;<( (genUniformMatrix (d,d));(genUniformMatrix (d,d)) )
 relation checkEqOfMatricesScalarsRel data
