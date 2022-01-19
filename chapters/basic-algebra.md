@@ -1400,7 +1400,7 @@ Add property testing for the adjoint relations.
 
 For nonsingular *A* have also an important relation <img src="https://latex.codecogs.com/svg.image?(A)^{adj}=|A|A^{-1}" title="(A)^{adj}=|A|A^{-1}" />
 ```
-  inv=: adjoint % det
+   inv=: adjoint % det
    domain=: 1 2 3 5 8 11
    ]m=: 3 3 $ ( 9 ?@$ #domain) { domain
 5 2 11
@@ -2831,7 +2831,51 @@ j=. 1 {x
    ( (0 0 get m) - (1 0 get m) ) + ( (2 0 get m) - (3 0 get m) )
 939
 ```
+
 ### Solution to exercise 25
+- <img src="https://latex.codecogs.com/svg.image?|AB|=|A||B|" title="|AB|=|A||B|" />
+```
+   leftR=: 4 : 'det ( (>0{y) mult (>1{y) )'
+   rightR=: 4 : '(det (>0{y)) * (det (>1{y))'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#20
+m=.(genUniformMatrix (d, d));(genUniformMatrix (d, d))
+data=._1;<m
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)1000#0
+911
+
+   genUniformMatrix=: 3 : 'y $ toR <. ( _10 10 runiform ((0{y) * (1{y)))'
+    ]m=:genUniformMatrix (5,5)
+_8   6 _5 _3 _6
+ 3 _10 _8  7  1
+ 0   2 _5 _7  8
+ 0  _4  0  1  2
+ 5  _2 _2  5  5
+    leftR=: 4 : 'det ( (>0{y) mult (>1{y) )'
+    rightR=: 4 : '(det (>0{y)) * (det (>1{y))'
+    relation=: leftR`rightR
+    run=: 3 : 0
+d=.1+?1#20
+m=.(genUniformMatrix (d, d));(genUniformMatrix (d, d))
+data=._1;<m
+relation checkEqOfMatricesScalarsRel data
+)
+   run 0
+1
+   (+/)(run"0)100#0
+100
+```
+- <img src="https://latex.codecogs.com/svg.image?|A^{T}|=|A|" title="|A^{T}|=|A|" />
+```
+```
+- <img src="https://latex.codecogs.com/svg.image?|sA|=s^{n}|A|" title="|sA|=s^{n}|A|" /> for any scalar `s`
+```
+```
+
+### Solution to exercise 27
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 ```
    leftR=: 4 : 'tr ( %. (>0{y) )'
