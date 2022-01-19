@@ -2926,6 +2926,16 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?(AB)^{adj}=B^{adj}A^{adj}" title="(AB)^{adj}=B^{adj}A^{adj}" />
 ```
+   leftR=: 4 : 'adjoint ( (>0{y) mult (>1{y) )'
+   rightR=: 4 : '(adjoint (>1{y) ) mult (adjoint (>0{y) )'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#10
+data=._1;<((genUniformMatrix (d, d));(genUniformMatrix (d, d)))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
 ```
 
 ### Solution to exercise 27
