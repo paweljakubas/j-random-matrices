@@ -2870,6 +2870,16 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?|A^{T}|=|A|" title="|A^{T}|=|A|" />
 ```
+   leftR=: 4 : 'det ( tr (>0{y) )'
+   rightR=: 4 : 'det (>0{y)'
+   relation=: leftR`rightR
+         run=: 3 : 0
+d=.1+?1#20
+data=._1;<( (genUniformMatrix (d, d)); (genUniformMatrix (d, d)) )
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
 ```
 - <img src="https://latex.codecogs.com/svg.image?|sA|=s^{n}|A|" title="|sA|=s^{n}|A|" /> for any scalar `s`
 ```
