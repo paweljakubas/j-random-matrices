@@ -2883,6 +2883,17 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?|sA|=s^{n}|A|" title="|sA|=s^{n}|A|" /> for any scalar `s`
 ```
+   leftR=: 4 : 'det ( (0{x) * (>y) )'
+   rightR=: 4 : '((0{x) ^ (#(>y))) * ( det (>y) )'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#10
+s=. _2 2 runiform 1
+data=.s;<(genUniformMatrix (d, d))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
 ```
 
 ### Solution to exercise 27
