@@ -1429,22 +1429,22 @@ The calculation of rank and its properties will be covered after introducing SVD
 the numerical rank can be determined as a side effect of the decomposition (also possible using QR or LU although
 not so reliable as in case of SVD).
 
-More performant than above the inverse of a square matrix is defined as `%.`
+More performant inverse of a square matrix is defined as `%.` (than the one defined on adjoint)
 ```
    NB. nonsingular matrix has an inverse (each row, so also the column, is linearly independent)
    ]m=: 3 3 $ 1 2 3 5 4 6 9 7 8
 1 2 3
 5 4 6
 9 7 8
-   ]inv=: %. m
+   ]invm=: %. m
  _0.666667 0.333333    0
   0.933333 _1.26667  0.6
 _0.0666667 0.733333 _0.4
-   inv mult m
+   inv, mult m
            1            0 0
            0            1 0
 _4.44089e_16 _4.44089e_16 1
-   (toRational inv) mult m
+   (toRational invm) mult m
 1 0 0
 0 1 0
 0 0 1
@@ -1454,7 +1454,7 @@ _4.44089e_16 _4.44089e_16 1
 1 2 3
 2 4 6
 9 7 8
-   ]inv=: %. m
+   ]invm=: %. m
 _. _. _.
 _. _. _.
 _. _. _.
@@ -1478,11 +1478,12 @@ relation checkEqOfMatricesScalarsRel data
 Now, we will test
 - <img src="https://latex.codecogs.com/svg.image?A^{-1}A&space;=&space;I" title="A^{-1}A = I" />
 ```
-   leftR=: 4 : '(%. (>0{y) ) mult (>0{y)'
+   inv=: %.
+   leftR=: 4 : '(inv (>0{y) ) mult (>0{y)'
    rightR=: 4 : '>1{y'
    relation=: leftR`rightR
    run=: 3 : 0
-d=.1+?1#30
+d=.1+?1#20
 data=._1;<( (genUniformMatrix (d,d)); (=/~ (i.d)) )
 relation checkEqOfMatricesScalarsRel data
 )
@@ -1523,7 +1524,7 @@ _5.57332e_14  4.17444e_14 _3.90799e_14 _2.08722e_14            1  4.39648e_14
 0 0 0 1 0 0
 0 0 0 0 1 0
 0 0 0 0 0 1
-   leftR=: 4 : '1e_10 filterOut ((%. (>0{y) ) mult (>0{y))'
+   leftR=: 4 : '1e_10 filterOut ((inv (>0{y) ) mult (>0{y))'
    rightR=: 4 : '>1{y'
    relation=: leftR`rightR
    run=: 3 : 0
@@ -1533,11 +1534,23 @@ relation checkEqOfMatricesScalarsRel data
 )
    run 0
 1
-   (+/)(run"0)1000#0
-988
+   (+/)(run"0)100#0
+98
+
+   inv=: 3 : 'toRational (%. y)'
+   leftR=: 4 : '(inv (>0{y) ) mult (>0{y)'
+   rightR=: 4 : '>1{y'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#20
+data=._1;<( (genUniformMatrix (d,d)); (=/~ (i.d)) )
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
 ```
 
-We are still not perfect. We will have another try with LAPACK implementation. This will be tackled in decomposition section though.
+We are will also get to LAPACK implementation of inverse later in decomposition section.
 
 
 Worth noting properties of the matrix inverse are following:
@@ -3010,4 +3023,24 @@ _774.097
 810.135
 
   NB. Looks like we have quite substantial inconsistency.
+```
+- <img src="https://latex.codecogs.com/svg.image?|A^{-1}|=1/|A|" title="|A^{-1}|=1/|A|" />
+```
+   leftR=: 4 : 'det ( inv y )'
+   rightR=: 4 : '% (det y)'
+   relation=: leftR`rightR
+   genUniformMatrix=: 3 : 'y $ ( _10 10 runiform ((0{y) * (1{y)))'
+   run=: 3 : 0
+d=.1+?1#20
+data=._1;<(genUniformMatrix (d,d))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+98
+   (+/)(run"0)1000#0
+970
+   9!:19 ]5e_11
+
+   (+/)(run"0)1000#0
+999
 ```
