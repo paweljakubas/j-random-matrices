@@ -1589,10 +1589,10 @@ length=.*/$y
 ```
 
 There are the following properties the trace satisfies[2, page 11]:
-- <img src="https://latex.codecogs.com/svg.image?transpose(A&space;&plus;&space;B)=transposeA&plus;transposeB" title="transpose(A + B)=transposeA+transposeB" />
-- <img src="https://latex.codecogs.com/svg.image?transpose(sA)=s*transposeA" title="transpose(sA)=s*transposeA" />
-- <img src="https://latex.codecogs.com/svg.image?transpose(A^{T})=transposeA" title="transpose(A^{T})=transposeA" />
-- <img src="https://latex.codecogs.com/svg.image?transpose(AB)=transpose(BA)" title="transpose(AB)=transpose(BA)" />
+- <img src="https://latex.codecogs.com/svg.image?trace(A&space;&plus;&space;B)=traceA&plus;traceB" title="trace(A + B)=traceA+traceB" />
+- <img src="https://latex.codecogs.com/svg.image?trace(sA)=s*traceA" title="trace(sA)=s*traceA" />
+- <img src="https://latex.codecogs.com/svg.image?trace(A^{T})=traceA" title="trace(A^{T})=traceA" />
+- <img src="https://latex.codecogs.com/svg.image?trace(AB)=trace(BA)" title="trace(AB)=trace(BA)" />
 
 **Exercise 28**
 Add property testing for trace properties.
@@ -3081,7 +3081,7 @@ relation checkEqOfMatricesScalarsRel data
 ```
 
 ### Solution to exercise 28
-- <img src="https://latex.codecogs.com/svg.image?transpose(A&space;&plus;&space;B)=transposeA&plus;transposeB" title="transpose(A + B)=transposeA+transposeB" />
+- <img src="https://latex.codecogs.com/svg.image?trace(A&space;&plus;&space;B)=traceA&plus;traceB" title="trace(A + B)=traceA+traceB" />
 ```
    leftR=: 4 : 'trace ( (>0{y) mult (>1{y) )'
    leftR=: 4 : 'trace ( (>0{y) + (>1{y) )'
@@ -3096,6 +3096,25 @@ relation checkEqOfMatricesScalarsRel data
    (+/)(run"0)100#0
 100
 ```
-- <img src="https://latex.codecogs.com/svg.image?transpose(sA)=s*transposeA" title="transpose(sA)=s*transposeA" />
-- <img src="https://latex.codecogs.com/svg.image?transpose(A^{T})=transposeA" title="transpose(A^{T})=transposeA" />
-- <img src="https://latex.codecogs.com/svg.image?transpose(AB)=transpose(BA)" title="transpose(AB)=transpose(BA)" />
+- <img src="https://latex.codecogs.com/svg.image?trace(sA)=s*traceA" title="trace(sA)=s*traceA" />
+```
+   leftR=: 4 : 'trace ( (0{x) * (>y) )'
+   rightR=: 4 : '(0{x) * ( trace (>y) )'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#10
+s=. _2 2 runiform 1
+data=.s;<(genUniformMatrix (d, d))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
+```
+- <img src="https://latex.codecogs.com/svg.image?trace(A^{T})=traceA" title="trace(A^{T})=traceA" />
+```
+
+```
+- <img src="https://latex.codecogs.com/svg.image?trace(AB)=trace(BA)" title="trace(AB)=trace(BA)" />
+```
+
+```
