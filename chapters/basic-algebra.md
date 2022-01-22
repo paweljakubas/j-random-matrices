@@ -1570,7 +1570,8 @@ The trace of a square matrix *A* is the sum of its diagonal elements.
 'r c' =. ,"0 $ y
 assert. (r = c)
 idM=. =/~ (i.#y)
-+/ ( (idM #&,y) { ,y)
+length=.*/$y
++/ ( (idM #&,i.length) { ,y)
 )
    ]m=: i. 3 3
 0 1 2
@@ -1588,10 +1589,10 @@ idM=. =/~ (i.#y)
 ```
 
 There are the following properties the trace satisfies[2, page 11]:
-- <img src="https://latex.codecogs.com/svg.image?tr(A&space;&plus;&space;B)=trA&plus;trB" title="tr(A + B)=trA+trB" />
-- <img src="https://latex.codecogs.com/svg.image?tr(sA)=s*trA" title="tr(sA)=s*trA" />
-- <img src="https://latex.codecogs.com/svg.image?tr(A^{T})=trA" title="tr(A^{T})=trA" />
-- <img src="https://latex.codecogs.com/svg.image?tr(AB)=tr(BA)" title="tr(AB)=tr(BA)" />
+- <img src="https://latex.codecogs.com/svg.image?transpose(A&space;&plus;&space;B)=transposeA&plus;transposeB" title="transpose(A + B)=transposeA+transposeB" />
+- <img src="https://latex.codecogs.com/svg.image?transpose(sA)=s*transposeA" title="transpose(sA)=s*transposeA" />
+- <img src="https://latex.codecogs.com/svg.image?transpose(A^{T})=transposeA" title="transpose(A^{T})=transposeA" />
+- <img src="https://latex.codecogs.com/svg.image?transpose(AB)=transpose(BA)" title="transpose(AB)=transpose(BA)" />
 
 **Exercise 28**
 Add property testing for trace properties.
@@ -3080,16 +3081,21 @@ relation checkEqOfMatricesScalarsRel data
 ```
 
 ### Solution to exercise 28
-- <img src="https://latex.codecogs.com/svg.image?tr(A&space;&plus;&space;B)=trA&plus;trB" title="tr(A + B)=trA+trB" />
+- <img src="https://latex.codecogs.com/svg.image?transpose(A&space;&plus;&space;B)=transposeA&plus;transposeB" title="transpose(A + B)=transposeA+transposeB" />
 ```
-
+   leftR=: 4 : 'trace ( (>0{y) mult (>1{y) )'
+   leftR=: 4 : 'trace ( (>0{y) + (>1{y) )'
+   rightR=: 4 : '(trace (>0{y)) + (trace (>1{y) )'
+   relation=: leftR`rightR
+   genUniformMatrix=: 3 : 'y $ ( _10 10 runiform ((0{y) * (1{y)))'
+   run=: 3 : 0
+d=.1+?1#30
+data=._1;<((genUniformMatrix (d, d));(genUniformMatrix (d, d)))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
 ```
-- <img src="https://latex.codecogs.com/svg.image?tr(sA)=s*trA" title="tr(sA)=s*trA" />
-```
-```
-- <img src="https://latex.codecogs.com/svg.image?tr(A^{T})=trA" title="tr(A^{T})=trA" />
-```
-```
-- <img src="https://latex.codecogs.com/svg.image?tr(AB)=tr(BA)" title="tr(AB)=tr(BA)" />
-```
-```
+- <img src="https://latex.codecogs.com/svg.image?transpose(sA)=s*transposeA" title="transpose(sA)=s*transposeA" />
+- <img src="https://latex.codecogs.com/svg.image?transpose(A^{T})=transposeA" title="transpose(A^{T})=transposeA" />
+- <img src="https://latex.codecogs.com/svg.image?transpose(AB)=transpose(BA)" title="transpose(AB)=transpose(BA)" />

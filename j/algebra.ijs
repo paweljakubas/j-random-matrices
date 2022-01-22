@@ -239,11 +239,12 @@ NB.  6 _12  6
 NB. _3   6 _3
 
 NB. Trace of a square matrix
-trace=: 3 : 0
+      trace=: 3 : 0
 'r c' =. ,"0 $ y
 assert. (r = c)
 idM=. =/~ (i.#y)
-+/ ( (idM #&,y) { ,y)
+length=.*/$y
++/ ( (idM #&,i.length) { ,y)
 )
 NB. Examples:
 NB.    ]m=: i. 3 3
