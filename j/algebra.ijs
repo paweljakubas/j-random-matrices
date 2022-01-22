@@ -135,6 +135,7 @@ principalSubmatrices =: 3 : 0
 assert. (r = c)
 1 |:\."2^:2 ] y
 )
+NB. Examples:
 NB.    ]m=: i. 3 3
 NB. 0 1 2
 NB. 3 4 5
@@ -179,6 +180,7 @@ assert. ( (i >: 0) *. (i < r) )
 assert. ( (j >: 0) *. (j < c) )
 (<(<<i),(<<j)) { y
 )
+NB. Examples:
 NB.    ]m=: i. 3 3
 NB. 0 1 2
 NB. 3 4 5
@@ -205,6 +207,7 @@ det=: 3 : 0
 assert. (r = c)
 -/ .* y
 )
+NB. Examples:
 NB.    ]m=: i. 3 3
 NB. 0 1 2
 NB. 3 4 5
@@ -225,6 +228,7 @@ assert. (r = c)
 det=.-/ .*
 ([: |: */~@($&1 _1)@# * det@principalSubmatrices) y
 )
+NB. Examples:
 NB.    ]m=: i. 3 3
 NB. 0 1 2
 NB. 3 4 5
@@ -233,6 +237,28 @@ NB.    adjoint m
 NB. _3   6 _3
 NB.  6 _12  6
 NB. _3   6 _3
+
+NB. Trace of a square matrix
+tr=: 3 : 0
+'r c' =. ,"0 $ y
+assert. (r = c)
+idM=. =/~ (i.#y)
++/ ( (idM #&,y) { ,y)
+)
+NB. Examples:
+NB.    ]m=: i. 3 3
+NB. 0 1 2
+NB. 3 4 5
+NB. 6 7 8
+NB.    tr m
+NB. 12
+NB.    ]m=: i. 4 4
+NB.  0  1  2  3
+NB.  4  5  6  7
+NB.  8  9 10 11
+NB. 12 13 14 15
+NB.    tr m
+NB. 30
 
 NB. Prepare frequency report of vector 'y' ordered in ascending order by elements
 discreteHist=: 3 : 0

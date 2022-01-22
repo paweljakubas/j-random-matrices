@@ -9,7 +9,7 @@
 6. [Transpose of a matrix](#transpose-of-matrix)
 7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
 8. [Inverse of a matrix](#inverse-of-matrix)
-9. [Trace of a matrix](#trace-of-matrix) - TODO
+9. [Trace of a matrix](#trace-of-matrix)
 10. [A partitioned matrix](#partitioned-matrix) - TODO
 11. [Basic matrix decompositions](#matrix-decompositions) - TODO
     - [SVD decomposition](#svd) - TODO
@@ -1563,6 +1563,40 @@ Add property testing for inverse properties.
 
 [Solution to exercise 27](#solution-to-exercise-27)
 
+### Trace of matrix
+The trace of a square matrix *A* is the sum of its diagonal elements.
+```
+   tr=: 3 : 0
+'r c' =. ,"0 $ y
+assert. (r = c)
+idM=. =/~ (i.#y)
++/ ( (idM #&,y) { ,y)
+)
+   ]m=: i. 3 3
+0 1 2
+3 4 5
+6 7 8
+   tr m
+12
+   ]m=: i. 4 4
+ 0  1  2  3
+ 4  5  6  7
+ 8  9 10 11
+12 13 14 15
+   tr m
+30
+```
+
+There are the following properties the trace satisifes[2, page 11]:
+- <img src="https://latex.codecogs.com/svg.image?tr(A&space;&plus;&space;B)=trA&plus;trB" title="tr(A + B)=trA+trB" />
+- <img src="https://latex.codecogs.com/svg.image?tr(sA)=s*trA" title="tr(sA)=s*trA" />
+- <img src="https://latex.codecogs.com/svg.image?tr(A^{T})=trA" title="tr(A^{T})=trA" />
+- <img src="https://latex.codecogs.com/svg.image?tr(AB)=tr(BA)" title="tr(AB)=tr(BA)" />
+
+**Exercise 28**
+Add property testing for trace properties.
+
+[Solution to exercise 28](#solution-to-exercise-28)
 
 ### Matrix decompositions
 
