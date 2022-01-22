@@ -3083,7 +3083,6 @@ relation checkEqOfMatricesScalarsRel data
 ### Solution to exercise 28
 - <img src="https://latex.codecogs.com/svg.image?trace(A&space;&plus;&space;B)=traceA&plus;traceB" title="trace(A + B)=traceA+traceB" />
 ```
-   leftR=: 4 : 'trace ( (>0{y) mult (>1{y) )'
    leftR=: 4 : 'trace ( (>0{y) + (>1{y) )'
    rightR=: 4 : '(trace (>0{y)) + (trace (>1{y) )'
    relation=: leftR`rightR
@@ -3102,7 +3101,7 @@ relation checkEqOfMatricesScalarsRel data
    rightR=: 4 : '(0{x) * ( trace (>y) )'
    relation=: leftR`rightR
    run=: 3 : 0
-d=.1+?1#10
+d=.1+?1#30
 s=. _2 2 runiform 1
 data=.s;<(genUniformMatrix (d, d))
 relation checkEqOfMatricesScalarsRel data
@@ -3112,9 +3111,28 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?trace(A^{T})=traceA" title="trace(A^{T})=traceA" />
 ```
+   leftR=: 4 : 'trace ( transpose (>y) )'
+   rightR=: 4 : 'trace (>y)'
+   relation=: leftR`rightR
+   run=: 3 : 0
+d=.1+?1#30
+data=._1;<(genUniformMatrix (d, d))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
 
 ```
 - <img src="https://latex.codecogs.com/svg.image?trace(AB)=trace(BA)" title="trace(AB)=trace(BA)" />
 ```
-
+   leftR=: 4 : 'trace ( (>0{y) mult (>1{y) )'
+   rightR=: 4 : 'trace ( (>1{y) mult (>0{y) )'
+   relation=: leftR`rightR
+      run=: 3 : 0
+d=.1+?1#30
+data=._1;<((genUniformMatrix (d, d));(genUniformMatrix (d, d)))
+relation checkEqOfMatricesScalarsRel data
+)
+   (+/)(run"0)100#0
+100
 ```
