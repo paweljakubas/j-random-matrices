@@ -6,6 +6,13 @@
 3. [Generate a random matrix](#generating-random-matrix)
 4. [Testing matrix properties](#testing-matrix-properties)
 5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
+    - [Matrix addition](#matrix-addition)
+    - [Note on floating point arithmetics](#note-on-floating-point-arithmetics)
+    - [Matrix multiplication](#matrix-multiplication)
+    - [Matrix elementary row and column operations](#matrix-elementary-row-and-column-operations)
+    - [Orthogonal transformations](#orthogonal-transformations) - TODO
+    - [Givens rotations](#givens-rotations) - TODO
+    - [Householder reflections](#householder-reflections) - TODO
 6. [Transpose of a matrix](#transpose-of-matrix)
 7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
 8. [Inverse of a matrix](#inverse-of-matrix)
@@ -1001,7 +1008,7 @@ Perform property testing for the rest addition properties specified above
 
 [Solution to exercise 18](#solution-to-exercise-18)
 
-### Note on floating point arithmetics.
+### Note on floating point arithmetics
 
 Let's revisit the following property <img src="https://latex.codecogs.com/svg.image?s_1&space;(A&space;&plus;&space;B)&space;=&space;s_1&space;A&space;&plus;&space;s_1&space;B" title="s_1 (A + B) = s_1 A + s_1 B" />
 
@@ -1251,6 +1258,12 @@ Show the case for a following matrix
 
 [Solution to exercise 22](#solution-to-exercise-22)
 
+### Orthogonal transformations
+
+### Givens rotations
+
+### Householder reflections
+
 ### Transpose of matrix
 The transpose is defined as follows:
 ```
@@ -1272,6 +1285,10 @@ We have also the following properties [2, page 6]
 Perform property testing for transpose properties.
 
 [Solution to exercise 23](#solution-to-exercise-23)
+
+We can also introduce transpose for arbitrary dimension n > 2 arrays. In such a case we have `n!` ways of transposing
+hence the transpose is dyad
+TO-DO
 
 ### Determinant and adjoint of matrix
 
