@@ -1254,12 +1254,12 @@ Show the case for a following matrix
 ### Transpose of matrix
 The transpose is defined as follows:
 ```
-   tr=: |:
-   tr (2 3 $ 1 2 3 4 5 6)
+   transpose=: |:
+   transpose (2 3 $ 1 2 3 4 5 6)
 1 4
 2 5
 3 6
-   tr (tr (2 3 $ 1 2 3 4 5 6))
+   transpose (transpose (2 3 $ 1 2 3 4 5 6))
 1 2 3
 4 5 6
 ```
@@ -1566,7 +1566,7 @@ Add property testing for inverse properties.
 ### Trace of matrix
 The trace of a square matrix *A* is the sum of its diagonal elements.
 ```
-   tr=: 3 : 0
+   trace=: 3 : 0
 'r c' =. ,"0 $ y
 assert. (r = c)
 idM=. =/~ (i.#y)
@@ -1576,18 +1576,18 @@ idM=. =/~ (i.#y)
 0 1 2
 3 4 5
 6 7 8
-   tr m
+   trace m
 12
    ]m=: i. 4 4
  0  1  2  3
  4  5  6  7
  8  9 10 11
 12 13 14 15
-   tr m
+   trace m
 30
 ```
 
-There are the following properties the trace satisifes[2, page 11]:
+There are the following properties the trace satisfies[2, page 11]:
 - <img src="https://latex.codecogs.com/svg.image?tr(A&space;&plus;&space;B)=trA&plus;trB" title="tr(A + B)=trA+trB" />
 - <img src="https://latex.codecogs.com/svg.image?tr(sA)=s*trA" title="tr(sA)=s*trA" />
 - <img src="https://latex.codecogs.com/svg.image?tr(A^{T})=trA" title="tr(A^{T})=trA" />
@@ -2811,7 +2811,7 @@ relation checkEqOfMatricesScalarsRel data
 ### Solution to exercise 23
 - <img src="https://latex.codecogs.com/svg.image?(A^T)^T=A" title="(A^T)^T=A" />
 ```
-   leftR=: 4 : 'tr ( tr (>0{y) )'
+   leftR=: 4 : 'transpose ( transpose (>0{y) )'
    rightR=: 4 : '>0{y'
    relation=: leftR`rightR
       run=: 3 : 0
@@ -2824,8 +2824,8 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?(A&plus;B)^T=A^T&plus;B^T" title="(A+B)^T=A^T+B^T" />
 ```
-   leftR=: 4 : 'tr ( (>0{y) + (>1{y) )'
-   rightR=: 4 : '( tr (>0{y) ) + ( tr (>1{y) )'
+   leftR=: 4 : 'transpose ( (>0{y) + (>1{y) )'
+   rightR=: 4 : '( transpose (>0{y) ) + ( transpose (>1{y) )'
    relation=: leftR`rightR
    run=: 3 : 0
 shape=.1+?2#100
@@ -2837,8 +2837,8 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?(AB)^T=B^TA^T" title="(AB)^T=B^TA^T" />
 ```
-   leftR=: 4 : 'tr ( (>0{y) mult (>1{y) )'
-   rightR=: 4 : '( tr (>1{y) ) mult ( tr (>0{y) )'
+   leftR=: 4 : 'transpose ( (>0{y) mult (>1{y) )'
+   rightR=: 4 : '( transpose (>1{y) ) mult ( transpose (>0{y) )'
    relation=: leftR`rightR
    run=: 3 : 0
 'd1 d2'=.1+?2#30
@@ -2917,7 +2917,7 @@ relation checkEqOfMatricesScalarsRel data
 ```
 - <img src="https://latex.codecogs.com/svg.image?|A^{T}|=|A|" title="|A^{T}|=|A|" />
 ```
-   leftR=: 4 : 'det ( tr (>0{y) )'
+   leftR=: 4 : 'det ( transpose (>0{y) )'
    rightR=: 4 : 'det (>0{y)'
    relation=: leftR`rightR
          run=: 3 : 0
@@ -2988,8 +2988,8 @@ relation checkEqOfMatricesScalarsRel data
 ### Solution to exercise 27
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 ```
-   leftR=: 4 : 'tr ( %. (>0{y) )'
-   rightR=: 4 : '%. ( tr (>0{y) )'
+   leftR=: 4 : 'transpose ( %. (>0{y) )'
+   rightR=: 4 : '%. ( transpose (>0{y) )'
    relation=: leftR`rightR
    run=: 3 : 0
 d=.1+?1#30
@@ -3077,4 +3077,19 @@ relation checkEqOfMatricesScalarsRel data
 
    (+/)(run"0)1000#0
 999
+```
+
+### Solution to exercise 28
+- <img src="https://latex.codecogs.com/svg.image?tr(A&space;&plus;&space;B)=trA&plus;trB" title="tr(A + B)=trA+trB" />
+```
+
+```
+- <img src="https://latex.codecogs.com/svg.image?tr(sA)=s*trA" title="tr(sA)=s*trA" />
+```
+```
+- <img src="https://latex.codecogs.com/svg.image?tr(A^{T})=trA" title="tr(A^{T})=trA" />
+```
+```
+- <img src="https://latex.codecogs.com/svg.image?tr(AB)=tr(BA)" title="tr(AB)=tr(BA)" />
+```
 ```

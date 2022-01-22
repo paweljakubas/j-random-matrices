@@ -7,12 +7,12 @@ NB. ]scriptdir=: 'PATH-TO-REPO/j-random-matrices/j/'
 NB. 0!:1 < scriptdir,'algebra.ijs'
 
 NB. Transpose of a matrix
-tr=: |:
-NB.    tr (2 3 $ 1 2 3 4 5 6)
+transpose=: |:
+NB.    transpose (2 3 $ 1 2 3 4 5 6)
 NB. 1 4
 NB. 2 5
 NB. 3 6
-NB.    tr (tr (2 3 $ 1 2 3 4 5 6))
+NB.    transpose (transpose (2 3 $ 1 2 3 4 5 6))
 NB. 1 2 3
 NB. 4 5 6
 
@@ -239,7 +239,7 @@ NB.  6 _12  6
 NB. _3   6 _3
 
 NB. Trace of a square matrix
-tr=: 3 : 0
+trace=: 3 : 0
 'r c' =. ,"0 $ y
 assert. (r = c)
 idM=. =/~ (i.#y)
@@ -250,14 +250,14 @@ NB.    ]m=: i. 3 3
 NB. 0 1 2
 NB. 3 4 5
 NB. 6 7 8
-NB.    tr m
+NB.    trace m
 NB. 12
 NB.    ]m=: i. 4 4
 NB.  0  1  2  3
 NB.  4  5  6  7
 NB.  8  9 10 11
 NB. 12 13 14 15
-NB.    tr m
+NB.    trace m
 NB. 30
 
 NB. Prepare frequency report of vector 'y' ordered in ascending order by elements
