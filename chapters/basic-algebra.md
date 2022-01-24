@@ -17,7 +17,7 @@
 7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
 8. [Inverse of a matrix](#inverse-of-matrix)
 9. [Trace of a matrix](#trace-of-matrix)
-10. [A partitioned matrix](#partitioned-matrix) - TODO
+10. [A partitioned matrix](#partitioned-matrix)
 11. [Basic matrix decompositions](#matrix-decompositions) - TODO
     - [SVD decomposition](#svd) - TODO
     - [LU decomposition](#lu) - TODO
@@ -1615,6 +1615,105 @@ There are the following properties the trace satisfies[2, page 11]:
 Add property testing for trace properties.
 
 [Solution to exercise 28](#solution-to-exercise-28)
+
+### Partitioned matrix
+
+A partitioned matrix is obtained when an underlying matrix is carved out both row-wise and column-wise in such a way that inner blocks are created.
+Those blocks cover fully the underlying matrix and do not mutually overlap. Moreover, we usually restrict the partitioning in such a way that
+each block row has the same number of rows, and each block column has the same number of columns.
+At first we will develop a technique that partitions a given underlying matrix into the same dimensional blocks:
+```
+   toR=:x:
+   genUniformMatrix=: 3 : 'y $ toR <. ( _10 10 runiform ((0{y) * (1{y)))'
+   ]m=:genUniformMatrix 10 10
+_6  _3  _2  5 _1  5  _2 _4  _3  _8
+ 6   6 _10 _8  9 _6 _10  4  _5  _6
+ 3   9   4  2  9  8   5  5  _1  _1
+ 4  _6   7  8  9  6  _1  1  _7   0
+_7 _10  _9  7  9 _6   0 _6  _9  _6
+_5  _9  _3  5 _9  9   7  7  _7   3
+ 6  _1  _8 _4  8 _3  _6  8   2 _10
+_9   6  _8  4 _2 _7  _6 _9   2   9
+ 4  _4   1 _7 _3  3  _8  0 _10   0
+_2  _2   1  1 _9 _8   9 _2   4   3
+   ]mblock=: (2 2,: 2 2) <;._3 m
+┌──────┬──────┬─────┬──────┬─────┐
+│_6 _3 │ _2  5│_1  5│ _2 _4│_3 _8│
+│ 6  6 │_10 _8│ 9 _6│_10  4│_5 _6│
+├──────┼──────┼─────┼──────┼─────┤
+│3  9  │4 2   │9 8  │ 5 5  │_1 _1│
+│4 _6  │7 8   │9 6  │_1 1  │_7  0│
+├──────┼──────┼─────┼──────┼─────┤
+│_7 _10│_9 7  │ 9 _6│0 _6  │_9 _6│
+│_5  _9│_3 5  │_9  9│7  7  │_7  3│
+├──────┼──────┼─────┼──────┼─────┤
+│ 6 _1 │_8 _4 │ 8 _3│_6  8 │2 _10│
+│_9  6 │_8  4 │_2 _7│_6 _9 │2   9│
+├──────┼──────┼─────┼──────┼─────┤
+│ 4 _4 │1 _7  │_3  3│_8  0 │_10 0│
+│_2 _2 │1  1  │_9 _8│ 9 _2 │  4 3│
+└──────┴──────┴─────┴──────┴─────┘
+  NB. selecting operators applies here
+   (<(<1),(<1)) { mblock
+┌───┐
+│4 2│
+│7 8│
+└───┘
+   (<(<1,2),(<1,2,3)) { mblock
+┌────┬─────┬────┐
+│4 2 │9 8  │ 5 5│
+│7 8 │9 6  │_1 1│
+├────┼─────┼────┤
+│_9 7│ 9 _6│0 _6│
+│_3 5│_9  9│7  7│
+└────┴─────┴────┘
+   ]mblock=: (5 5,: 5 5) <;._3 m
+┌────────────────┬────────────────┐
+│_6  _3  _2  5 _1│ 5  _2 _4 _3 _8 │
+│ 6   6 _10 _8  9│_6 _10  4 _5 _6 │
+│ 3   9   4  2  9│ 8   5  5 _1 _1 │
+│ 4  _6   7  8  9│ 6  _1  1 _7  0 │
+│_7 _10  _9  7  9│_6   0 _6 _9 _6 │
+├────────────────┼────────────────┤
+│_5 _9 _3  5 _9  │ 9  7  7  _7   3│
+│ 6 _1 _8 _4  8  │_3 _6  8   2 _10│
+│_9  6 _8  4 _2  │_7 _6 _9   2   9│
+│ 4 _4  1 _7 _3  │ 3 _8  0 _10   0│
+│_2 _2  1  1 _9  │_8  9 _2   4   3│
+└────────────────┴────────────────┘
+   ]mblock=: (2 3,: 2 3) <;._3 m
+┌─────────┬────────┬─────────┐
+│_6 _3  _2│ 5 _1  5│ _2 _4 _3│
+│ 6  6 _10│_8  9 _6│_10  4 _5│
+├─────────┼────────┼─────────┤
+│3  9 4   │2 9 8   │ 5 5 _1  │
+│4 _6 7   │8 9 6   │_1 1 _7  │
+├─────────┼────────┼─────────┤
+│_7 _10 _9│7  9 _6 │0 _6 _9  │
+│_5  _9 _3│5 _9  9 │7  7 _7  │
+├─────────┼────────┼─────────┤
+│ 6 _1 _8 │_4  8 _3│_6  8 2  │
+│_9  6 _8 │ 4 _2 _7│_6 _9 2  │
+├─────────┼────────┼─────────┤
+│ 4 _4 1  │_7 _3  3│_8  0 _10│
+│_2 _2 1  │ 1 _9 _8│ 9 _2   4│
+└─────────┴────────┴─────────┘
+   ]mblock=: (5 2,: 5 2) <;._3 m
+┌──────┬──────┬─────┬──────┬───────┐
+│_6  _3│ _2  5│_1  5│ _2 _4│_3 _8  │
+│ 6   6│_10 _8│ 9 _6│_10  4│_5 _6  │
+│ 3   9│  4  2│ 9  8│  5  5│_1 _1  │
+│ 4  _6│  7  8│ 9  6│ _1  1│_7  0  │
+│_7 _10│ _9  7│ 9 _6│  0 _6│_9 _6  │
+├──────┼──────┼─────┼──────┼───────┤
+│_5 _9 │_3  5 │_9  9│ 7  7 │ _7   3│
+│ 6 _1 │_8 _4 │ 8 _3│_6  8 │  2 _10│
+│_9  6 │_8  4 │_2 _7│_6 _9 │  2   9│
+│ 4 _4 │ 1 _7 │_3  3│_8  0 │_10   0│
+│_2 _2 │ 1  1 │_9 _8│ 9 _2 │  4   3│
+└──────┴──────┴─────┴──────┴───────┘
+```
+
 
 ### Matrix decompositions
 
