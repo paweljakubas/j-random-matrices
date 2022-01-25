@@ -1291,8 +1291,41 @@ Perform property testing for transpose properties.
 [Solution to exercise 23](#solution-to-exercise-23)
 
 We can also introduce transpose for arbitrary dimension n > 2 arrays. In such a case we have `n!` ways of transposing
-hence the transpose is dyad
-TO-DO
+hence the transpose and those ways are expressed as permutations
+```
+   ]tensor=:i. 3 2 2
+ 0  1
+ 2  3
+
+ 4  5
+ 6  7
+
+ 8  9
+10 11
+   (0 1 2) |: tensor
+ 0  1
+ 2  3
+
+ 4  5
+ 6  7
+
+ 8  9
+10 11
+   (2 1 0) |: tensor
+0 4  8
+2 6 10
+
+1 5  9
+3 7 11
+   (2 0 1) |: tensor
+0  2
+4  6
+8 10
+
+1  3
+5  7
+9 11
+```
 
 ### Determinant and adjoint of matrix
 
@@ -1778,6 +1811,7 @@ Let's assume now that we want to adopt variable tile sizes that satisfy:
 - tiles do not overlap and cover the underlying matrix completely
 - each block row has the same number of rows within the same block row
 - each block column has the same number of columns within the same block column
+
 It is achievable using `x(u;.1)y` when x marks both rows (column) block starting boundaries with 1s and their height (lenght) using 0s.
 There is also an option of specifying the ending of partitions with 1s - `x(u;.2)y` when defining blocks in the underlying matrix.
 ```
