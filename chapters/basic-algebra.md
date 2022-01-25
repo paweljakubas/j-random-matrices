@@ -18,12 +18,16 @@
 8. [Inverse of a matrix](#inverse-of-matrix)
 9. [Trace of a matrix](#trace-of-matrix)
 10. [A partitioned matrix](#partitioned-matrix)
-11. [Basic matrix decompositions](#matrix-decompositions) - TODO
+11. [Eigenvalues](#eigenvalues) - TODO
+12. [Basic matrix decompositions](#matrix-decompositions) - TODO
     - [SVD decomposition](#svd) - TODO
     - [LU decomposition](#lu) - TODO
     - [QR decomposition](#qr) - TODO
-12. [Rank of a matrix](#rank-of-matrix) - TODO
+13. [Rank of a matrix](#rank-of-matrix) - TODO
+14. [FFT](#fft) - TODO
+15. [Wavelets](#wavelets) - TODO
 
+[Project1](#project1)
 
 [Solutions to exercices](#basic-linear-algebra-solutions-to-exercises)
 
@@ -1626,12 +1630,11 @@ applies verb `u` to each tile of a regular tiling of `y` specified by `x`. Basic
 ```
    NB. We will define tile as 2x2 which is translated throughout the underlying matrix by vector (2,2)
    NB. So we will not have overlap here upon tile translation
-   MovementVector=: 2 2
-   TileSize=: 2 2
-   ] x=: MovementVector ,: TileSize
+   translationVector=: 2 2
+   tileSize=: 2 2
+   ] tile=: translationVector ,: tileSize
 2 2
 2 2
-   tile=: MovementVector ,: TileSize
 
    NB. boxing as verb
    u=: <
@@ -1771,7 +1774,66 @@ _7 _2  9  4 _5  3 _2 _9  9 _8
 │_3r2│_1r2│13r4│_2  │3r2  │
 └────┴────┴────┴────┴─────┘
 ```
-
+Let's assume now that we want to adopt variable tile sizes that satisfy:
+- tiles do not overlap and cover the underlying matrix completely
+- each block row has the same number of rows within the same block row
+- each block column has the same number of columns within the same block column
+It is achievable using `x(u;.1)y` when x marks both rows (column) block starting boundaries with 1s and their height (lenght) using 0s.
+There is also an option of specifying the ending of partitions with 1s - `x(u;.2)y` when defining blocks in the underlying matrix.
+```
+   ]m=:genUniformMatrix 10 10
+ 2 _4  8 _9 _3 _4 _9  2 _5  8
+_5 _2  3  6  5 _1  2 _7  4 _7
+ 3  8 _2  2  7  7  4  9 _1  8
+ 8  6  2 _8 _6 _6 _5  3  6  4
+ 1 _1  7 _2 _6  4  9 _8 _1 _7
+_1 _3 _4  5  4 _9  3  4  3  3
+ 9  3 _9 _6  6  1  2  9 _6 _8
+_9 _7  8  0  5 _4 _5  0  4 _1
+_7 _2  9  4 _5  3 _2 _9  9 _8
+ 0  3 _7 _8  7  8  2  1 _1  6
+   (1 0 1 0 0 0 1 1 0 0; 1 0 0 1 0 0 1 0 0 0) <;.1 m
+┌────────┬────────┬───────────┐
+│ 2 _4 8 │_9 _3 _4│_9  2 _5  8│
+│_5 _2 3 │ 6  5 _1│ 2 _7  4 _7│
+├────────┼────────┼───────────┤
+│ 3  8 _2│ 2  7  7│ 4  9 _1  8│
+│ 8  6  2│_8 _6 _6│_5  3  6  4│
+│ 1 _1  7│_2 _6  4│ 9 _8 _1 _7│
+│_1 _3 _4│ 5  4 _9│ 3  4  3  3│
+├────────┼────────┼───────────┤
+│9 3 _9  │_6 6 1  │2 9 _6 _8  │
+├────────┼────────┼───────────┤
+│_9 _7  8│ 0  5 _4│_5  0  4 _1│
+│_7 _2  9│ 4 _5  3│_2 _9  9 _8│
+│ 0  3 _7│_8  7  8│ 2  1 _1  6│
+└────────┴────────┴───────────┘
+   NB. It would be more user friendly to be able to specify partitioning the following (2 4 1 3; 3 3 4)
+   expressNum=: 3 : 'if. y = 1 do. 1 else. (1, (y - 1) $ 0) end.'
+   ;<@:expressNum"0 (2 4 1 3)
+1 0 1 0 0 0 1 1 0 0
+   partitionMatrix=: 4 : 0
+rows=.>0{x
+cols=.>1{x
+((;<@:expressNum"0 rows); (;<@:expressNum"0 cols)) <;.1 y
+)
+   (2 4 1 3; 3 3 4) partitionMatrix m
+┌────────┬────────┬───────────┐
+│ 2 _4 8 │_9 _3 _4│_9  2 _5  8│
+│_5 _2 3 │ 6  5 _1│ 2 _7  4 _7│
+├────────┼────────┼───────────┤
+│ 3  8 _2│ 2  7  7│ 4  9 _1  8│
+│ 8  6  2│_8 _6 _6│_5  3  6  4│
+│ 1 _1  7│_2 _6  4│ 9 _8 _1 _7│
+│_1 _3 _4│ 5  4 _9│ 3  4  3  3│
+├────────┼────────┼───────────┤
+│9 3 _9  │_6 6 1  │2 9 _6 _8  │
+├────────┼────────┼───────────┤
+│_9 _7  8│ 0  5 _4│_5  0  4 _1│
+│_7 _2  9│ 4 _5  3│_2 _9  9 _8│
+│ 0  3 _7│_8  7  8│ 2  1 _1  6│
+└────────┴────────┴───────────┘
+```
 
 ### Matrix decompositions
 

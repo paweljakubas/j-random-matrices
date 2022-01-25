@@ -239,7 +239,7 @@ NB.  6 _12  6
 NB. _3   6 _3
 
 NB. Trace of a square matrix
-      trace=: 3 : 0
+trace=: 3 : 0
 'r c' =. ,"0 $ y
 assert. (r = c)
 idM=. =/~ (i.#y)
@@ -260,6 +260,92 @@ NB.  8  9 10 11
 NB. 12 13 14 15
 NB.    trace m
 NB. 30
+
+NB. Represent number y > 0 as 1 and y - 1 0s
+expressNum=: 3 : 0
+assert (y > 0)
+assert (y = (>. y))
+if. y = 1 do. 1 else. (1, (y - 1) $ 0) end.
+)
+NB.    expressNum 0
+NB. |assertion failure: assert
+NB. |       assert(y>0)
+NB.    expressNum 1
+NB. 1
+NB.    expressNum 10
+NB. 1 0 0 0 0 0 0 0 0 0
+NB.    expressNum 10.1
+NB. |assertion failure: assert
+NB. |       assert(y=(>.y))
+NB.
+
+NB. Partition matrix y by specifying consecutive partition block lenghts rows and columns
+partitionMatrix=: 4 : 0
+rows=.>0{x
+cols=.>1{x
+rowDim=.0{$y
+colDim=.1{$y
+assert ( (+/ rows) = rowDim)
+assert ( (+/ cols) = colDim)
+((;<@:expressNum"0 rows); (;<@:expressNum"0 cols)) <;.1 y
+)
+NB.    ]m=: i. 10 10
+NB.  0  1  2  3  4  5  6  7  8  9
+NB. 10 11 12 13 14 15 16 17 18 19
+NB. 20 21 22 23 24 25 26 27 28 29
+NB. 30 31 32 33 34 35 36 37 38 39
+NB. 40 41 42 43 44 45 46 47 48 49
+NB. 50 51 52 53 54 55 56 57 58 59
+NB. 60 61 62 63 64 65 66 67 68 69
+NB. 70 71 72 73 74 75 76 77 78 79
+NB. 80 81 82 83 84 85 86 87 88 89
+NB. 90 91 92 93 94 95 96 97 98 99
+NB.    (2 4 1 3; 3 3 4) partitionMatrix m
+NB. ┌────────┬────────┬───────────┐
+NB. │ 0  1  2│ 3  4  5│ 6  7  8  9│
+NB. │10 11 12│13 14 15│16 17 18 19│
+NB. ├────────┼────────┼───────────┤
+NB. │20 21 22│23 24 25│26 27 28 29│
+NB. │30 31 32│33 34 35│36 37 38 39│
+NB. │40 41 42│43 44 45│46 47 48 49│
+NB. │50 51 52│53 54 55│56 57 58 59│
+NB. ├────────┼────────┼───────────┤
+NB. │60 61 62│63 64 65│66 67 68 69│
+NB. ├────────┼────────┼───────────┤
+NB. │70 71 72│73 74 75│76 77 78 79│
+NB. │80 81 82│83 84 85│86 87 88 89│
+NB. │90 91 92│93 94 95│96 97 98 99│
+NB. └────────┴────────┴───────────┘
+NB.    (2 4 1 3; 3 3 4 1) partitionMatrix m
+NB. |assertion failure: assert
+NB. |       assert((+/cols)=colDim)
+NB.    ]m=: i. 10 5
+NB.  0  1  2  3  4
+NB.  5  6  7  8  9
+NB. 10 11 12 13 14
+NB. 15 16 17 18 19
+NB. 20 21 22 23 24
+NB. 25 26 27 28 29
+NB. 30 31 32 33 34
+NB. 35 36 37 38 39
+NB. 40 41 42 43 44
+NB. 45 46 47 48 49
+NB.    (2 4 1 3; 3 2) partitionMatrix m
+NB. ┌────────┬─────┐
+NB. │0 1 2   │3 4  │
+NB. │5 6 7   │8 9  │
+NB. ├────────┼─────┤
+NB. │10 11 12│13 14│
+NB. │15 16 17│18 19│
+NB. │20 21 22│23 24│
+NB. │25 26 27│28 29│
+NB. ├────────┼─────┤
+NB. │30 31 32│33 34│
+NB. ├────────┼─────┤
+NB. │35 36 37│38 39│
+NB. │40 41 42│43 44│
+NB. │45 46 47│48 49│
+NB. └────────┴─────┘
 
 NB. Prepare frequency report of vector 'y' ordered in ascending order by elements
 discreteHist=: 3 : 0
