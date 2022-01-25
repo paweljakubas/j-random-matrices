@@ -1620,9 +1620,26 @@ Add property testing for trace properties.
 
 A partitioned matrix is obtained when an underlying matrix is carved out both row-wise and column-wise in such a way that inner blocks are created.
 Those blocks cover fully the underlying matrix and do not mutually overlap. Moreover, we usually restrict the partitioning in such a way that
-each block row has the same number of rows, and each block column has the same number of columns.
-At first we will develop a technique that partitions a given underlying matrix into the same dimensional blocks:
+each block row has the same number of rows within the same block row, and each block column has the same number of columns within the same block column.
+At first we will develop a technique that partitions a given underlying matrix into the same dimensional blocks. We will use `x(u;._3)y` that
+applies verb `u` to each tile of a regular tiling of `y` specified by `x`. Basically we will define
 ```
+   NB. We will define tile as 2x2 which is translated throughout the underlying matrix by vector (2,2)
+   NB. So we will not have overlap here upon tile translation
+   MovementVector=: 2 2
+   TileSize=: 2 2
+   ] x=: MovementVector ,: TileSize
+2 2
+2 2
+   tile=: MovementVector ,: TileSize
+
+   NB. boxing as verb
+   u=: <
+   NB. discarding uncompleted tiles
+   tile < ;._3 input
+   NB. including uncompleted tiles
+   tile < ;.3 input
+
    toR=:x:
    genUniformMatrix=: 3 : 'y $ toR <. ( _10 10 runiform ((0{y) * (1{y)))'
    ]m=:genUniformMatrix 10 10
@@ -1712,6 +1729,47 @@ _2  _2   1  1 _9 _8   9 _2   4   3
 │ 4 _4 │ 1 _7 │_3  3│_8  0 │_10   0│
 │_2 _2 │ 1  1 │_9 _8│ 9 _2 │  4   3│
 └──────┴──────┴─────┴──────┴───────┘
+
+   ]m=:genUniformMatrix 10 10
+ 2 _4  8 _9 _3 _4 _9  2 _5  8
+_5 _2  3  6  5 _1  2 _7  4 _7
+ 3  8 _2  2  7  7  4  9 _1  8
+ 8  6  2 _8 _6 _6 _5  3  6  4
+ 1 _1  7 _2 _6  4  9 _8 _1 _7
+_1 _3 _4  5  4 _9  3  4  3  3
+ 9  3 _9 _6  6  1  2  9 _6 _8
+_9 _7  8  0  5 _4 _5  0  4 _1
+_7 _2  9  4 _5  3 _2 _9  9 _8
+ 0  3 _7 _8  7  8  2  1 _1  6
+   (2 2,: 2 2) <;._3 m
+┌─────┬─────┬─────┬─────┬─────┐
+│ 2 _4│8 _9 │_3 _4│_9  2│_5  8│
+│_5 _2│3  6 │ 5 _1│ 2 _7│ 4 _7│
+├─────┼─────┼─────┼─────┼─────┤
+│3 8  │_2  2│ 7  7│ 4 9 │_1 8 │
+│8 6  │ 2 _8│_6 _6│_5 3 │ 6 4 │
+├─────┼─────┼─────┼─────┼─────┤
+│ 1 _1│ 7 _2│_6  4│9 _8 │_1 _7│
+│_1 _3│_4  5│ 4 _9│3  4 │ 3  3│
+├─────┼─────┼─────┼─────┼─────┤
+│ 9  3│_9 _6│6  1 │ 2 9 │_6 _8│
+│_9 _7│ 8  0│5 _4 │_5 0 │ 4 _1│
+├─────┼─────┼─────┼─────┼─────┤
+│_7 _2│ 9  4│_5 3 │_2 _9│ 9 _8│
+│ 0  3│_7 _8│ 7 8 │ 2  1│_1  6│
+└─────┴─────┴─────┴─────┴─────┘
+   (2 2,: 2 2) <@mean@,;._3 m
+┌────┬────┬────┬────┬─────┐
+│_9r4│2   │_3r4│_3  │0    │
+├────┼────┼────┼────┼─────┤
+│25r4│_3r2│1r2 │11r4│17r4 │
+├────┼────┼────┼────┼─────┤
+│_1  │3r2 │_7r4│2   │_1r2 │
+├────┼────┼────┼────┼─────┤
+│_1  │_7r4│2   │3r2 │_11r4│
+├────┼────┼────┼────┼─────┤
+│_3r2│_1r2│13r4│_2  │3r2  │
+└────┴────┴────┴────┴─────┘
 ```
 
 
