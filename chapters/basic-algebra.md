@@ -17,13 +17,10 @@
 7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
 8. [Inverse of a matrix](#inverse-of-matrix)
 9. [Trace of a matrix](#trace-of-matrix)
-10. [A partitioned matrix](#partitioned-matrix)
-11. [Eigenvalues](#eigenvalues) - TODO
-12. [Basic matrix decompositions](#matrix-decompositions) - TODO
-    - [SVD decomposition](#svd) - TODO
-    - [LU decomposition](#lu) - TODO
-    - [QR decomposition](#qr) - TODO
-13. [Rank of a matrix](#rank-of-matrix) - TODO
+10. [Eigenvalues](#eigenvalues) - TODO
+11. [LU decompositions](#lu-decomposition) - TODO
+12. [Rank of a matrix](#rank-of-matrix) - TODO
+13. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 14. [FFT](#fft) - TODO
 15. [Wavelets](#wavelets) - TODO
 
@@ -1653,6 +1650,20 @@ Add property testing for trace properties.
 
 [Solution to exercise 28](#solution-to-exercise-28)
 
+### Eigenvalues
+
+### LU decomposition
+
+Let's try LAPACK impl and see if we can be better.
+We are going to call [https://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga56d9c860ce4ce42ded7f914fdb0683ff.html]
+It is important to understand how to work with LAPACK functions. Most LAPACK functions were implemented in Fortran 77 which lacked dynamic allocation of resources.
+As some routines needs additional resources it was routine's user responsibility to deliver them. Those additional resources could be
+static arrays, arrays allocated on the stack or array allocated on the heap. The straightforward question is how much resources to provide. The user
+can specify and deliver too much resources or not enough. LAPACK helps in determining the optimal resources to provide via a preemptive call with
+`LWORK=-1` and other parameters as intended. After that the `WORK` variable will be updated with the optimal matrix to instantiate and to provided to the routine upon the main call.
+
+### Rank of matrix
+
 ### Partitioned matrix
 
 A partitioned matrix is obtained when an underlying matrix is carved out both row-wise and column-wise in such a way that inner blocks are created.
@@ -1869,16 +1880,8 @@ cols=.>1{x
 └────────┴────────┴───────────┘
 ```
 
-### Matrix decompositions
-
-Let's try LAPACK impl and see if we can be better.
-We are going to call [https://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga56d9c860ce4ce42ded7f914fdb0683ff.html]
-It is important to understand how to work with LAPACK functions. Most LAPACK functions were implemented in Fortran 77 which lacked dynamic allocation of resources.
-As some routines needs additional resources it was routine's user responsibility to deliver them. Those additional resources could be
-static arrays, arrays allocated on the stack or array allocated on the heap. The straightforward question is how much resources to provide. The user
-can specify and deliver too much resources or not enough. LAPACK helps in determining the optimal resources to provide via a preemptive call with
-`LWORK=-1` and other parameters as intended. After that the `WORK` variable will be updated with the optimal matrix to instantiate and to provided to the routine upon the main call.
-
+### FFT
+### Wavelets
 
 ## Basic linear algebra. Solutions to exercises
 ### Solution to exercise 1
