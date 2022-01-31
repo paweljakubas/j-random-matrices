@@ -18,7 +18,7 @@
 8. [Inverse of a matrix](#inverse-of-matrix)
 9. [Trace of a matrix](#trace-of-matrix)
 10. [Eigenvalues](#eigenvalues) - TODO
-11. [LU decompositions](#lu-decomposition) - TODO
+11. [LU decomposition](#lu-decomposition) - TODO
 12. [Rank of a matrix](#rank-of-matrix) - TODO
 13. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 14. [FFT](#fft) - TODO
@@ -1178,8 +1178,8 @@ For a row case we do analogically but we choose corresponding row selections:
    row0=:(<(<0),(<a:))
    row0 { m
 100 101 102 103
-   Row2=:(<(<2),(<A:))
-   Row2 { m
+   row2=:(<(<2),(<A:))
+   row2 { m
 108 109 110 111
    (row0, row2) { m
 100 101 102 103
@@ -1258,6 +1258,87 @@ Show the case for a following matrix
 ```
 
 [Solution to exercise 22](#solution-to-exercise-22)
+
+All three elementary matrices are invertible:
+(a) the inverse of scaling matrix with *c* entry is scaling matrix with *1/c* entry
+(b) interchange matrix acts also as its inverse
+(c) the inverse of addition matrix with *c* is the addition matrix with *-c*
+
+So the inverse of any elementary matrix is another elementary matrix.
+
+Now let's look at an interesting observation [1, Problem 1.3.3 and Problem 1.3.4, page 23]
+```
+   genUniformMatrix=: 3 : 'y $ <. ( _10 10 runiform ((0{y) * (1{y)))'
+   ]A=:genUniformMatrix 4 5
+ 1 _1  7 _2 _6
+ 4  9 _8 _1 _7
+_1 _3 _4  5  4
+_9  3  4  3  3
+   ]B=:genUniformMatrix 5 6
+ 9  3 _9 _6  6  1
+ 2  9 _6 _8 _9 _7
+ 8  0  5 _4 _5  0
+ 4 _1 _7 _2  9  4
+_5  3 _2 _9  9 _8
+   A mult B
+ 85 _22   58  32 _92  48
+ 21  73 _109   1 _89  _7
+_47 _23  _36   0 122   8
+_46   6   56 _19 _47 _42
+
+   NB. let's exchange 2nd and 4th column of A, and 2nd and 4th row of B
+   ]diag=: =/~ (i.5)
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 1 0
+0 0 0 0 1
+   col1=:(<(<a:),(<1))
+   col3=:(<(<a:),(<3))
+   ]e=: ((col1, col3) { diag) (col3,col1) } diag
+1 0 0 0 0
+0 0 0 1 0
+0 0 1 0 0
+0 1 0 0 0
+0 0 0 0 1
+   ]A1=: A mult e
+ 1 _2  7 _1 _6
+ 4 _1 _8  9 _7
+_1  5 _4 _3  4
+_9  3  4  3  3
+
+   row1=:(<(<1),(<a:))
+   row3=:(<(<3),(<a:))
+   ]e=: ((row1, row3) { diag) (row3,row1) } diag
+1 0 0 0 0
+0 0 0 1 0
+0 0 1 0 0
+0 1 0 0 0
+0 0 0 0 1
+   ]B1=: e mult B
+ 9  3 _9 _6  6  1
+ 4 _1 _7 _2  9  4
+ 8  0  5 _4 _5  0
+ 2  9 _6 _8 _9 _7
+_5  3 _2 _9  9 _8
+   A1 mult B1
+ 85 _22   58  32 _92  48
+ 21  73 _109   1 _89  _7
+_47 _23  _36   0 122   8
+_46   6   56 _19 _47 _42
+
+  NB. A mult B is the same as A1 mult B, it is worth mentioning that A mult e mult e mult B
+  NB. e mult e = I
+   e mult e
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 1 0
+0 0 0 0 1
+  NB. indeed exchange is the inverse of itself
+
+  NB. Now let's look at addition operation (add 5 times 2nd column to 4th column).
+```
 
 ### Orthogonal transformations
 
@@ -1882,6 +1963,7 @@ cols=.>1{x
 
 ### FFT
 ### Wavelets
+### Project1
 
 ## Basic linear algebra. Solutions to exercises
 ### Solution to exercise 1
