@@ -6,6 +6,11 @@ NB. How to load the script - an example
 NB. ]scriptdir=: 'PATH-TO-REPO/j-random-matrices/j/'
 NB. 0!:1 < scriptdir,'algebra.ijs'
 
+NB. Color palletes
+pallete1=: (255 154 162, 255 183 178, 255 218 193, 226 240 203, 191 234 215,: 199 206 234)
+NB. load 'viemat'
+NB. pallete1 viewmat ?20 20$6
+
 NB. Transpose of a matrix
 transpose=: |:
 NB.    transpose (2 3 $ 1 2 3 4 5 6)
