@@ -6,10 +6,12 @@ NB. How to load the script - an example
 NB. ]scriptdir=: 'PATH-TO-REPO/j-random-matrices/j/'
 NB. 0!:1 < scriptdir,'algebra.ijs'
 
+
 NB. Color palletes
 pallete1=: (255 154 162, 255 183 178, 255 218 193, 226 240 203, 191 234 215,: 199 206 234)
 NB. load 'viemat'
 NB. pallete1 viewmat ?20 20$6
+
 
 NB. Transpose of a matrix
 transpose=: |:
@@ -20,6 +22,7 @@ NB. 3 6
 NB.    transpose (transpose (2 3 $ 1 2 3 4 5 6))
 NB. 1 2 3
 NB. 4 5 6
+
 
 NB. Multiplication of matrices x and y
 mult=: +/ .*
@@ -34,6 +37,7 @@ NB. 3  6 3  6
 NB. 7 14 7 14
 NB.    $c
 NB. 2 4
+
 
 NB. Decompose each index in a given array into respective coordinates
 toIxs=: 3 : '(#:i.)@$y'
@@ -94,6 +98,7 @@ NB.
 NB. 2 1 0
 NB. 2 1 1
 
+
 NB. interchange of columns
 interchangeC=: 4 : 0
 'r c' =. ,"0 $ y
@@ -126,6 +131,7 @@ NB.    1 7 interchangeC y
 NB. |assertion failure: interchangeC
 NB. |       ((c1>:0)*.(c1<r)*.(c2>:0)*.(c2<r))
 
+
 NB. interchange of rows
 interchangeR=: 4 : 0
 'r c' =. ,"0 $ y
@@ -148,11 +154,57 @@ NB.    1 3 interchangeR y
 NB. |assertion failure: interchangeR
 NB. |       ((r1>:0)*.(r1<r)*.(r2>:0)*.(r2<r))
 
+
+NB. scaling of a column by a factor
+scaleC=: 4 : 0
+'r c' =. ,"0 $ y
+'f col'=. x
+assert. ( (col >: 0) *. (col < c) )
+col0=:(<(<a:),(<col))
+(f * (col0 { y)) col0 } y
+)
+NB. Examples:
+NB.    y
+NB.  0  1  2  3  4
+NB.  5  6  7  8  9
+NB. 10 11 12 13 14
+NB.    10 0 scaleC y
+NB.   0  1  2  3  4
+NB.  50  6  7  8  9
+NB. 100 11 12 13 14
+NB.    10 10 scaleC y
+NB. |assertion failure: scaleC
+NB. |       ((col>:0)*.(col<c))
+
+
+NB. scaling of a row by a factor
+scaleR=: 4 : 0
+'r c' =. ,"0 $ y
+'f row'=. x
+assert. ( (row >: 0) *. (row < r) )
+row0=:(<(<row),(<a:))
+(f * (row0 { y)) row0 } y
+)
+NB. Examples:
+NB.    y
+NB.  0  1  2  3  4
+NB.  5  6  7  8  9
+NB. 10 11 12 13 14
+NB.    10 0 scaleR y
+NB.  0 10 20 30 40
+NB.  5  6  7  8  9
+NB. 10 11 12 13 14
+NB.    10 3 scaleR y
+NB. |assertion failure: scaleR
+NB. |       ((row>:0)*.(row<r))
+
+
 NB. Unique elements of vector
 nub=: 3 : '{./.~ y'
 NB. Examples:
 NB.    nub 1 2 3 1 4 5 5
 NB. 1 2 3 4 5
+
 
 NB. Sort rows of matrix `y` by ascending column `x`
 sortRowsByColumnAsc=: ]/:{"1
@@ -171,6 +223,7 @@ NB. 1  6
 NB. 3  7
 NB. 2 15
 
+
 NB. Sort rows of matrix `y` by descending column `x`
 sortRowsByColumnDesc=: ]\:{"1
 NB. Examples:
@@ -187,6 +240,7 @@ NB.    1 sortRowsByColumnDesc a
 NB. 2 15
 NB. 3  7
 NB. 1  6
+
 
 NB. Get all principal submatrices of a square matrix, consecutive planes contain row-wise principal submatrices
 principalSubmatrices =: 3 : 0
@@ -229,6 +283,7 @@ NB.
 NB. 0 1
 NB. 3 4
 
+
 NB. Get a principal submatrix specified by x of a square matrix y
 principalSubmatrix=: 4 : 0
 i=. 0 { x
@@ -260,6 +315,7 @@ NB.    0 1 principalSubmatrix m
 NB. |assertion failure: principalSubmatrix
 NB. |       (r=c)
 
+
 NB. Determinant of a square matrix y
 det=: 3 : 0
 'r c' =. ,"0 $ y
@@ -280,6 +336,7 @@ NB.    det m
 NB. |assertion failure: det
 NB. |       (r=c)
 
+
 NB. Adjoint of matrix y
 adjoint=: 3 : 0
 'r c' =. ,"0 $ y
@@ -296,6 +353,7 @@ NB.    adjoint m
 NB. _3   6 _3
 NB.  6 _12  6
 NB. _3   6 _3
+
 
 NB. Trace of a square matrix
 trace=: 3 : 0
@@ -320,6 +378,7 @@ NB. 12 13 14 15
 NB.    trace m
 NB. 30
 
+
 NB. Represent number y > 0 as 1 and y - 1 0s
 expressNum=: 3 : 0
 assert (y > 0)
@@ -337,6 +396,7 @@ NB.    expressNum 10.1
 NB. |assertion failure: assert
 NB. |       assert(y=(>.y))
 NB.
+
 
 NB. Partition matrix y by specifying consecutive partition block lenghts rows and columns
 partitionMatrix=: 4 : 0
@@ -406,6 +466,7 @@ NB. │40 41 42│43 44│
 NB. │45 46 47│48 49│
 NB. └────────┴─────┘
 
+
 NB. Prepare frequency report of vector 'y' ordered in ascending order by elements
 discreteHist=: 3 : 0
   freq=. #/.~ y
@@ -424,6 +485,7 @@ NB. │2   │0.2 │
 NB. │3   │0.2 │
 NB. │4   │0.2 │
 NB. └────┴────┘
+
 
 NB. Prepare count report of element occurance of vector 'y' in ordered bins that right boundaries are specified by consequitive elements of x
 intervalHist=: 4 : 0
@@ -472,6 +534,7 @@ NB. │ 2.8    │ 0   │   0│
 NB. │   3    │ 0   │   0│
 NB. └────────┴─────┴────┘
 
+
 NB. mean of a vector
 mean=: +/ % #
 NB. Examples:
@@ -479,6 +542,7 @@ NB.    mean 1 1 1 1
 NB. 1
 NB.    mean 1 1 1 2 3
 NB. 1.6
+
 
 NB. variance of a sample
 var=: (+/@(*:@(] - +/ % #)) % #)"1
@@ -492,6 +556,7 @@ rnd=. ?@#&0
 rne=. -@* ^.@rnd
 rno=: 3 : '(%:2 rne y)*2 o.(rnd y)*o.2'
 
+
 NB. Generation of y samples of normal distribution having 'mean var'=:x
 rnorm=: 4 : 0
   (rno y) #.every <|.x
@@ -500,6 +565,7 @@ NB. Examples:
 NB. 10 samples of N(0,1)
 NB.      0 1 rnorm 10
 NB. 0.583949 0.151037 1.44553 1.18409 _0.53704 1.49066 0.649399 0.569303 0.855299 0.738213
+
 
 NB. Generation of y samples of uniform distribution having bounds 'from to'=:x
 runiform=: 4 : 0
