@@ -94,6 +94,60 @@ NB.
 NB. 2 1 0
 NB. 2 1 1
 
+NB. interchange of columns
+interchangeC=: 4 : 0
+'r c' =. ,"0 $ y
+'c1 c2'=. x
+assert. ( (c1 >: 0) *. (c1 < c) *. (c2 >: 0) *. (c2 < c))
+col1=:(<(<a:),(<c1))
+col2=:(<(<a:),(<c2))
+((col1, col2) { y) (col2,col1) } y
+)
+NB. Examples:
+NB.    ]y=: i. 5 6
+NB.  0  1  2  3  4  5
+NB.  6  7  8  9 10 11
+NB. 12 13 14 15 16 17
+NB. 18 19 20 21 22 23
+NB. 24 25 26 27 28 29
+NB.    0 1 interchangeC y
+NB.  1  0  2  3  4  5
+NB.  7  6  8  9 10 11
+NB. 13 12 14 15 16 17
+NB. 19 18 20 21 22 23
+NB. 25 24 26 27 28 29
+NB.    1 4 interchangeC y
+NB.  0  4  2  3  1  5
+NB.  6 10  8  9  7 11
+NB. 12 16 14 15 13 17
+NB. 18 22 20 21 19 23
+NB. 24 28 26 27 25 29
+NB.    1 7 interchangeC y
+NB. |assertion failure: interchangeC
+NB. |       ((c1>:0)*.(c1<r)*.(c2>:0)*.(c2<r))
+
+NB. interchange of rows
+interchangeR=: 4 : 0
+'r c' =. ,"0 $ y
+'r1 r2'=. x
+assert. ( (r1 >: 0) *. (r1 < r) *. (r2 >: 0) *. (r2 < r))
+row1=:(<(<r1),(<a:))
+row2=:(<(<r2),(<a:))
+((row1, row2) { y) (row2,row1) } y
+)
+NB. Examples:
+NB.    ]y=: i. 3 5
+NB.  0  1  2  3  4
+NB.  5  6  7  8  9
+NB. 10 11 12 13 14
+NB.    1 0 interchangeR y
+NB.  5  6  7  8  9
+NB.  0  1  2  3  4
+NB. 10 11 12 13 14
+NB.    1 3 interchangeR y
+NB. |assertion failure: interchangeR
+NB. |       ((r1>:0)*.(r1<r)*.(r2>:0)*.(r2<r))
+
 NB. Unique elements of vector
 nub=: 3 : '{./.~ y'
 NB. Examples:

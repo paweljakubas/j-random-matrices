@@ -1178,7 +1178,7 @@ For a row case we do analogically but we choose corresponding row selections:
    row0=:(<(<0),(<a:))
    row0 { m
 100 101 102 103
-   row2=:(<(<2),(<A:))
+   row2=:(<(<2),(<a:))
    row2 { m
 108 109 110 111
    (row0, row2) { m
