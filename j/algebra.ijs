@@ -99,7 +99,7 @@ NB. 2 1 0
 NB. 2 1 1
 
 
-NB. interchange of columns
+NB. interchange of columns in matrix y, x=:col1 col2
 interchangeC=: 4 : 0
 'r c' =. ,"0 $ y
 'c1 c2'=. x
@@ -132,7 +132,7 @@ NB. |assertion failure: interchangeC
 NB. |       ((c1>:0)*.(c1<r)*.(c2>:0)*.(c2<r))
 
 
-NB. interchange of rows
+NB. interchange of rows in matrix y, x=:row1 row2
 interchangeR=: 4 : 0
 'r c' =. ,"0 $ y
 'r1 r2'=. x
@@ -155,7 +155,7 @@ NB. |assertion failure: interchangeR
 NB. |       ((r1>:0)*.(r1<r)*.(r2>:0)*.(r2<r))
 
 
-NB. scaling of a column by a factor
+NB. scaling of a column by a factor in a matrix y, x=:col f
 scaleC=: 4 : 0
 'r c' =. ,"0 $ y
 'f col'=. x
@@ -177,7 +177,7 @@ NB. |assertion failure: scaleC
 NB. |       ((col>:0)*.(col<c))
 
 
-NB. scaling of a row by a factor
+NB. scaling of a row by a factor in a matrix y, x=:row f
 scaleR=: 4 : 0
 'r c' =. ,"0 $ y
 'f row'=. x
@@ -197,6 +197,64 @@ NB. 10 11 12 13 14
 NB.    10 3 scaleR y
 NB. |assertion failure: scaleR
 NB. |       ((row>:0)*.(row<r))
+
+
+NB. addition of a scaled column col1 to an another column col2 in a matrix y, x=: f col2 col1
+additionC=: 4 : 0
+'r c' =. ,"0 $ y
+'f c1 c2'=. x
+assert. ( (c1 >: 0) *. (c1 < c) *. (c2 >: 0) *. (c2 < c))
+col1=:(<(<a:),(<c1))
+col2=:(<(<a:),(<c2))
+((col1 { y) + (f *(col2 { y))) col1 } y
+)
+NB. Examples:
+NB.    y
+NB.  0  1  2  3  4
+NB.  5  6  7  8  9
+NB. 10 11 12 13 14
+NB.    1 0 1 additionC y
+NB.  1  1  2  3  4
+NB. 11  6  7  8  9
+NB. 21 11 12 13 14
+NB.    1 1 2 additionC y
+NB.  0  3  2  3  4
+NB.  5 13  7  8  9
+NB. 10 23 12 13 14
+NB.    10 1 2 additionC y
+NB.  0  21  2  3  4
+NB.  5  76  7  8  9
+NB. 10 131 12 13 14
+NB.    10 1 9 additionC y
+NB. |assertion failure: additionC
+NB. |       ((c1>:0)*.(c1<c)*.(c2>:0)*.(c2<c))
+
+
+NB. addition of a scaled row row1 to an another row row2 in a matrix y, x=: f row2 row1
+additionR=: 4 : 0
+'r c' =. ,"0 $ y
+'f r1 r2'=. x
+assert. ( (r1 >: 0) *. (r1 < r) *. (r2 >: 0) *. (r2 < r))
+row1=:(<(<r1),(<a:))
+row2=:(<(<r2),(<a:))
+((row1 { y) + (f *(row2 { y))) row1 } y
+)
+NB. Examples:
+NB.    y
+NB.  0  1  2  3  4
+NB.  5  6  7  8  9
+NB. 10 11 12 13 14
+NB.    1 0 1 additionR y
+NB.  5  7  9 11 13
+NB.  5  6  7  8  9
+NB. 10 11 12 13 14
+NB.    1 1 0 additionR y
+NB.  0  1  2  3  4
+NB.  5  7  9 11 13
+NB. 10 11 12 13 14
+NB.    1 1 4 additionR y
+NB. |assertion failure: additionR
+NB. |       ((r1>:0)*.(r1<r)*.(r2>:0)*.(r2<r))
 
 
 NB. Unique elements of vector
