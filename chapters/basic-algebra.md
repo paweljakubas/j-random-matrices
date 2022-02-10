@@ -1338,6 +1338,42 @@ _46   6   56 _19 _47 _42
   NB. indeed exchange is the inverse of itself
 
   NB. Now let's look at addition operation (add 5 times 2nd column to 4th column).
+  NB. Let's use 'additionC' and 'additionR' from 'j/algebra.ijs'
+   ]A=:genUniformMatrix 4 5
+ 2 _4  8 _9 _3
+_4 _9  2 _5  8
+_5 _2  3  6  5
+_1  2 _7  4 _7
+   ]B=:genUniformMatrix 5 6
+ 3  8 _2  2  7  7
+ 4  9 _1  8  8  6
+ 2 _8 _6 _6 _5  3
+ 6  4  1 _1  7 _2
+_6  4  9 _8 _1 _7
+   A mult B
+ _30 _132 _84  _43 _118   53
+_122 _117  72 _151 _153 _122
+ _11  _38  45  _90  _29  _85
+  57   54 _17  108   79   25
+   ]addA=: 5 3 1 additionC A
+ 2 _4  8 _29 _3
+_4 _9  2 _50  8
+_5 _2  3  _4  5
+_1  2 _7  14 _7
+   ]addB=: _5 1 3 additionR B
+  3   8 _2  2   7  7
+_26 _11 _6 13 _27 16
+  2  _8 _6 _6  _5  3
+  6   4  1 _1   7 _2
+ _6   4  9 _8  _1 _7
+   addA mult addB
+ _30 _132 _84  _43 _118   53
+_122 _117  72 _151 _153 _122
+ _11  _38  45  _90  _29  _85
+  57   54 _17  108   79   25
+  NB. A mult B is the same as addA mult addB
+  NB. adding j column scaled by f to i column in A and adding i row scaled by -f to j row in B
+  NB. conserved matrix multiplication
 ```
 
 ### Orthogonal transformations
