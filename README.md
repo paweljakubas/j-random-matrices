@@ -27,7 +27,7 @@ The sequels are planned and will cover the author's J experiments in:
 - statistics
 - data mining
 - quantum mechanics
-- network science
+- network science and graph spectra
 
 I find this hacking so enjoyable that I hope this will become a multi-year project for me.
 I bet that investing in J will prove very fruitful as I will not only get extremely powerful calculator at my disposal,

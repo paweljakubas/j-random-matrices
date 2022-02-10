@@ -1262,7 +1262,7 @@ Show the case for a following matrix
 All three elementary matrices are invertible:
 (a) the inverse of scaling matrix with *c* entry is scaling matrix with *1/c* entry
 (b) interchange matrix acts also as its inverse
-(c) the inverse of addition matrix with *c* is the addition matrix with *-c*
+(c) the inverse of column addition matrix with (i, ci + j) is the row addition matrix with (i-cj, j)
 
 So the inverse of any elementary matrix is another elementary matrix.
 
@@ -1374,6 +1374,36 @@ _122 _117  72 _151 _153 _122
   NB. A mult B is the same as addA mult addB
   NB. adding j column scaled by f to i column in A and adding i row scaled by -f to j row in B
   NB. conserved matrix multiplication
+  NB. Looking at this differently we have:
+   ]elemA=: |: 5 5 $ 1 0 0 0 0 0 1 0 5 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 5 0 1 0
+0 0 0 0 1
+   A mult elemA
+ 2 _49  8 _9 _3
+_4 _34  2 _5  8
+_5  28  3  6  5
+_1  22 _7  4 _7
+   ]elemB=: 5 5 $ 1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 _5 0 1 0 0 0 0 0 1
+1  0 0 0 0
+0  1 0 0 0
+0  0 1 0 0
+0 _5 0 1 0
+0  0 0 0 1
+   elemB mult B
+  3   8 _2   2   7   7
+  4   9 _1   8   8   6
+  2  _8 _6  _6  _5   3
+_14 _41  6 _41 _33 _32
+ _6   4  9  _8  _1  _7
+   elemA mult elemB
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 1 0
+0 0 0 0 1
 ```
 
 ### Orthogonal transformations
