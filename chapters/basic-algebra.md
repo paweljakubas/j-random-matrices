@@ -5,17 +5,18 @@
 2. [Updating a matrix](#updating-of-matrix)
 3. [Generate a random matrix](#generating-random-matrix)
 4. [Testing matrix properties](#testing-matrix-properties)
-5. [Elementary operations of a matrix](#elementary-operations-in-matrix)
+5. [Elementary operations of a matrix I](#elementary-operations-in-matrix-1)
     - [Matrix addition](#matrix-addition)
     - [Note on floating point arithmetics](#note-on-floating-point-arithmetics)
     - [Matrix multiplication](#matrix-multiplication)
+6. [Transpose of a matrix](#transpose-of-matrix)
+7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
+8. [Inverse of a matrix](#inverse-of-matrix)
+5. [Elementary operations of a matrix II](#elementary-operations-in-matrix-2)
     - [Matrix elementary row and column operations](#matrix-elementary-row-and-column-operations)
     - [Orthogonal transformations](#orthogonal-transformations) - TODO
     - [Givens rotations](#givens-rotations) - TODO
     - [Householder reflections](#householder-reflections) - TODO
-6. [Transpose of a matrix](#transpose-of-matrix)
-7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
-8. [Inverse of a matrix](#inverse-of-matrix)
 9. [Trace of a matrix](#trace-of-matrix)
 10. [Eigenvalues](#eigenvalues) - TODO
 11. [LU decomposition](#lu-decomposition) - TODO
@@ -923,7 +924,7 @@ This is a standard procedure, for example in Haskell development, were we constr
 upon property testing, proper array instances are generated and the property is tried with them. As I am convinced this is the proper and
 the required approach I will adopt it as well here.
 
-## Elementary operations in matrix
+## Elementary operations in matrix 1
 We have the following basic results.
 
 ### Matrix addition
@@ -1149,268 +1150,6 @@ Perform property testing for the multiplication properties specified above
 
 [Solution to exercise 20](#solution-to-exercise-20)
 
-### Matrix elementary row and column operations
-
-There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
-Let's start with **interchange** elementary operations.
-For column case we define two selection for each column we want to interchange, then use the pair selection in 'view'
-and the interchanged pair in the same update:
-```
-   col0=:(<(<a:),(<0))
-   col0 { m
-100 104 108 112
-   col2=:(<(<a:),(<2))
-   col2 { m
-102 106 110 114
-
-   (col0, col2) { m
-100 104 108 112
-102 106 110 114
-
-   ((col0, col2) { m) (col2,col0) } m
-102 101 100 103
-106 105 104 107
-110 109 108 111
-114 113 112 115
-```
-For a row case we do analogically but we choose corresponding row selections:
-```
-   row0=:(<(<0),(<a:))
-   row0 { m
-100 101 102 103
-   row2=:(<(<2),(<a:))
-   row2 { m
-108 109 110 111
-   (row0, row2) { m
-100 101 102 103
-108 109 110 111
-   ((row0, row2) { m) (row2,row0) } m
-108 109 110 111
-104 105 106 107
-100 101 102 103
-112 113 114 115
-```
-
-In **scaling** elementary operation each element in a given column (row) is multiplied
-by the provided factor. For both column and row cases this could be realized as follows:
-```
-f =: 4 : '(y * x)'
-   (5 f (col0 { m))
-500 520 540 560
-   (5 f (col0 { m)) col0 } m
-500 101 102 103
-520 105 106 107
-540 109 110 111
-560 113 114 115
-
-   (5 f (row0 { m)) row0 } m
-500 505 510 515
-104 105 106 107
-108 109 110 111
-112 113 114 115
-```
-
-The **addition** elementary operation in a column case entails adding column scaled by some factor
-,element-wise, to other column. The case for the row varies with the choice of a row selector
-instead of the column selector. Following we are replacing column 0 with the result of the
-addition of column 0 and column 2 that was scaled by factor 5. Once again we use update operation
-with selectors. Then we do the same for the row 0:
-```
-   (col0 { m) + (5 f (col2 { m))
-610 634 658 682
-
-   ((col0 { m) + (5 f (col2 { m))) col0 } m
-610 101 102 103
-634 105 106 107
-658 109 110 111
-682 113 114 115
-
-   (row0 { m) + (5 f (row2 { m))
-640 646 652 658
-   (row0 { m) + (5 f (row2 { m)) row0 } m
-640 645 650 655
-205 206 207 208
-210 211 212 213
-215 216 217 218
-```
-
-**Exercise 21**
-Show that the three basic operations can be realized by matrix multiplication of the transformed identity matrices.
-Show the case for a following matrix
-```
-    ]m=: 3 3 $ i.9
-0 1 2
-3 4 5
-6 7 8
-```
-
-[Solution to exercise 21](#solution-to-exercise-21)
-
-**Exercise 22**
-Show that the three basic operations can be realized by matrix multiplication of the transformed identity matrices.
-Show the case for a following matrix
-```
-    ]m=: 4 3 $ i.12
-0  1  2
-3  4  5
-6  7  8
-9 10 11
-```
-
-[Solution to exercise 22](#solution-to-exercise-22)
-
-All three elementary matrices are invertible:
-(a) the inverse of scaling matrix with *c* entry is scaling matrix with *1/c* entry
-(b) interchange matrix acts also as its inverse
-(c) the inverse of column addition matrix with (i, ci + j) is the row addition matrix with (i-cj, j)
-
-So the inverse of any elementary matrix is another elementary matrix.
-
-Now let's look at an interesting observation [1, Problem 1.3.3 and Problem 1.3.4, page 23]
-```
-   genUniformMatrix=: 3 : 'y $ <. ( _10 10 runiform ((0{y) * (1{y)))'
-   ]A=:genUniformMatrix 4 5
- 1 _1  7 _2 _6
- 4  9 _8 _1 _7
-_1 _3 _4  5  4
-_9  3  4  3  3
-   ]B=:genUniformMatrix 5 6
- 9  3 _9 _6  6  1
- 2  9 _6 _8 _9 _7
- 8  0  5 _4 _5  0
- 4 _1 _7 _2  9  4
-_5  3 _2 _9  9 _8
-   A mult B
- 85 _22   58  32 _92  48
- 21  73 _109   1 _89  _7
-_47 _23  _36   0 122   8
-_46   6   56 _19 _47 _42
-
-   NB. let's exchange 2nd and 4th column of A, and 2nd and 4th row of B
-   ]diag=: =/~ (i.5)
-1 0 0 0 0
-0 1 0 0 0
-0 0 1 0 0
-0 0 0 1 0
-0 0 0 0 1
-   col1=:(<(<a:),(<1))
-   col3=:(<(<a:),(<3))
-   ]e=: ((col1, col3) { diag) (col3,col1) } diag
-1 0 0 0 0
-0 0 0 1 0
-0 0 1 0 0
-0 1 0 0 0
-0 0 0 0 1
-   ]A1=: A mult e
- 1 _2  7 _1 _6
- 4 _1 _8  9 _7
-_1  5 _4 _3  4
-_9  3  4  3  3
-
-   row1=:(<(<1),(<a:))
-   row3=:(<(<3),(<a:))
-   ]e=: ((row1, row3) { diag) (row3,row1) } diag
-1 0 0 0 0
-0 0 0 1 0
-0 0 1 0 0
-0 1 0 0 0
-0 0 0 0 1
-   ]B1=: e mult B
- 9  3 _9 _6  6  1
- 4 _1 _7 _2  9  4
- 8  0  5 _4 _5  0
- 2  9 _6 _8 _9 _7
-_5  3 _2 _9  9 _8
-   A1 mult B1
- 85 _22   58  32 _92  48
- 21  73 _109   1 _89  _7
-_47 _23  _36   0 122   8
-_46   6   56 _19 _47 _42
-
-  NB. A mult B is the same as A1 mult B, it is worth mentioning that A mult e mult e mult B
-  NB. e mult e = I
-   e mult e
-1 0 0 0 0
-0 1 0 0 0
-0 0 1 0 0
-0 0 0 1 0
-0 0 0 0 1
-  NB. indeed exchange is the inverse of itself
-
-  NB. Now let's look at addition operation (add 5 times 2nd column to 4th column).
-  NB. Let's use 'additionC' and 'additionR' from 'j/algebra.ijs'
-   ]A=:genUniformMatrix 4 5
- 2 _4  8 _9 _3
-_4 _9  2 _5  8
-_5 _2  3  6  5
-_1  2 _7  4 _7
-   ]B=:genUniformMatrix 5 6
- 3  8 _2  2  7  7
- 4  9 _1  8  8  6
- 2 _8 _6 _6 _5  3
- 6  4  1 _1  7 _2
-_6  4  9 _8 _1 _7
-   A mult B
- _30 _132 _84  _43 _118   53
-_122 _117  72 _151 _153 _122
- _11  _38  45  _90  _29  _85
-  57   54 _17  108   79   25
-   ]addA=: 5 3 1 additionC A
- 2 _4  8 _29 _3
-_4 _9  2 _50  8
-_5 _2  3  _4  5
-_1  2 _7  14 _7
-   ]addB=: _5 1 3 additionR B
-  3   8 _2  2   7  7
-_26 _11 _6 13 _27 16
-  2  _8 _6 _6  _5  3
-  6   4  1 _1   7 _2
- _6   4  9 _8  _1 _7
-   addA mult addB
- _30 _132 _84  _43 _118   53
-_122 _117  72 _151 _153 _122
- _11  _38  45  _90  _29  _85
-  57   54 _17  108   79   25
-  NB. A mult B is the same as addA mult addB
-  NB. adding j column scaled by f to i column in A and adding i row scaled by -f to j row in B
-  NB. conserved matrix multiplication
-  NB. Looking at this differently we have:
-   ]elemA=: |: 5 5 $ 1 0 0 0 0 0 1 0 5 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1
-1 0 0 0 0
-0 1 0 0 0
-0 0 1 0 0
-0 5 0 1 0
-0 0 0 0 1
-   A mult elemA
- 2 _49  8 _9 _3
-_4 _34  2 _5  8
-_5  28  3  6  5
-_1  22 _7  4 _7
-   ]elemB=: 5 5 $ 1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 _5 0 1 0 0 0 0 0 1
-1  0 0 0 0
-0  1 0 0 0
-0  0 1 0 0
-0 _5 0 1 0
-0  0 0 0 1
-   elemB mult B
-  3   8 _2   2   7   7
-  4   9 _1   8   8   6
-  2  _8 _6  _6  _5   3
-_14 _41  6 _41 _33 _32
- _6   4  9  _8  _1  _7
-   elemA mult elemB
-1 0 0 0 0
-0 1 0 0 0
-0 0 1 0 0
-0 0 0 1 0
-0 0 0 0 1
-```
-
-### Orthogonal transformations
-
-### Givens rotations
-
-### Householder reflections
 
 ### Transpose of matrix
 The transpose is defined as follows:
@@ -1429,10 +1168,10 @@ We have also the following properties [2, page 6]
 - <img src="https://latex.codecogs.com/svg.image?(A&plus;B)^T=A^T&plus;B^T" title="(A+B)^T=A^T+B^T" />
 - <img src="https://latex.codecogs.com/svg.image?(AB)^T=B^TA^T" title="(AB)^T=B^TA^T" />
 
-**Exercise 23**
+**Exercise 21**
 Perform property testing for transpose properties.
 
-[Solution to exercise 23](#solution-to-exercise-23)
+[Solution to exercise 21](#solution-to-exercise-21)
 
 We can also introduce transpose for arbitrary dimension n > 2 arrays. In such a case we have `n!` ways of transposing
 hence the transpose and those ways are expressed as permutations
@@ -1547,21 +1286,21 @@ Determinant of a square matrix is specified as below:
 0
 ```
 
-**Exercise 24**
+**Exercise 22**
 Show for 4x4 random matrix with integer elements from 0 to 20 that determinant of this matrix is a sum
 of determinants of principal submatrices (row-wise or column-wise), called *minors*, multiplied by elements at (i,j) (and negated when (i+j) is odd)
 
-[Solution to exercise 24](#solution-to-exercise-24)
+[Solution to exercise 22](#solution-to-exercise-22)
 
 Noteworthy properties of determinant [2, page 10]
 - <img src="https://latex.codecogs.com/svg.image?|AB|=|A||B|" title="|AB|=|A||B|" />
 - <img src="https://latex.codecogs.com/svg.image?|A^{T}|=|A|" title="|A^{T}|=|A|" />
 - <img src="https://latex.codecogs.com/svg.image?|sA|=s^{n}|A|" title="|sA|=s^{n}|A|" /> for any scalar `s`
 
-**Exercise 25**
+**Exercise 23**
 Add property testing for the determinant properties.
 
-[Solution to exercise 25](#solution-to-exercise-25)
+[Solution to exercise 23](#solution-to-exercise-23)
 
 For the record, **minor** of an element <img src="https://latex.codecogs.com/svg.image?a_{ij}" title="a_{ij}" />  is the determinant of a square submatrix
 that is obtained from a matrix *A* by deleting the i-th row and j-th column.
@@ -1591,10 +1330,10 @@ The adjoint matrix has a number of interesting properties [2, page 11]:
 - <img src="https://latex.codecogs.com/svg.image?A^{adj}A=AA^{adj}=|A|I" title="A^{adj}A=AA^{adj}=|A|I" />
 - <img src="https://latex.codecogs.com/svg.image?(AB)^{adj}=B^{adj}A^{adj}" title="(AB)^{adj}=B^{adj}A^{adj}" />
 
-**Exercise 26**
+**Exercise 24**
 Add property testing for the adjoint relations.
 
-[Solution to exercise 26](#solution-to-exercise-26)
+[Solution to exercise 24](#solution-to-exercise-24)
 
 For nonsingular *A* have also an important relation <img src="https://latex.codecogs.com/svg.image?(A)^{adj}=|A|A^{-1}" title="(A)^{adj}=|A|A^{-1}" />
 ```
@@ -1756,10 +1495,277 @@ Worth noting properties of the matrix inverse are following:
 - <img src="https://latex.codecogs.com/svg.image?(AB)^{-1}=B^{-1}A^{-1}" title="(AB)^{-1}=B^{-1}A^{-1}" />
 - <img src="https://latex.codecogs.com/svg.image?|A^{-1}|=1/|A|" title="|A^{-1}|=1/|A|" />
 
-**Exercise 27**
+**Exercise 25**
 Add property testing for inverse properties.
 
+[Solution to exercise 25](#solution-to-exercise-25)
+
+## Elementary operations in matrix 2
+Another basic results are following.
+
+### Matrix elementary row and column operations
+
+There are three elementary operations we are going to cover here, all three in the context of both rows and columns.
+Let's start with **interchange** elementary operations.
+For column case we define two selection for each column we want to interchange, then use the pair selection in 'view'
+and the interchanged pair in the same update:
+```
+   col0=:(<(<a:),(<0))
+   col0 { m
+100 104 108 112
+   col2=:(<(<a:),(<2))
+   col2 { m
+102 106 110 114
+
+   (col0, col2) { m
+100 104 108 112
+102 106 110 114
+
+   ((col0, col2) { m) (col2,col0) } m
+102 101 100 103
+106 105 104 107
+110 109 108 111
+114 113 112 115
+```
+For a row case we do analogically but we choose corresponding row selections:
+```
+   row0=:(<(<0),(<a:))
+   row0 { m
+100 101 102 103
+   row2=:(<(<2),(<a:))
+   row2 { m
+108 109 110 111
+   (row0, row2) { m
+100 101 102 103
+108 109 110 111
+   ((row0, row2) { m) (row2,row0) } m
+108 109 110 111
+104 105 106 107
+100 101 102 103
+112 113 114 115
+```
+
+In **scaling** elementary operation each element in a given column (row) is multiplied
+by the provided factor. For both column and row cases this could be realized as follows:
+```
+f =: 4 : '(y * x)'
+   (5 f (col0 { m))
+500 520 540 560
+   (5 f (col0 { m)) col0 } m
+500 101 102 103
+520 105 106 107
+540 109 110 111
+560 113 114 115
+
+   (5 f (row0 { m)) row0 } m
+500 505 510 515
+104 105 106 107
+108 109 110 111
+112 113 114 115
+```
+
+The **addition** elementary operation in a column case entails adding column scaled by some factor
+,element-wise, to other column. The case for the row varies with the choice of a row selector
+instead of the column selector. Following we are replacing column 0 with the result of the
+addition of column 0 and column 2 that was scaled by factor 5. Once again we use update operation
+with selectors. Then we do the same for the row 0:
+```
+   (col0 { m) + (5 f (col2 { m))
+610 634 658 682
+
+   ((col0 { m) + (5 f (col2 { m))) col0 } m
+610 101 102 103
+634 105 106 107
+658 109 110 111
+682 113 114 115
+
+   (row0 { m) + (5 f (row2 { m))
+640 646 652 658
+   (row0 { m) + (5 f (row2 { m)) row0 } m
+640 645 650 655
+205 206 207 208
+210 211 212 213
+215 216 217 218
+```
+
+**Exercise 26**
+Show that the three basic operations can be realized by matrix multiplication of the transformed identity matrices.
+Show the case for a following matrix
+```
+    ]m=: 3 3 $ i.9
+0 1 2
+3 4 5
+6 7 8
+```
+
+[Solution to exercise 26](#solution-to-exercise-26)
+
+**Exercise 27**
+Show that the three basic operations can be realized by matrix multiplication of the transformed identity matrices.
+Show the case for a following matrix
+```
+    ]m=: 4 3 $ i.12
+0  1  2
+3  4  5
+6  7  8
+9 10 11
+```
+
 [Solution to exercise 27](#solution-to-exercise-27)
+
+All three elementary matrices are invertible:
+(a) the inverse of scaling matrix with *c* entry is scaling matrix with *1/c* entry
+(b) interchange matrix acts also as its inverse
+(c) the inverse of column addition matrix with (i, ci + j) is the row addition matrix with (i-cj, j)
+
+So the inverse of any elementary matrix is another elementary matrix.
+
+Now let's look at an interesting observation [1, Problem 1.3.3 and Problem 1.3.4, page 23]
+```
+   genUniformMatrix=: 3 : 'y $ <. ( _10 10 runiform ((0{y) * (1{y)))'
+   ]A=:genUniformMatrix 4 5
+ 1 _1  7 _2 _6
+ 4  9 _8 _1 _7
+_1 _3 _4  5  4
+_9  3  4  3  3
+   ]B=:genUniformMatrix 5 6
+ 9  3 _9 _6  6  1
+ 2  9 _6 _8 _9 _7
+ 8  0  5 _4 _5  0
+ 4 _1 _7 _2  9  4
+_5  3 _2 _9  9 _8
+   A mult B
+ 85 _22   58  32 _92  48
+ 21  73 _109   1 _89  _7
+_47 _23  _36   0 122   8
+_46   6   56 _19 _47 _42
+
+   NB. let's exchange 2nd and 4th column of A, and 2nd and 4th row of B
+   ]diag=: =/~ (i.5)
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 1 0
+0 0 0 0 1
+   col1=:(<(<a:),(<1))
+   col3=:(<(<a:),(<3))
+   ]e=: ((col1, col3) { diag) (col3,col1) } diag
+1 0 0 0 0
+0 0 0 1 0
+0 0 1 0 0
+0 1 0 0 0
+0 0 0 0 1
+   ]A1=: A mult e
+ 1 _2  7 _1 _6
+ 4 _1 _8  9 _7
+_1  5 _4 _3  4
+_9  3  4  3  3
+
+   row1=:(<(<1),(<a:))
+   row3=:(<(<3),(<a:))
+   ]e=: ((row1, row3) { diag) (row3,row1) } diag
+1 0 0 0 0
+0 0 0 1 0
+0 0 1 0 0
+0 1 0 0 0
+0 0 0 0 1
+   ]B1=: e mult B
+ 9  3 _9 _6  6  1
+ 4 _1 _7 _2  9  4
+ 8  0  5 _4 _5  0
+ 2  9 _6 _8 _9 _7
+_5  3 _2 _9  9 _8
+   A1 mult B1
+ 85 _22   58  32 _92  48
+ 21  73 _109   1 _89  _7
+_47 _23  _36   0 122   8
+_46   6   56 _19 _47 _42
+
+  NB. A mult B is the same as A1 mult B, it is worth mentioning that A mult e mult e mult B
+  NB. e mult e = I
+   e mult e
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 1 0
+0 0 0 0 1
+  NB. indeed exchange is the inverse of itself
+
+  NB. Now let's look at addition operation (add 5 times 2nd column to 4th column).
+  NB. Let's use 'additionC' and 'additionR' from 'j/algebra.ijs'
+   ]A=:genUniformMatrix 4 5
+ 2 _4  8 _9 _3
+_4 _9  2 _5  8
+_5 _2  3  6  5
+_1  2 _7  4 _7
+   ]B=:genUniformMatrix 5 6
+ 3  8 _2  2  7  7
+ 4  9 _1  8  8  6
+ 2 _8 _6 _6 _5  3
+ 6  4  1 _1  7 _2
+_6  4  9 _8 _1 _7
+   A mult B
+ _30 _132 _84  _43 _118   53
+_122 _117  72 _151 _153 _122
+ _11  _38  45  _90  _29  _85
+  57   54 _17  108   79   25
+   ]addA=: 5 3 1 additionC A
+ 2 _4  8 _29 _3
+_4 _9  2 _50  8
+_5 _2  3  _4  5
+_1  2 _7  14 _7
+   ]addB=: _5 1 3 additionR B
+  3   8 _2  2   7  7
+_26 _11 _6 13 _27 16
+  2  _8 _6 _6  _5  3
+  6   4  1 _1   7 _2
+ _6   4  9 _8  _1 _7
+   addA mult addB
+ _30 _132 _84  _43 _118   53
+_122 _117  72 _151 _153 _122
+ _11  _38  45  _90  _29  _85
+  57   54 _17  108   79   25
+  NB. A mult B is the same as addA mult addB
+  NB. adding j column scaled by f to i column in A and adding i row scaled by -f to j row in B
+  NB. conserved matrix multiplication
+  NB. Looking at this differently we have:
+   ]elemA=: |: 5 5 $ 1 0 0 0 0 0 1 0 5 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 5 0 1 0
+0 0 0 0 1
+   A mult elemA
+ 2 _49  8 _9 _3
+_4 _34  2 _5  8
+_5  28  3  6  5
+_1  22 _7  4 _7
+   ]elemB=: 5 5 $ 1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 _5 0 1 0 0 0 0 0 1
+1  0 0 0 0
+0  1 0 0 0
+0  0 1 0 0
+0 _5 0 1 0
+0  0 0 0 1
+   elemB mult B
+  3   8 _2   2   7   7
+  4   9 _1   8   8   6
+  2  _8 _6  _6  _5   3
+_14 _41  6 _41 _33 _32
+ _6   4  9  _8  _1  _7
+   elemA mult elemB
+1 0 0 0 0
+0 1 0 0 0
+0 0 1 0 0
+0 0 0 1 0
+0 0 0 0 1
+```
+
+### Orthogonal transformations
+
+### Givens rotations
+
+### Householder reflections
+
 
 ### Trace of matrix
 The trace of a square matrix *A* is the sum of its diagonal elements.
@@ -3102,135 +3108,6 @@ relation checkEqOfMatricesScalarsRel data
 ```
 
 ### Solution to exercise 21
-```
-    ]m=: 3 3 $ i.9
-0 1 2
-3 4 5
-6 7 8
-    NB. exchange between row 0 and 2
-   ]e=: 3 3 $ 0 0 1 0 1 0 1 0 0
-0 0 1
-0 1 0
-1 0 0
-   e mult m
-6 7 8
-3 4 5
-0 1 2
-
-   NB. add 2 x (row 2) to row 0
-   ]a=: 3 3 $ 1 0 2 0 1 0 0 0 1
-1 0 2
-0 1 0
-0 0 1
-   a mult m
-12 15 18
- 3  4  5
- 6  7  8
-
-   NB. scale row 0 by factor 2
-   ]s=: 3 3 $ 2 0 0 0 1 0 0 0 1
-2 0 0
-0 1 0
-0 0 1
-   s mult m
-0 2 4
-3 4 5
-6 7 8
-
-   NB. reuse e, a, s to column operations
-   m mult e
-2 1 0
-5 4 3
-8 7 6
-   m mult a
-0 1  2
-3 4 11
-6 7 20
-   m mult s
- 0 1 2
- 6 4 5
-12 7 8
-
-   NB. exchange and scaling works fine except addition, it act on column 2 rather than column 0, so transpose is needed
-   m mult (|: a)
- 4 1 2
-13 4 5
-22 7 8
-```
-
-### Solution to exercise 22
-```
-    ]m=: 4 3 $ i.12
-0  1  2
-3  4  5
-6  7  8
-9 10 11
-   NB. exchange between row 0 and 2
-   ]e=: 4 4 $ 0 0 1 0 0 1 0 0 1 0 0 0 0 0 0 1
-0 0 1 0
-0 1 0 0
-1 0 0 0
-0 0 0 1
-   e mult m
-6  7  8
-3  4  5
-0  1  2
-9 10 11
-   NB. exchange between column 0 and 2 - other basic matrix is needed here
-   ]e=: 3 3 $ 0 0 1 0 1 0 1 0 0
-0 0 1
-0 1 0
-1 0 0
-   m mult e
- 2  1 0
- 5  4 3
- 8  7 6
-11 10 9
-
-  NB. scaling rows and column needs different basic matrices
-   ]s=: 4 4 $ 2 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
-2 0 0 0
-0 1 0 0
-0 0 1 0
-0 0 0 1
-   s mult m
-0  2  4
-3  4  5
-6  7  8
-9 10 11
-   ]s=: 3 3 $ 2 0 0 0 1 0 0 0 1
-2 0 0
-0 1 0
-0 0 1
-   m mult s
- 0  1  2
- 6  4  5
-12  7  8
-18 10 11
-
-  NB. addition of rows and column needs also different matrices
-   ]a=: 4 4 $ 1 0 2 0 0 1 0 0 0 0 1 0 0 0 0 1
-1 0 2 0
-0 1 0 0
-0 0 1 0
-0 0 0 1
-   a mult m
-12 15 18
- 3  4  5
- 6  7  8
- 9 10 11
-   ]a=: 3 3 $ 1 0 2 0 1 0 0 0 1
-1 0 2
-0 1 0
-0 0 1
-   m mult (|: a)
- 4  1  2
-13  4  5
-22  7  8
-31 10 11
-```
-
-### Solution to exercise 23
 - <img src="https://latex.codecogs.com/svg.image?(A^T)^T=A" title="(A^T)^T=A" />
 ```
    leftR=: 4 : 'transpose ( transpose (>0{y) )'
@@ -3275,7 +3152,7 @@ relation checkEqOfMatricesScalarsRel data
 1000
 ```
 
-### Solution to exercise 24
+### Solution to exercise 22
 ```
    domain=: i. 21
    ]m=: 4 4 $ ( 16 ?@$ #domain) { domain
@@ -3301,7 +3178,7 @@ j=. 1 {x
 939
 ```
 
-### Solution to exercise 25
+### Solution to exercise 23
 - <img src="https://latex.codecogs.com/svg.image?|AB|=|A||B|" title="|AB|=|A||B|" />
 ```
    leftR=: 4 : 'det ( (>0{y) mult (>1{y) )'
@@ -3365,7 +3242,7 @@ relation checkEqOfMatricesScalarsRel data
 100
 ```
 
-### Solution to exercise 26
+### Solution to exercise 24
 - <img src="https://latex.codecogs.com/svg.image?A^{adj}A=AA^{adj}=|A|I" title="A^{adj}A=AA^{adj}=|A|I" />
 ```
    NB. Checking to equalities and relying on equality transivity relation
@@ -3407,7 +3284,7 @@ relation checkEqOfMatricesScalarsRel data
 100
 ```
 
-### Solution to exercise 27
+### Solution to exercise 25
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 ```
    leftR=: 4 : 'transpose ( %. (>0{y) )'
@@ -3499,6 +3376,135 @@ relation checkEqOfMatricesScalarsRel data
 
    (+/)(run"0)1000#0
 999
+```
+
+### Solution to exercise 26
+```
+    ]m=: 3 3 $ i.9
+0 1 2
+3 4 5
+6 7 8
+    NB. exchange between row 0 and 2
+   ]e=: 3 3 $ 0 0 1 0 1 0 1 0 0
+0 0 1
+0 1 0
+1 0 0
+   e mult m
+6 7 8
+3 4 5
+0 1 2
+
+   NB. add 2 x (row 2) to row 0
+   ]a=: 3 3 $ 1 0 2 0 1 0 0 0 1
+1 0 2
+0 1 0
+0 0 1
+   a mult m
+12 15 18
+ 3  4  5
+ 6  7  8
+
+   NB. scale row 0 by factor 2
+   ]s=: 3 3 $ 2 0 0 0 1 0 0 0 1
+2 0 0
+0 1 0
+0 0 1
+   s mult m
+0 2 4
+3 4 5
+6 7 8
+
+   NB. reuse e, a, s to column operations
+   m mult e
+2 1 0
+5 4 3
+8 7 6
+   m mult a
+0 1  2
+3 4 11
+6 7 20
+   m mult s
+ 0 1 2
+ 6 4 5
+12 7 8
+
+   NB. exchange and scaling works fine except addition, it act on column 2 rather than column 0, so transpose is needed
+   m mult (|: a)
+ 4 1 2
+13 4 5
+22 7 8
+```
+
+### Solution to exercise 27
+```
+    ]m=: 4 3 $ i.12
+0  1  2
+3  4  5
+6  7  8
+9 10 11
+   NB. exchange between row 0 and 2
+   ]e=: 4 4 $ 0 0 1 0 0 1 0 0 1 0 0 0 0 0 0 1
+0 0 1 0
+0 1 0 0
+1 0 0 0
+0 0 0 1
+   e mult m
+6  7  8
+3  4  5
+0  1  2
+9 10 11
+   NB. exchange between column 0 and 2 - other basic matrix is needed here
+   ]e=: 3 3 $ 0 0 1 0 1 0 1 0 0
+0 0 1
+0 1 0
+1 0 0
+   m mult e
+ 2  1 0
+ 5  4 3
+ 8  7 6
+11 10 9
+
+  NB. scaling rows and column needs different basic matrices
+   ]s=: 4 4 $ 2 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+2 0 0 0
+0 1 0 0
+0 0 1 0
+0 0 0 1
+   s mult m
+0  2  4
+3  4  5
+6  7  8
+9 10 11
+   ]s=: 3 3 $ 2 0 0 0 1 0 0 0 1
+2 0 0
+0 1 0
+0 0 1
+   m mult s
+ 0  1  2
+ 6  4  5
+12  7  8
+18 10 11
+
+  NB. addition of rows and column needs also different matrices
+   ]a=: 4 4 $ 1 0 2 0 0 1 0 0 0 0 1 0 0 0 0 1
+1 0 2 0
+0 1 0 0
+0 0 1 0
+0 0 0 1
+   a mult m
+12 15 18
+ 3  4  5
+ 6  7  8
+ 9 10 11
+   ]a=: 3 3 $ 1 0 2 0 1 0 0 0 1
+1 0 2
+0 1 0
+0 0 1
+   m mult (|: a)
+ 4  1  2
+13  4  5
+22  7  8
+31 10 11
 ```
 
 ### Solution to exercise 28
