@@ -1769,8 +1769,16 @@ operation is itself. So the interchange operation is orthogonal matrix, ie. it s
 
 We now focus on orthogonal matrices. It is worth observing that product of orthogonal matrices is orthogonal matrix,
 so we closure property under multiplication:
-<img src="https://latex.codecogs.com/svg.image?A_{i}A_{i}^{T}=I" title="A_{i}A_{i}^{T}=I" />
-<img src="https://latex.codecogs.com/svg.image?(A_{i}A_{j})(A_{i}A_{j})^{T}=A_{i}(A_{j}A_{j}^T)A_{i}^{T}=I" title="(A_{i}A_{j})(A_{i}A_{j})^{T}=A_{i}(A_{j}A_{j}^T)A_{i}^{T}=I" />
+- <img src="https://latex.codecogs.com/svg.image?A_{i}A_{i}^{T}=I" title="A_{i}A_{i}^{T}=I" />
+- <img src="https://latex.codecogs.com/svg.image?(A_{i}A_{j})(A_{i}A_{j})^{T}=A_{i}(A_{j}A_{j}^T)A_{i}^{T}=I" title="(A_{i}A_{j})(A_{i}A_{j})^{T}=A_{i}(A_{j}A_{j}^T)A_{i}^{T}=I" />
+
+Orthogonal 2x2 matrix rotating 2-dimensional row by <img src="https://latex.codecogs.com/svg.image?\theta" title="\theta" /> degrees in the counter-clockwise direction is following:
+<img src="https://latex.codecogs.com/svg.image?R_{\theta&space;}=\begin{vmatrix}&space;cos\theta&space;&&space;sin\theta&space;&space;\\&space;-sin\theta&space;&&space;cos\theta&space;&space;&space;\\\end{vmatrix}" title="R_{\theta }=\begin{vmatrix} cos\theta & sin\theta \\ -sin\theta & cos\theta \\\end{vmatrix}" />
+
+Now <img src="https://latex.codecogs.com/svg.image?DR_{\theta&space;}" title="DR_{\theta }" /> rotate each row of D. In order to rotate column we need to apply <img src="https://latex.codecogs.com/svg.image?R_{\theta&space;}^{T}D^{T}" title="R_{\theta }^{T}D^{T}" /> .
+
+
+
 
 ### Givens rotations
 
