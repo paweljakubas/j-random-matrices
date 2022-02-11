@@ -5,14 +5,14 @@
 2. [Updating a matrix](#updating-of-matrix)
 3. [Generate a random matrix](#generating-random-matrix)
 4. [Testing matrix properties](#testing-matrix-properties)
-5. [Elementary operations of a matrix I](#elementary-operations-in-matrix-1)
+5. [Elementary operations of a matrix A](#elementary-operations-in-matrix-a)
     - [Matrix addition](#matrix-addition)
     - [Note on floating point arithmetics](#note-on-floating-point-arithmetics)
     - [Matrix multiplication](#matrix-multiplication)
 6. [Transpose of a matrix](#transpose-of-matrix)
 7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
 8. [Inverse of a matrix](#inverse-of-matrix)
-5. [Elementary operations of a matrix II](#elementary-operations-in-matrix-2)
+5. [Elementary operations of a matrix B](#elementary-operations-in-matrix-b)
     - [Matrix elementary row and column operations](#matrix-elementary-row-and-column-operations)
     - [Orthogonal transformations](#orthogonal-transformations) - TODO
     - [Givens rotations](#givens-rotations) - TODO
@@ -924,7 +924,7 @@ This is a standard procedure, for example in Haskell development, were we constr
 upon property testing, proper array instances are generated and the property is tried with them. As I am convinced this is the proper and
 the required approach I will adopt it as well here.
 
-## Elementary operations in matrix 1
+## Elementary operations in matrix A
 We have the following basic results.
 
 ### Matrix addition
@@ -1500,7 +1500,7 @@ Add property testing for inverse properties.
 
 [Solution to exercise 25](#solution-to-exercise-25)
 
-## Elementary operations in matrix 2
+## Elementary operations in matrix B
 Another basic results are following.
 
 ### Matrix elementary row and column operations
@@ -1759,6 +1759,11 @@ _14 _41  6 _41 _33 _32
 0 0 0 1 0
 0 0 0 0 1
 ```
+
+Any linear transformation of a matrix can be decomposed into the product of interchange/scaling/addition.
+Only interchange operation has the property that it is also its inverse. Also the transpose of interchange
+operation is itself. So the interchange operation is orthogonal matrix, ie. it satisfies:
+<img src="https://latex.codecogs.com/svg.image?AA^{T}=IA^{T}=A^{-1}&space;" title="AA^{T}=IA^{T}=A^{-1} " />
 
 ### Orthogonal transformations
 
