@@ -14,7 +14,7 @@
 8. [Inverse of a matrix](#inverse-of-matrix)
 5. [Elementary operations of a matrix II](#elementary-operations-in-matrix-ii)
     - [Matrix elementary row and column operations](#matrix-elementary-row-and-column-operations)
-    - [Orthogonal transformations](#orthogonal-transformations) - TODO
+    - [Orthogonal transformations](#orthogonal-transformations) - IN PROGRESS
     - [Givens rotations](#givens-rotations) - TODO
     - [Householder reflections](#householder-reflections) - TODO
 9. [Trace of a matrix](#trace-of-matrix)
@@ -1767,16 +1767,26 @@ operation is itself. So the interchange operation is orthogonal matrix, ie. it s
 
 ### Orthogonal transformations
 
-We now focus on orthogonal matrices. It is worth observing that product of orthogonal matrices is orthogonal matrix,
-so we closure property under multiplication:
+We now focus on orthogonal matrices. It is worth recalling that vectors are orthogonal if <img src="https://latex.codecogs.com/svg.image?x^{T}y=0" title="x^{T}y=0" /> .
+If the vectors are additionally normalized then we call them *orthonormal*. So the norm of a vector is 1 <img src="https://latex.codecogs.com/svg.image?x^{T}x=\left\|x&space;\right\|^{2}=1" title="x^{T}x=\left\|x \right\|^{2}=1" /> .
+The ortogonal matrix consists of mutually orthonormal vectors, hence the number of them
+established the rank of the matrix and induces that the orthogonal matrix is a square matrix. Using orthogonal property of columns we can immediately get to the result:
 - <img src="https://latex.codecogs.com/svg.image?A_{i}A_{i}^{T}=I" title="A_{i}A_{i}^{T}=I" />
+
+
+Moreover, one can observe that product of orthogonal matrices is orthogonal matrix,
+so we have a closure property under multiplication:
 - <img src="https://latex.codecogs.com/svg.image?(A_{i}A_{j})(A_{i}A_{j})^{T}=A_{i}(A_{j}A_{j}^T)A_{i}^{T}=I" title="(A_{i}A_{j})(A_{i}A_{j})^{T}=A_{i}(A_{j}A_{j}^T)A_{i}^{T}=I" />
+It is straightforward to show that rows of orthogonal matrix are mutually orthogonal, hence <img src="https://latex.codecogs.com/svg.image?QQ^{T}=I" title="QQ^{T}=I" />.
+
+Orthogonal matrix when acting on vector preserves its norm:
+- <img src="https://latex.codecogs.com/svg.image?\left\|Qx&space;\right\|^{2}=(Qx)^{T}(Qx)=x^{T}Q^{T}Qx=x^{T}x=\left\|x&space;\right\|^{2}" title="\left\|Qx \right\|^{2}=(Qx)^{T}(Qx)=x^{T}Q^{T}Qx=x^{T}x=\left\|x \right\|^{2}" />
+
 
 Orthogonal 2x2 matrix rotating 2-dimensional row by <img src="https://latex.codecogs.com/svg.image?\theta" title="\theta" /> degrees in the counter-clockwise direction is following:
 <img src="https://latex.codecogs.com/svg.image?R_{\theta&space;}=\begin{vmatrix}&space;cos\theta&space;&&space;sin\theta&space;&space;\\&space;-sin\theta&space;&&space;cos\theta&space;&space;&space;\\\end{vmatrix}" title="R_{\theta }=\begin{vmatrix} cos\theta & sin\theta \\ -sin\theta & cos\theta \\\end{vmatrix}" />
 
 Now <img src="https://latex.codecogs.com/svg.image?DR_{\theta&space;}" title="DR_{\theta }" /> rotate each row of D. In order to rotate column we need to apply <img src="https://latex.codecogs.com/svg.image?R_{\theta&space;}^{T}D^{T}" title="R_{\theta }^{T}D^{T}" /> .
-
 
 
 
