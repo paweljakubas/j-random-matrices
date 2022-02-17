@@ -1788,24 +1788,27 @@ Orthogonal 2x2 matrix rotating 2-dimensional row by <img src="https://latex.code
 
 Now <img src="https://latex.codecogs.com/svg.image?DR_{\theta&space;}" title="DR_{\theta }" /> rotate each row of D. In order to rotate column we need to apply <img src="https://latex.codecogs.com/svg.image?R_{\theta&space;}^{T}D^{T}" title="R_{\theta }^{T}D^{T}" /> .
 
-Let's generate data for sin in <0,2pi>.
+Let's generate data for sin in <img src="https://latex.codecogs.com/svg.image?<0,&space;2\pi&space;>" title="<0, 2\pi >" />.
 ```
+   load 'plot numeric'
    xs=:steps 0p1 2p1 100
    ys=:sin xs
-   plot xs;ys
+   'title sin(x); xcaption x; ycaption y' plot xs;ys
 ```
-![alt text](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig1.png "Fig 1") presents the very expected result.
+![alt text](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig1.pdf "Fig 1") presents the very expected result.
 
-Now let's use theta=45 and apply to the set
+Now let's use <img src="https://latex.codecogs.com/svg.image?\theta=45^{\circ}&space;" title="\theta=45^{\circ} " /> and apply to the set
 ```
-   ]T=: 2 2 $ 0.5 0.5 _0.5 0.5
- 0.5 0.5
-_0.5 0.5
+   ]theta=: 1r4p1
+0.785398
+   ]T=:2 2$ (cos theta), (sin theta), (- @sin theta), (cos theta)
+ 0.707107 0.707107
+_0.707107 0.707107
    xs1=: 0 { |: (xs,.ys) mult T
    ys1=: 1 { |: (xs,.ys) mult T
-   plot xs1;ys1
+   'title sin(x) rotated 45 degrees counter-clockwise; xcaption x; ycaption y' plot xs1;ys1
 ```
-![alt text](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig2.png "Fig 2") presents the initial data rotated by 45 degrees counter-clockwise.
+![alt text](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig2.pdf "Fig 2") presents the initial data rotated by 45 degrees counter-clockwise.
 
 ### Givens rotations
 
