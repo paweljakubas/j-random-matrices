@@ -1795,7 +1795,7 @@ Let's generate data for sin in <img src="https://latex.codecogs.com/svg.image?<0
    ys=:sin xs
    'title sin(x); xcaption x; ycaption y' plot xs;ys
 ```
-![alt text](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig1.pdf "Fig 1") presents the very expected result.
+![Fig 1](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig1.pdf "Fig 1") presents the very expected result.
 
 Now let's use <img src="https://latex.codecogs.com/svg.image?\theta=45^{\circ}&space;" title="\theta=45^{\circ} " /> and apply to the set
 ```
@@ -1808,9 +1808,39 @@ _0.707107 0.707107
    ys1=: 1 { |: (xs,.ys) mult T
    'title sin(x) rotated 45 degrees counter-clockwise; xcaption x; ycaption y' plot xs1;ys1
 ```
-![alt text](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig2.pdf "Fig 2") presents the initial data rotated by 45 degrees counter-clockwise.
+![Fig 2](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig2.pdf "Fig 2") presents the initial data rotated by 45 degrees counter-clockwise.
 
 ### Givens rotations
+Let's reformulate rotation matrix to have following
+<img src="https://latex.codecogs.com/svg.image?G&space;=&space;\begin{pmatrix}c&space;&&space;s&space;\\&space;-s&space;&&space;c&space;\\\end{pmatrix}&space;,&space;c^{2}&space;&plus;&space;s^{2}&space;=&space;1" title="G = \begin{pmatrix}c & s \\ -s & c \\\end{pmatrix} , c^{2} + s^{2} = 1" />
+We have the below properties:
+```
+   ]vec=: 2 1 $ 4 3
+4
+3
+   G=: 3 : 0
+l=.(< (<0),(<0)) { (|: y)
+r=.(< (<0),(<1)) { (|: y)
+norm=.%: ( (*:l) + (*:r) )
+(2 2 $ l, r, (-r), l) % norm
+)
+   G vec
+ 0.8 0.6
+_0.6 0.8
+   (G vec) mult vec
+          5
+4.44089e_16
+   (x: (G vec)) mult vec
+5
+0
+   NB. Having vector vec=(x1 x2)^T we can construct G where c=x1/norm(vec) and s=x2/norm(vec)
+   NB. G mult vec nullifies the second element, so G is a plane rotation that rotates vec in such a way that
+   NB. the vector does ceases to have projection on the second axis.
+   vec=: 2 1 $ 10 0
+   (x: (G vec)) mult vec
+10
+ 0
+```
 
 ### Householder reflections
 
