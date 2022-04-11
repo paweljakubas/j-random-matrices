@@ -1882,7 +1882,7 @@ Add property testing for trace properties.
 
 ### LU decomposition
 
-It is a fundamental algebra task to solve linear systems of equations, ie. <img src="https://latex.codecogs.com/svg.image?Ax=b" title="Ax=b" /> .
+It is a fundamental algebra task to solve linear systems of equations, ie. `Ax=b`.
 When `A` is `n x n` and nonsingular then the system of equations has solution which could be achieved using `Gaussian elimination`. Let's look at
 steps and then illustrative example to show what is an idea behind it.
 
@@ -1906,6 +1906,13 @@ The LU decompostion will work for all `A` that is square `n x n` and nonsingular
 Now let's try to find out how to realize `LU decompostition`
 
 #### Gaussian elimination
+
+Let's do a hands-on real example. The idea is to adopt `n - 1` times the procedure of nulling of values below diagonal in a given column.
+In order to achive that the perturbed identity matrix is constructed. The following observation is utilized here:
+<img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}1&space;&&space;0&space;&&space;0&space;\\-\frac{a_{11}}{a_{21}}&space;&&space;1&space;&&space;0&space;\\-\frac{a_{11}}{a_{31}}&space;&&space;0&space;&&space;1&space;\\\end{pmatrix}&space;\begin{pmatrix}a_{11}&space;&&space;a_{12}&space;&&space;a_{13}&space;\\a_{21}&space;&&space;a_{22}&space;&&space;a_{23}&space;\\a_{31}&space;&&space;a_{32}&space;&&space;a_{33}&space;\\\end{pmatrix}&space;=&space;\begin{pmatrix}a_{11}&space;&&space;a_{12}&space;&&space;a_{13}&space;\\0&space;&&space;-\frac{a_{11}a_{12}}{a_{21}}&plus;a_{22}&space;&&space;-\frac{a_{11}a_{13}}{a_{21}}&plus;a_{23}&space;\\0&space;&&space;-\frac{a_{11}a_{12}}{a_{31}}&plus;a_{32}&space;&&space;-\frac{a_{11}a_{21}}{a_{21}}&plus;a_{33}&space;\\\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}1 & 0 & 0 \\-\frac{a_{11}}{a_{21}} & 1 & 0 \\-\frac{a_{11}}{a_{31}} & 0 & 1 \\\end{pmatrix} \begin{pmatrix}a_{11} & a_{12} & a_{13} \\a_{21} & a_{22} & a_{23} \\a_{31} & a_{32} & a_{33} \\\end{pmatrix} = \begin{pmatrix}a_{11} & a_{12} & a_{13} \\0 & -\frac{a_{11}a_{12}}{a_{21}}+a_{22} & -\frac{a_{11}a_{13}}{a_{21}}+a_{23} \\0 & -\frac{a_{11}a_{12}}{a_{31}}+a_{32} & -\frac{a_{11}a_{21}}{a_{21}}+a_{33} \\\end{pmatrix}" />
+
+The same is continued for next columns until the end.
+
 
 ```
    ]A=: 3 3 $ 3 17 10 2 4 _2 6 18 _12
