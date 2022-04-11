@@ -18,12 +18,12 @@
     - [Givens rotations](#givens-rotations) - TODO
     - [Householder reflections](#householder-reflections) - TODO
 9. [Trace of a matrix](#trace-of-matrix)
-10. [Eigenvalues](#eigenvalues) - TODO
-11. [LU decomposition](#lu-decomposition) - TODO
-12. [Rank of a matrix](#rank-of-matrix) - TODO
-13. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
-14. [FFT](#fft) - TODO
-15. [Wavelets](#wavelets) - TODO
+10. [LU decomposition](#lu-decomposition) - IN PROGRESS
+    - [Gaussian elimination](#gaussian-elimination) - TODO
+    - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)  - TODO
+    - [LAPACK](#lapack) - TODO
+11. [Rank of a matrix](#rank-of-matrix) - TODO
+12. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
 [Project1](#project1)
 
@@ -195,7 +195,6 @@ First let's show how to get handle on them:
 In order to get diagonal elements one can do the following:
 ```
    nub=: 3 : '{./.~ y'
-   nub 1 2 3 4 5 6
    nub 1 2 3 4 5 6
 1 2 3 4 5 6
    nub 1 2 3 4 5 6 1 2 3 4
@@ -1881,9 +1880,44 @@ Add property testing for trace properties.
 
 [Solution to exercise 28](#solution-to-exercise-28)
 
-### Eigenvalues
-
 ### LU decomposition
+
+It is a fundamental algebra task to solve linear systems of equations, ie. <img src="https://latex.codecogs.com/svg.image?Ax=b" title="Ax=b" /> .
+When `A` is `n x n` and nonsingular then the system of equations has solution which could be achieved using `Gaussian elimination`. Let's look at
+steps and then illustrative example to show what is an idea behind it.
+
+Let's consider `3x3` linear system. So we have the following to be solved:
+<img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}a_{11}&space;&&space;a_{12}&space;&&space;a_{13}&space;\\a_{21}&space;&&space;a_{22}&space;&&space;a_{23}&space;\\a_{31}&space;&&space;a_{32}&space;&&space;a_{33}&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\end{pmatrix}&space;=&space;\begin{pmatrix}b_{1}&space;\\b_{2}&space;\\b_{3}\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}a_{11} & a_{12} & a_{13} \\a_{21} & a_{22} & a_{23} \\a_{31} & a_{32} & a_{33} \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \end{pmatrix} = \begin{pmatrix}b_{1} \\b_{2} \\b_{3}\end{pmatrix}" />
+Now, two observations:
+(a) when we have lower triangular matrix the equation, `Lx=b`, it is solved using forward substitution (ie., <img src="https://latex.codecogs.com/svg.image?x_{1}=\frac{l_{11}}{b_{1}}" title="https://latex.codecogs.com/svg.image?x_{1}=\frac{l_{11}}{b_{1}}" />, then in the second from the top equation we use already solved <img src="https://latex.codecogs.com/svg.image?x_{1}" title="https://latex.codecogs.com/svg.image?x_{1}" />  and extract <img src="https://latex.codecogs.com/svg.image?x_{2}" title="https://latex.codecogs.com/svg.image?x_{2}" />, and so on):
+<img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}l_{11}&space;&&space;0&space;&&space;0&space;\\l_{21}&space;&&space;l_{22}&space;&&space;0&space;\\l_{31}&space;&&space;l_{32}&space;&&space;l_{33}&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\end{pmatrix}&space;=&space;\begin{pmatrix}b_{1}&space;\\b_{2}&space;\\b_{3}\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}l_{11} & 0 & 0 \\l_{21} & l_{22} & 0 \\l_{31} & l_{32} & l_{33} \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \end{pmatrix} = \begin{pmatrix}b_{1} \\b_{2} \\b_{3}\end{pmatrix}" />
+(b) for upper triangular matrix the equation, `Ux=b` , it is solved using back substitution approach (ie., we start from <img src="https://latex.codecogs.com/svg.image?x_{3}=\frac{l_{33}}{b_{3}}" title="https://latex.codecogs.com/svg.image?x_{3}=\frac{l_{33}}{b_{3}}" />, then move up).
+<img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}u_{11}&space;&&space;u_{12}&space;&&space;u_{13}&space;\\0&space;&&space;u_{22}&space;&&space;u_{23}&space;\\0&space;&&space;0&space;&&space;u_{33}&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\end{pmatrix}&space;=&space;\begin{pmatrix}b_{1}&space;\\b_{2}&space;\\b_{3}\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}u_{11} & u_{12} & u_{13} \\0 & u_{22} & u_{23} \\0 & 0 & u_{33} \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \end{pmatrix} = \begin{pmatrix}b_{1} \\b_{2} \\b_{3}\end{pmatrix}" />
+
+Now, if we are able to decompose `A` into `LU`, then we have `LUx=b`.
+Then we are two steps, using the above trivial substitutions, away from solving `Ax=b`.
+In first step we use the forward substitution to get `y` from `Ly=b`.
+Finally, we use back substitution to get `x` from `Ux=y`.
+
+The LU decompostion will work for all `A` that is square `n x n` and nonsingular, so `rank(A)=n`. Moreover, if we have
+`Ax=b` then for any `b` the linear system has a unique solution. This is direct consequence of a fact that for any nonsingular
+`A` the column vectors are linearly independent (row vectors also).
+
+Now let's try to find out how to realize `LU decompostition`
+
+#### Gaussian elimination
+
+```
+   ]A=: 3 3 $ 3 17 10 2 4 _2 6 18 _12
+3 17  10
+2  4  _2
+6 18 _12
+
+```
+
+#### Gaussian elimination with pivoting
+
+#### LAPACK
 
 Let's try LAPACK impl and see if we can be better.
 We are going to call [https://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga56d9c860ce4ce42ded7f914fdb0683ff.html]

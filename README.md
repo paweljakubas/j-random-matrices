@@ -45,7 +45,7 @@ Following is the list of books that I found especially useful during the first i
 6. Fractals, Visualization & J, 4th ed. (2 Parts), Clifford A. Reiter 2016
 7. Fifty Shades of J, Norman Thomson, [https://code.jsoftware.com/wiki/Fifty_Shades_of_J]
 
-   *Throughout the code J902 version of J lang was used.*
+   *Throughout the code J903 version of J lang was used.*
 
 
 ## Contents
