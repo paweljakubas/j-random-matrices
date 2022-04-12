@@ -18,8 +18,8 @@
     - [Givens rotations](#givens-rotations) - TODO
     - [Householder reflections](#householder-reflections) - TODO
 9. [Trace of a matrix](#trace-of-matrix)
-10. [LU decomposition](#lu-decomposition) - IN PROGRESS
-    - [Gaussian elimination](#gaussian-elimination) - TODO
+10. [LU decomposition](#lu-decomposition)
+    - [Gaussian elimination](#gaussian-elimination) - IN PROGRESS
     - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)  - TODO
     - [LAPACK](#lapack) - TODO
 11. [Rank of a matrix](#rank-of-matrix) - TODO
@@ -1903,7 +1903,7 @@ The LU decompostion will work for all `A` that is square `n x n` and nonsingular
 `Ax=b` then for any `b` the linear system has a unique solution. This is direct consequence of a fact that for any nonsingular
 `A` the column vectors are linearly independent (row vectors also).
 
-Now let's try to find out how to realize `LU decompostition`
+Now let's try to find out how to realize `LU decomposition`.
 
 #### Gaussian elimination
 
@@ -1913,6 +1913,46 @@ In order to achive that the perturbed identity matrix is constructed. The follow
 
 The same is continued for next columns until the end.
 
+```
+   ]A=: 3 3 $ 1 4 7 2 5 8 3 6 9
+1 4 7
+2 5 8
+3 6 9
+   ]M1=: 3 3 $ 1 0 0 _2 1 0 _3 0 1
+ 1 0 0
+_2 1 0
+_3 0 1
+   ]A1=: M1 mult A
+1  4   7
+0 _3  _6
+0 _6 _12
+   ]M2=: 3 3 $ 1 0 0 0 1 0 0 _2 1
+1  0 0
+0  1 0
+0 _2 1
+   ]U=: M2 mult A1
+1  4  7
+0 _3 _6
+0  0  0
+
+   NB. M2 (M1 A) = U
+   NB. A = LU
+```
+The above upper triangularization was performed and to get L we observe that <img src="https://latex.codecogs.com/svg.image?L=M_{1}^{-1}&space;M_{2}^{-1}&space;" title="https://latex.codecogs.com/svg.image?L=M_{1}^{-1} M_{2}^{-1} " />
+Due to the structure of Ms, in literature called multipliers, we have `L` that is constructed from first column of M1, second column of M2 and v3 (in all ases with below diagonal elements negated).
+
+```
+   ]L=: 3 3 $ 1 0 0 2 1 0 3 2 1
+1 0 0
+2 1 0
+3 2 1
+   L mult U
+1 4 7
+2 5 8
+3 6 9
+```
+
+Another example,
 
 ```
    ]A=: 3 3 $ 3 17 10 2 4 _2 6 18 _12
@@ -1920,9 +1960,65 @@ The same is continued for next columns until the end.
 2  4  _2
 6 18 _12
 
+   ]M1=: 3 3 $ 1 0 0 _2r3 1 0 _6r3 0 1
+   1 0 0
+_2r3 1 0
+  _2 0 1
+
+   ]A1=: M1 mult A
+3    17    10
+0 _22r3 _26r3
+0   _16   _32
+
+   ]M2=: 3 3 $ 1 0 0 0 1 0 0 _48r22 1
+1      0 0
+0      1 0
+0 _24r11 1
+
+   ]U=: M2 mult A1
+3    17      10
+0 _22r3   _26r3
+0     0 _144r11
+
+   ]L=: 3 3 $ 1 0 0 2r3 1 0 2 24r11 1
+  1     0 0
+2r3     1 0
+  2 24r11 1
+
+   L mult U
+3 17  10
+2  4  _2
+6 18 _12
 ```
 
+Now, let's look at another example that will show some shortcomin of pure Gaussian elimination method.
+```
+   ]A=: 2 2 $ 0.00001 1 1 2
+1e_5 1
+   1 2
+   ]M=: 2 2 $ 0.00001 1 _100000 2
+   1e_5 1
+_100000 2
+   ]U=: M mult A
+1 2.00001
+1  _99996
+   ]L=: 2 2 $ 1 0 100000 1
+     1 0
+100000 1
+   L mult U
+     1 2.00001
+100001  100005
+```
+
+Due to small <img src="https://latex.codecogs.com/svg.image?a_{11}" title="https://latex.codecogs.com/svg.image?a_{11}" /> with respect to
+<img src="https://latex.codecogs.com/svg.image?a_{21}" title="https://latex.codecogs.com/svg.image?a_{21}" /> we have numerical inaccuracy.
+In order to adress this shortcoming a number of techniques are used along Gaussian elimination that stabilize the LU decomposition.
+
+
 #### Gaussian elimination with pivoting
+
+
+See also https://code.jsoftware.com/wiki/Essays/LU_Decomposition
 
 #### LAPACK
 
