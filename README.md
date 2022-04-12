@@ -38,12 +38,13 @@ Following is the list of books that I found especially useful during the first i
 1. Linear Algebra and Optimization for Machine Learning. A Textbook, Charu C. Aggarwal, Springer 2020
 2. Matrix Differential Calculus with Applications in Statistics and Econometrics, 3rd Edition, Jan R. Magnus, Heinz Neudecker, Wiley 2019
 3. Scalar, Vector, and Matrix Mathematics: Theory, Facts, and Formulas - Revised and Expanded Edition, Dennis S. Bernstein, Princeton University Press 2018
+4. Matrix Computations, 4th Edition, Gene H. Golub and Charles F. Van Loan, John Hopkins University Press
 ### Random matrices
-4. A First Course in Random Matrix Theory for Physicists, Engineers and Data Scientists, Marc Potters, Jean-Philippe Bouchaud, Cambridge University Press 2021
+5. A First Course in Random Matrix Theory for Physicists, Engineers and Data Scientists, Marc Potters, Jean-Philippe Bouchaud, Cambridge University Press 2021
 ### J language
-5. Learning J. An Introduction to the J Programming Language, Roger Stokes, [https://www.jsoftware.com/help/learning/contents.htm#toc]
-6. Fractals, Visualization & J, 4th ed. (2 Parts), Clifford A. Reiter 2016
-7. Fifty Shades of J, Norman Thomson, [https://code.jsoftware.com/wiki/Fifty_Shades_of_J]
+6. Learning J. An Introduction to the J Programming Language, Roger Stokes, [https://www.jsoftware.com/help/learning/contents.htm#toc]
+7. Fractals, Visualization & J, 4th ed. (2 Parts), Clifford A. Reiter 2016
+8. Fifty Shades of J, Norman Thomson, [https://code.jsoftware.com/wiki/Fifty_Shades_of_J]
 
    *Throughout the code J903 version of J lang was used.*
 

@@ -1887,11 +1887,11 @@ When `A` is `n x n` and nonsingular then the system of equations has solution wh
 steps and then illustrative example to show what is an idea behind it.
 
 Let's consider `3x3` linear system. So we have the following to be solved:
-<img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}a_{11}&space;&&space;a_{12}&space;&&space;a_{13}&space;\\a_{21}&space;&&space;a_{22}&space;&&space;a_{23}&space;\\a_{31}&space;&&space;a_{32}&space;&&space;a_{33}&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\end{pmatrix}&space;=&space;\begin{pmatrix}b_{1}&space;\\b_{2}&space;\\b_{3}\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}a_{11} & a_{12} & a_{13} \\a_{21} & a_{22} & a_{23} \\a_{31} & a_{32} & a_{33} \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \end{pmatrix} = \begin{pmatrix}b_{1} \\b_{2} \\b_{3}\end{pmatrix}" />
+<img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}a_{11}&space;&&space;a_{12}&space;&&space;a_{13}&space;\\a_{21}&space;&&space;a_{22}&space;&&space;a_{23}&space;\\a_{31}&space;&&space;a_{32}&space;&&space;a_{33}&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\end{pmatrix}&space;=&space;\begin{pmatrix}b_{1}&space;\\b_{2}&space;\\b_{3}\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}a_{11} & a_{12} & a_{13} \\a_{21} & a_{22} & a_{23} \\a_{31} & a_{32} & a_{33} \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \end{pmatrix} = \begin{pmatrix}b_{1} \\b_{2} \\b_{3}\end{pmatrix}" /> .
 Now, two observations:
 (a) when we have lower triangular matrix the equation, `Lx=b`, it is solved using forward substitution (ie., <img src="https://latex.codecogs.com/svg.image?x_{1}=\frac{l_{11}}{b_{1}}" title="https://latex.codecogs.com/svg.image?x_{1}=\frac{l_{11}}{b_{1}}" />, then in the second from the top equation we use already solved <img src="https://latex.codecogs.com/svg.image?x_{1}" title="https://latex.codecogs.com/svg.image?x_{1}" />  and extract <img src="https://latex.codecogs.com/svg.image?x_{2}" title="https://latex.codecogs.com/svg.image?x_{2}" />, and so on):
 <img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}l_{11}&space;&&space;0&space;&&space;0&space;\\l_{21}&space;&&space;l_{22}&space;&&space;0&space;\\l_{31}&space;&&space;l_{32}&space;&&space;l_{33}&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\end{pmatrix}&space;=&space;\begin{pmatrix}b_{1}&space;\\b_{2}&space;\\b_{3}\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}l_{11} & 0 & 0 \\l_{21} & l_{22} & 0 \\l_{31} & l_{32} & l_{33} \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \end{pmatrix} = \begin{pmatrix}b_{1} \\b_{2} \\b_{3}\end{pmatrix}" />
-(b) for upper triangular matrix the equation, `Ux=b` , it is solved using back substitution approach (ie., we start from <img src="https://latex.codecogs.com/svg.image?x_{3}=\frac{l_{33}}{b_{3}}" title="https://latex.codecogs.com/svg.image?x_{3}=\frac{l_{33}}{b_{3}}" />, then move up).
+(b) for upper triangular matrix the equation, `Ux=b` , it is solved using back substitution approach (ie., we start from <img src="https://latex.codecogs.com/svg.image?x_{3}=\frac{u_{33}}{b_{3}}" title="https://latex.codecogs.com/svg.image?x_{3}=\frac{u_{33}}{b_{3}}" />, then move up).
 <img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}u_{11}&space;&&space;u_{12}&space;&&space;u_{13}&space;\\0&space;&&space;u_{22}&space;&&space;u_{23}&space;\\0&space;&&space;0&space;&&space;u_{33}&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\end{pmatrix}&space;=&space;\begin{pmatrix}b_{1}&space;\\b_{2}&space;\\b_{3}\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}u_{11} & u_{12} & u_{13} \\0 & u_{22} & u_{23} \\0 & 0 & u_{33} \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \end{pmatrix} = \begin{pmatrix}b_{1} \\b_{2} \\b_{3}\end{pmatrix}" />
 
 Now, if we are able to decompose `A` into `LU`, then we have `LUx=b`.
@@ -1900,8 +1900,8 @@ In first step we use the forward substitution to get `y` from `Ly=b`.
 Finally, we use back substitution to get `x` from `Ux=y`.
 
 The LU decompostion will work for all `A` that is square `n x n` and nonsingular, so `rank(A)=n`. Moreover, if we have
-`Ax=b` then for any `b` the linear system has a unique solution. This is direct consequence of a fact that for any nonsingular
-`A` the column vectors are linearly independent (row vectors also).
+`Ax=b` then for any `b` the linear system has a unique solution. This is a direct consequence of the fact that for any nonsingular
+`A` the column vectors (as well as row vectors) are linearly independent.
 
 Now let's try to find out how to realize `LU decomposition`.
 
@@ -1939,9 +1939,15 @@ _3 0 1
    NB. A = LU
 ```
 The above upper triangularization was performed and to get L we observe that <img src="https://latex.codecogs.com/svg.image?L=M_{1}^{-1}&space;M_{2}^{-1}&space;" title="https://latex.codecogs.com/svg.image?L=M_{1}^{-1} M_{2}^{-1} " />
-Due to the structure of Ms, in literature called multipliers, we have `L` that is constructed from first column of M1, second column of M2 and v3 (in all ases with below diagonal elements negated).
+Due to the structure of Ms, in literature called multipliers, we have `L` that is constructed from first column of <img src="https://latex.codecogs.com/svg.image?M_{1}" title="https://latex.codecogs.com/svg.image?M_{1}" />, second column of <img src="https://latex.codecogs.com/svg.image?M_{2}" title="https://latex.codecogs.com/svg.image?M_{2}" />  and <img src="https://latex.codecogs.com/svg.image?e_{3}" title="https://latex.codecogs.com/svg.image?e_{3}" /> (in all cases with the below diagonal elements negated).
 
 ```
+  NB. alternatively
+   ]L=: (%. M1) mult (%. M2)
+1 0 0
+2 1 0
+3 2 1
+
    ]L=: 3 3 $ 1 0 0 2 1 0 3 2 1
 1 0 0
 2 1 0
@@ -1985,13 +1991,19 @@ _2r3 1 0
 2r3     1 0
   2 24r11 1
 
+  NB. alternatively
+   ]L=: (%. M1) mult (%. M2)
+  1     0 0
+2r3     1 0
+  2 24r11 1
+
    L mult U
 3 17  10
 2  4  _2
 6 18 _12
 ```
 
-Now, let's look at another example that will show some shortcomin of pure Gaussian elimination method.
+Now, let's look at the example that will demonstrate rounding errors of pure Gaussian elimination method.
 ```
    ]A=: 2 2 $ 0.00001 1 1 2
 1e_5 1
@@ -2011,12 +2023,58 @@ _100000 2
 ```
 
 Due to small <img src="https://latex.codecogs.com/svg.image?a_{11}" title="https://latex.codecogs.com/svg.image?a_{11}" /> with respect to
-<img src="https://latex.codecogs.com/svg.image?a_{21}" title="https://latex.codecogs.com/svg.image?a_{21}" /> we have numerical inaccuracy.
-In order to adress this shortcoming a number of techniques are used along Gaussian elimination that stabilize the LU decomposition.
+<img src="https://latex.codecogs.com/svg.image?a_{21}" title="https://latex.codecogs.com/svg.image?a_{21}" /> we experienced numerical inaccuracy.
+In order to adress this shortcoming a number of techniques are used, along Gaussian elimination, that stabilize the LU decomposition.
 
 
 #### Gaussian elimination with pivoting
 
+There are number of strategies to address the round error of pure Gaussian elimination. Below, we introduce Gaussian elimination
+with partial pivoting. Another approaches, like partial or rook pivoting could be found [4].
+The idea behind the partial pivoting is to preprocess the matrix before each Gaussian elimination step by optional interchanging of the rows in such
+a way that diagonal element in a given column is the bigger than all elements below it.
+
+```
+   ]A=: 3 3 $ 3 17 10 2 4 _2 6 18 _12
+3 17  10
+2  4  _2
+6 18 _12
+   NB. in the first column 6 is the biggest ie. we apply P1 that interchange the first and third rows
+   ]P1=: 3 3 $ 0 0 1 0 1 0 1 0 0
+0 0 1
+0 1 0
+1 0 0
+   P1 mult A
+6 18 _12
+2  4  _2
+3 17  10
+   ]M1=: 3 3 $ 1 0 0 _2r6 1 0 _3r6 0 1
+   1 0 0
+_1r3 1 0
+_1r2 0 1
+   ]A1=: M1 mult (P1 mult A)
+6 18 _12
+0 _2   2
+0  8  16
+   NB. in the second column 8 is the biggest, ie. we apply P2 that interchange the second and third rows
+   ]P2=: 3 3 $ 1 0 0 0 0 1 0 1 0
+1 0 0
+0 0 1
+0 1 0
+   P2 mult A1
+6 18 _12
+0  8  16
+0 _2   2
+   ]M2=: 3 3 $ 1 0 0 0 1 0 0 2r8 1
+1   0 0
+0   1 0
+0 1r4 1
+   ]U=: M2 mult (P2 mult A1)
+6 18 _12
+0  8  16
+0  0   6
+
+```
 
 See also https://code.jsoftware.com/wiki/Essays/LU_Decomposition
 
