@@ -19,9 +19,9 @@
     - [Householder reflections](#householder-reflections) - TODO
 9. [Trace of a matrix](#trace-of-matrix)
 10. [LU decomposition](#lu-decomposition)
-    - [Gaussian elimination](#gaussian-elimination) - IN PROGRESS
-    - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)  - TODO
-    - [LAPACK](#lapack) - TODO
+    - [Gaussian elimination](#gaussian-elimination)
+    - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)
+    - [LAPACK](#lapack) - IN PROGRESS
 11. [Rank of a matrix](#rank-of-matrix) - TODO
 12. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
@@ -2075,18 +2075,20 @@ _1r2 0 1
 0  0   6
 ```
 
-So the question is how to solve `Ax=b` with permutation matrices introduced. It is important to recall that <img src="https://latex.codecogs.com/svg.image?P_{i}^{-1}=P_{i}^{T}" title="https://latex.codecogs.com/svg.image?P_{i}^{-1}=P_{i}^{T}" />, so we have
-<img src="https://latex.codecogs.com/svg.image?M_{2}&space;(P_{2}M_{1}P_{2})(P_{2}P_{1}A)" title="https://latex.codecogs.com/svg.image?M_{2} (P_{2}M_{1}P_{2})(P_{2}P_{1}A)" />
-<img src="https://latex.codecogs.com/svg.image?\tilde{M_{2}}\tilde{M_{1}}PA=U" title="https://latex.codecogs.com/svg.image?\tilde{M_{2}}\tilde{M_{1}}PA=U" />
-<img src="https://latex.codecogs.com/svg.image?PA=\tilde{M_{1}^{-1}}\tilde{M_{2}^{-1}}U" title="https://latex.codecogs.com/svg.image?PA=\tilde{M_{1}^{-1}}\tilde{M_{2}^{-1}}U" />
-<img src="https://latex.codecogs.com/svg.image?Ax=b" title="https://latex.codecogs.com/svg.image?Ax=b" />
-<img src="https://latex.codecogs.com/svg.image?PAx=Pb" title="https://latex.codecogs.com/svg.image?PAx=Pb" />
+So the question is how to solve `Ax=b` with permutation matrices introduced. It is important to recall that <img src="https://latex.codecogs.com/svg.image?P_{i}^{-1}=P_{i}^{T}" title="https://latex.codecogs.com/svg.image?P_{i}^{-1}=P_{i}^{T}" /> , so we have
+- <img src="https://latex.codecogs.com/svg.image?M_{2}&space;(P_{2}M_{1}P_{2})(P_{2}P_{1}A)" title="https://latex.codecogs.com/svg.image?M_{2} (P_{2}M_{1}P_{2})(P_{2}P_{1}A)" />
+- <img src="https://latex.codecogs.com/svg.image?\tilde{M_{2}}\tilde{M_{1}}PA=U" title="https://latex.codecogs.com/svg.image?\tilde{M_{2}}\tilde{M_{1}}PA=U" />
+- <img src="https://latex.codecogs.com/svg.image?PA=\tilde{M_{1}^{-1}}\tilde{M_{2}^{-1}}U" title="https://latex.codecogs.com/svg.image?PA=\tilde{M_{1}^{-1}}\tilde{M_{2}^{-1}}U" />
+- <img src="https://latex.codecogs.com/svg.image?Ax=b" title="https://latex.codecogs.com/svg.image?Ax=b" />
+- <img src="https://latex.codecogs.com/svg.image?PAx=Pb" title="https://latex.codecogs.com/svg.image?PAx=Pb" />
+
 Step 1:
-<img src="https://latex.codecogs.com/svg.image?LUx=Pb" title="https://latex.codecogs.com/svg.image?LUx=Pb" />
-<img src="https://latex.codecogs.com/svg.image?Ly=Pb" title="https://latex.codecogs.com/svg.image?Ly=Pb" />
+- <img src="https://latex.codecogs.com/svg.image?LUx=Pb" title="https://latex.codecogs.com/svg.image?LUx=Pb" />
+- <img src="https://latex.codecogs.com/svg.image?Ly=Pb" title="https://latex.codecogs.com/svg.image?Ly=Pb" />
 (solve for `y`)
+
 Step 2:
-<img src="https://latex.codecogs.com/svg.image?Ux=y" title="https://latex.codecogs.com/svg.image?Ux=y" />
+- <img src="https://latex.codecogs.com/svg.image?Ux=y" title="https://latex.codecogs.com/svg.image?Ux=y" />
 (solve for `x`)
 
 In the above example we have
@@ -2099,6 +2101,7 @@ In the above example we have
    1 0 0
 _1r2 1 0
 _1r3 0 1
+
    ]L=: (%. N1) mult (%. N2)
   1    0 0
 1r2    1 0
@@ -2107,6 +2110,7 @@ _1r3 0 1
 0 0 1
 1 0 0
 0 1 0
+
    P mult A
 6 18 _12
 3 17  10
@@ -2117,7 +2121,49 @@ _1r3 0 1
 2  4  _2
 ```
 
+Let's also look at the example that introduced, significant for numerical accuracy, round error.
+```
+   ]A=: 2 2 $ 0.00001 1 1 2
+1e_5 1
+   1 2
+
+   ]P=: 2 2 $ 0 1 1 0
+0 1
+1 0
+
+   ]M=: 2 2 $ 1 0 _0.00001 1
+    1 0
+_1e_5 1
+
+   M mult A
+1e_5       1
+   1 1.99999
+
+   ]L=: %. M
+   1 0
+1e_5 1
+   ]U=: M mult (P mult A)
+1       2
+0 0.99998
+
+   P mult A
+   1 2
+1e_5 1
+
+   L mult U
+   1 2
+1e_5 1
+```
+
+Adopting Gaussian elimination with partial pivoting allowed to avoid the round error that was experienced
+when Gaussian elimination without pivoting was used.
+
 See also https://code.jsoftware.com/wiki/Essays/LU_Decomposition
+
+**Exercise 29**
+Solve systems of equations below using Gaussian elimination without and with pivoting.
+
+<img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}2&space;&&space;4&space;&&space;-1&space;&&space;-1&space;\\4&space;&&space;9&space;&&space;0&space;&&space;-1&space;\\-6&space;&&space;-9&space;&&space;7&space;&&space;6&space;\\-2&space;&&space;-2&space;&&space;9&space;&&space;0&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\\x_{4}\end{pmatrix}&space;=&space;\begin{pmatrix}0&space;\\2&space;\\0&space;\\1\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}2 & 4 & -1 & -1 \\4 & 9 & 0 & -1 \\-6 & -9 & 7 & 6 \\-2 & -2 & 9 & 0 \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \\x_{4}\end{pmatrix} = \begin{pmatrix}0 \\2 \\0 \\1\end{pmatrix}" />
 
 #### LAPACK
 
