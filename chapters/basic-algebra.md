@@ -2073,7 +2073,48 @@ _1r2 0 1
 6 18 _12
 0  8  16
 0  0   6
+```
 
+So the question is how to solve `Ax=b` with permutation matrices introduced. It is important to recall that <img src="https://latex.codecogs.com/svg.image?P_{i}^{-1}=P_{i}^{T}" title="https://latex.codecogs.com/svg.image?P_{i}^{-1}=P_{i}^{T}" />, so we have
+<img src="https://latex.codecogs.com/svg.image?M_{2}&space;(P_{2}M_{1}P_{2})(P_{2}P_{1}A)" title="https://latex.codecogs.com/svg.image?M_{2} (P_{2}M_{1}P_{2})(P_{2}P_{1}A)" />
+<img src="https://latex.codecogs.com/svg.image?\tilde{M_{2}}\tilde{M_{1}}PA=U" title="https://latex.codecogs.com/svg.image?\tilde{M_{2}}\tilde{M_{1}}PA=U" />
+<img src="https://latex.codecogs.com/svg.image?PA=\tilde{M_{1}^{-1}}\tilde{M_{2}^{-1}}U" title="https://latex.codecogs.com/svg.image?PA=\tilde{M_{1}^{-1}}\tilde{M_{2}^{-1}}U" />
+<img src="https://latex.codecogs.com/svg.image?Ax=b" title="https://latex.codecogs.com/svg.image?Ax=b" />
+<img src="https://latex.codecogs.com/svg.image?PAx=Pb" title="https://latex.codecogs.com/svg.image?PAx=Pb" />
+Step 1:
+<img src="https://latex.codecogs.com/svg.image?LUx=Pb" title="https://latex.codecogs.com/svg.image?LUx=Pb" />
+<img src="https://latex.codecogs.com/svg.image?Ly=Pb" title="https://latex.codecogs.com/svg.image?Ly=Pb" />
+(solve for `y`)
+Step 2:
+<img src="https://latex.codecogs.com/svg.image?Ux=y" title="https://latex.codecogs.com/svg.image?Ux=y" />
+(solve for `x`)
+
+In the above example we have
+```
+   ]N2=: M2
+1   0 0
+0   1 0
+0 1r4 1
+   ]N1=: P2 mult (M1 mult P2)
+   1 0 0
+_1r2 1 0
+_1r3 0 1
+   ]L=: (%. N1) mult (%. N2)
+  1    0 0
+1r2    1 0
+1r3 _1r4 1
+   ]P=: P2 mult P1
+0 0 1
+1 0 0
+0 1 0
+   P mult A
+6 18 _12
+3 17  10
+2  4  _2
+   L mult U
+6 18 _12
+3 17  10
+2  4  _2
 ```
 
 See also https://code.jsoftware.com/wiki/Essays/LU_Decomposition
