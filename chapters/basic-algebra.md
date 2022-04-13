@@ -2030,7 +2030,7 @@ In order to adress this shortcoming a number of techniques are used, along Gauss
 #### Gaussian elimination with pivoting
 
 There are number of strategies to address the round error of pure Gaussian elimination. Below, we introduce Gaussian elimination
-with partial pivoting. Another approaches, like partial or rook pivoting could be found [4].
+with partial pivoting. Another approaches, like complete or rook pivoting could be found [4].
 The idea behind the partial pivoting is to preprocess the matrix before each Gaussian elimination step by optional interchanging of the rows in such
 a way that diagonal element in a given column is the bigger than all elements below it.
 
@@ -2076,6 +2076,7 @@ _1r2 0 1
 ```
 
 So the question is how to solve `Ax=b` with permutation matrices introduced. It is important to recall that <img src="https://latex.codecogs.com/svg.image?P_{i}^{-1}=P_{i}^{T}" title="https://latex.codecogs.com/svg.image?P_{i}^{-1}=P_{i}^{T}" /> , so we have
+- <img src="https://latex.codecogs.com/svg.image?P_{i}P_{i}=I" title="https://latex.codecogs.com/svg.image?P_{i}P_{i}=I" />
 - <img src="https://latex.codecogs.com/svg.image?M_{2}&space;(P_{2}M_{1}P_{2})(P_{2}P_{1}A)" title="https://latex.codecogs.com/svg.image?M_{2} (P_{2}M_{1}P_{2})(P_{2}P_{1}A)" />
 - <img src="https://latex.codecogs.com/svg.image?\tilde{M_{2}}\tilde{M_{1}}PA=U" title="https://latex.codecogs.com/svg.image?\tilde{M_{2}}\tilde{M_{1}}PA=U" />
 - <img src="https://latex.codecogs.com/svg.image?PA=\tilde{M_{1}^{-1}}\tilde{M_{2}^{-1}}U" title="https://latex.codecogs.com/svg.image?PA=\tilde{M_{1}^{-1}}\tilde{M_{2}^{-1}}U" />
@@ -2085,11 +2086,11 @@ So the question is how to solve `Ax=b` with permutation matrices introduced. It 
 Step 1:
 - <img src="https://latex.codecogs.com/svg.image?LUx=Pb" title="https://latex.codecogs.com/svg.image?LUx=Pb" />
 - <img src="https://latex.codecogs.com/svg.image?Ly=Pb" title="https://latex.codecogs.com/svg.image?Ly=Pb" />
-(solve for `y`)
+(solving for `y`)
 
 Step 2:
 - <img src="https://latex.codecogs.com/svg.image?Ux=y" title="https://latex.codecogs.com/svg.image?Ux=y" />
-(solve for `x`)
+(solving for `x`)
 
 In the above example we have
 ```
@@ -2135,17 +2136,14 @@ Let's also look at the example that introduced, significant for numerical accura
     1 0
 _1e_5 1
 
-   M mult A
-1e_5       1
-   1 1.99999
-
-   ]L=: %. M
-   1 0
-1e_5 1
    ]U=: M mult (P mult A)
 1       2
 0 0.99998
+   ]L=: %. M
+   1 0
+1e_5 1
 
+   NB. now with partial pivoting PA=LU
    P mult A
    1 2
 1e_5 1
@@ -2393,9 +2391,6 @@ cols=.>1{x
 └────────┴────────┴───────────┘
 ```
 
-### FFT
-### Wavelets
-### Project1
 
 ## Basic linear algebra. Solutions to exercises
 ### Solution to exercise 1
@@ -3922,4 +3917,69 @@ relation checkEqOfMatricesScalarsRel data
 )
    (+/)(run"0)100#0
 100
+```
+
+**Exercise 29**
+- <img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}2&space;&&space;4&space;&&space;-1&space;&&space;-1&space;\\4&space;&&space;9&space;&&space;0&space;&&space;-1&space;\\-6&space;&&space;-9&space;&&space;7&space;&&space;6&space;\\-2&space;&&space;-2&space;&&space;9&space;&&space;0&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\\x_{4}\end{pmatrix}&space;=&space;\begin{pmatrix}0&space;\\2&space;\\0&space;\\1\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}2 & 4 & -1 & -1 \\4 & 9 & 0 & -1 \\-6 & -9 & 7 & 6 \\-2 & -2 & 9 & 0 \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \\x_{4}\end{pmatrix} = \begin{pmatrix}0 \\2 \\0 \\1\end{pmatrix}" />
+
+Gaussian elimination without pivoting
+```
+   ]A=: 4 4 $ 2 4 _1 _1 4 9 0 _1 _6 _9 7 6 _2 _2 9 0
+ 2  4 _1 _1
+ 4  9  0 _1
+_6 _9  7  6
+_2 _2  9  0
+
+   ]M1=: 4 4 $ 1 0 0 0 _4r2 1 0 0 6r2 0 1 0 2r2 0 0 1
+ 1 0 0 0
+_2 1 0 0
+ 3 0 1 0
+ 1 0 0 1
+   ]A1=: M1 mult A
+2 4 _1 _1
+0 1  2  1
+0 3  4  3
+0 2  8 _1
+   ]M2=: 4 4 $ 1 0 0 0 0 1 0 0 0 _3 1 0 0 _2 0 1
+1  0 0 0
+0  1 0 0
+0 _3 1 0
+0 _2 0 1
+   ]A2=: M2 mult A1
+2 4 _1 _1
+0 1  2  1
+0 0 _2  0
+0 0  4 _3
+   ]M3=: 4 4 $ 1 0 0 0 0 1 0 0 0 0 1 0 0 0 2 1
+1 0 0 0
+0 1 0 0
+0 0 1 0
+0 0 2 1
+   ]A3=: M3 mult A2
+2 4 _1 _1
+0 1  2  1
+0 0 _2  0
+0 0  0 _3
+
+   ]U=: M3 mult A2
+2 4 _1 _1
+0 1  2  1
+0 0 _2  0
+0 0  0 _3
+   ]L=: (%. M1) mult ((%. M2) mult (%. M3))
+ 1 0  0 0
+ 2 1  0 0
+_3 3  1 0
+_1 2 _2 1
+   L mult U
+ 2  4 _1 _1
+ 4  9  0 _1
+_6 _9  7  6
+_2 _2  9  0
+   A
+ 2  4 _1 _1
+ 4  9  0 _1
+_6 _9  7  6
+_2 _2  9  0
+
 ```
