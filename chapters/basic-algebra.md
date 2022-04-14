@@ -1486,9 +1486,6 @@ relation checkEqOfMatricesScalarsRel data
 100
 ```
 
-We are will also get to LAPACK implementation of inverse later in decomposition section.
-
-
 Worth noting properties of the matrix inverse are following:
 - <img src="https://latex.codecogs.com/svg.image?(A^{-1})^T=(A^T)^{-1}&space;" title="(A^{-1})^T=(A^T)^{-1} " />
 - <img src="https://latex.codecogs.com/svg.image?(AB)^{-1}=B^{-1}A^{-1}" title="(AB)^{-1}=B^{-1}A^{-1}" />
@@ -2165,13 +2162,51 @@ Solve systems of equations below using Gaussian elimination without and with piv
 
 #### LAPACK
 
-Let's try LAPACK impl and see if we can be better.
-We are going to call [https://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga56d9c860ce4ce42ded7f914fdb0683ff.html]
+Before we try LAPACK implementation let's underline the basics that are needed to work consciously with LAPACK.
+We are going to call [http://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga0019443faea08275ca60a734d0593e60.html]
+which is basically LU decomposition with partial pivoting.
+
 It is important to understand how to work with LAPACK functions. Most LAPACK functions were implemented in Fortran 77 which lacked dynamic allocation of resources.
-As some routines needs additional resources it was routine's user responsibility to deliver them. Those additional resources could be
-static arrays, arrays allocated on the stack or array allocated on the heap. The straightforward question is how much resources to provide. The user
-can specify and deliver too much resources or not enough. LAPACK helps in determining the optimal resources to provide via a preemptive call with
-`LWORK=-1` and other parameters as intended. After that the `WORK` variable will be updated with the optimal matrix to instantiate and to provided to the routine upon the main call.
+As some routines require additional resources it is routine's user responsibility to deliver them. Those additional resources could be
+static arrays, arrays allocated on the stack or array allocated on the heap. The main question is how much resources the user need to provide. The user
+can specify and deliver too much resources or not enough. As both cases are not satisfactory LAPACK helps in determining the optimal resources
+to be provided via a preemptive call with `LWORK=-1` and other parameters as intended. After that the `WORK` variable is updated with the optimal matrix
+to be instantiated and provided to the routine upon the main call. There are functions that does not a preparatory call, though.
+
+```
+   ]A=: 3 3 $ 3 17 10 2 4 _2 6 18 _12
+3 17  10
+2  4  _2
+6 18 _12
+
+   load 'math/lapack2'
+   dgetrf_jlapack2_
+'"liblapack.so.3" dgetrf_  n *i *i *d *i *i *i '&cd
+
+   NB. One need to understand to read the arguments in line with online documentation (the link is above)
+   NB. 1. [in] M (*i) The number of rows of the matrix A.  M >= 0.
+   NB. 2. [in] N (*i) The number of columns of the matrix A.  N >= 0.
+   NB. 3. [in,out] A (*d)
+   NB              On entry, the M-by-N matrix to be factored.
+   NB.             On exit, the factors L and U from the factorization A = P*L*U; the unit diagonal elements of L are not stored.
+   NB. 4. [in] LDA (*i) The leading dimension of the array A.  LDA >= max(1,M).
+   NB. 5. [out] IPIV (*i)
+   NB.             The pivot indices; for 1 <= i <= min(M,N), row i of the matrix was interchanged with row IPIV(i).
+   NB. 6. [out] INFO (*i)
+   NB.             Return code, when 0 the call was successful
+
+   'r c' =. ,"0 $ A
+   r
+3
+   c
+3
+   ]res=: dgetrf_jlapack2_ c;r;(|:A);(1>.c);(,_1);,_1
+┌─┬─┬─┬────────────────┬─┬─┬─┐
+│0│3│3│  6 0.5 0.333333│3│3│0│
+│ │ │ │ 18   8    _0.25│ │ │ │
+│ │ │ │_12  16        6│ │ │ │
+└─┴─┴─┴────────────────┴─┴─┴─┘
+```
 
 ### Rank of matrix
 
