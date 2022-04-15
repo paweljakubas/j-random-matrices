@@ -2173,12 +2173,10 @@ can specify and deliver too much resources or not enough. As both cases are not 
 to be provided via a preemptive call with `LWORK=-1` and other parameters as intended. After that the `WORK` variable is updated with the optimal matrix
 to be instantiated and provided to the routine upon the main call. There are functions that does not a preparatory call, though.
 
-```
-   ]A=: 3 3 $ 3 17 10 2 4 _2 6 18 _12
-3 17  10
-2  4  _2
-6 18 _12
+Also, Fortran stores matrices column-by-column in contrast to J (or C++) which stores in row-wise fashion. One need to transpose the input matrices when
+delivering to LAPACK routines, and also transpose outputs from Fortran back to J.
 
+```
    load 'math/lapack2'
    dgetrf_jlapack2_
 '"liblapack.so.3" dgetrf_  n *i *i *d *i *i *i '&cd
@@ -2195,17 +2193,51 @@ to be instantiated and provided to the routine upon the main call. There are fun
    NB. 6. [out] INFO (*i)
    NB.             Return code, when 0 the call was successful
 
+   ]A=: 3 3 $ 4 4 _3 0 4 _1 1 1 1
+4 4 _3
+0 4 _1
+1 1  1
    'r c' =. ,"0 $ A
    r
 3
    c
 3
-   ]res=: dgetrf_jlapack2_ c;r;(|:A);(1>.c);(,_1);,_1
-┌─┬─┬─┬────────────────┬─┬─┬─┐
-│0│3│3│  6 0.5 0.333333│3│3│0│
-│ │ │ │ 18   8    _0.25│ │ │ │
-│ │ │ │_12  16        6│ │ │ │
-└─┴─┴─┴────────────────┴─┴─┴─┘
+   ]res=: dgetrf_jlapack2_ c;r;(|:A);(1>.c);((c<.r)$0.);,_1
+┌─┬─┬─┬──────────┬─┬─────┬─┐
+│0│3│3│ 4  0 0.25│3│1 2 3│0│
+│ │ │ │ 4  4    0│ │     │ │
+│ │ │ │_3 _1 1.75│ │     │ │
+└─┴─┴─┴──────────┴─┴─────┴─┘
+
+   ]LU=: |: >3 { res
+   4 4   _3
+   0 4   _1
+0.25 0 1.75
+
+   ]uppertriang=: (<:)/~ (i.r)
+1 1 1
+0 1 1
+0 0 1
+   ]U=: uppertriang * LU
+4 4   _3
+0 4   _1
+0 0 1.75
+   ]L=: (lowertriang * LU) + (=/~ (i.r))
+   1 0 0
+   0 1 0
+0.25 0 1
+   L mult U
+4 4 _3
+0 4 _1
+1 1  1
+   A
+4 4 _3
+0 4 _1
+1 1  1
+
+   ]ipiv=: >5 { res
+1 2 3
+   NB. here it means P is identity matrix as the first row is interchanged with row 1, the second with row 2, and third with row 3
 ```
 
 ### Rank of matrix
