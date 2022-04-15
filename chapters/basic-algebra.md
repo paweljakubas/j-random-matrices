@@ -2218,6 +2218,11 @@ delivering to LAPACK routines, and also transpose outputs from Fortran back to J
 1 1 1
 0 1 1
 0 0 1
+   ]lowertriang=: >/~ (i.r)
+0 0 0
+1 0 0
+1 1 0
+
    ]U=: uppertriang * LU
 4 4   _3
 0 4   _1
@@ -2235,9 +2240,77 @@ delivering to LAPACK routines, and also transpose outputs from Fortran back to J
 0 4 _1
 1 1  1
 
+  NB. A = LU
+
    ]ipiv=: >5 { res
 1 2 3
    NB. here it means P is identity matrix as the first row is interchanged with row 1, the second with row 2, and third with row 3
+```
+
+Now let's LU decompose the matrix we already tackled in previous section.
+```
+   ]A=: 3 3 $ 3 17 10 2 4 _2 6 18 _12
+3 17  10
+2  4  _2
+6 18 _12
+
+   'r c' =. ,"0 $ A
+   ]res=: dgetrf_jlapack2_ c;r;(|:A);(1>.c);((c<.r)$0.);,_1
+┌─┬─┬─┬────────────────┬─┬─────┬─┐
+│0│3│3│  6 0.5 0.333333│3│3 3 3│0│
+│ │ │ │ 18   8    _0.25│ │     │ │
+│ │ │ │_12  16        6│ │     │ │
+└─┴─┴─┴────────────────┴─┴─────┴─┘
+
+   ]LU=: |: >3 { res
+       6    18 _12
+     0.5     8  16
+0.333333 _0.25   6
+   ]U=: uppertriang * LU
+6 18 _12
+0  8  16
+0  0   6
+   ]L=: (lowertriang * LU) + (=/~ (i.r))
+       1     0 0
+     0.5     1 0
+0.333333 _0.25 1
+
+   ]ipiv=: >5 { res
+3 3 3
+   NB. here it means P is not identity matrix as the first row is interchanged with row 3,
+   NB. the second with row 3, and third with row 3
+   ]P1=: 3 3 $ 0 0 1   0 1 0  1 0 0
+0 0 1
+0 1 0
+1 0 0
+   ]P2=: 3 3 $ 1 0 0   0 0 1  0 1 0
+1 0 0
+0 0 1
+0 1 0
+   ]P3=: 3 3 $ 1 0 0   0 1 0  0 0 1
+1 0 0
+0 1 0
+0 0 1
+   ]P=: P1 mult (P2 mult P3)
+0 1 0
+0 0 1
+1 0 0
+
+   L mult U
+6 18 _12
+3 17  10
+2  4  _2
+   P mult (L mult U)
+3 17  10
+2  4  _2
+6 18 _12
+
+   A
+3 17  10
+2  4  _2
+6 18 _12
+
+  NB. A = PLU
 ```
 
 ### Rank of matrix
