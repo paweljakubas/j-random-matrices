@@ -436,6 +436,65 @@ NB. 12 13 14 15
 NB.    trace m
 NB. 30
 
+NB. Check if a square matrix is lower triangular L
+isL=: 3 : 0
+'r c' =. ,"0 $ y
+assert. (r = c)
+uppertriang=. </~ (i.r)
+elems=. uppertriang #&,y
+*/ (0 = elems)
+)
+NB. Examples
+NB.    ]A=: i. 3 3
+NB. 0 1 2
+NB. 3 4 5
+NB. 6 7 8
+NB.    isL A
+NB. 0
+NB.    ]lowertriang=. (>:)/~ (i.4)
+NB. 1 0 0 0
+NB. 1 1 0 0
+NB. 1 1 1 0
+NB. 1 1 1 1
+NB.    isL lowertriang
+NB. 1
+NB.    ]nonsquare=: i.3 2
+NB. 0 1
+NB. 2 3
+NB. 4 5
+NB.    isL nonsquare
+NB. |assertion failure: isL
+NB. |       (r=c)
+
+NB. Check if a square matrix is upper triangular U
+isU=: 3 : 0
+'r c' =. ,"0 $ y
+assert. (r = c)
+lowertriang=. >/~ (i.r)
+elems=. lowertriang #&,y
+*/ (0 = elems)
+)
+NB. Examples
+NB.    ]A=: i. 3 3
+NB. 0 1 2
+NB. 3 4 5
+NB. 6 7 8
+NB.    isU A
+NB. 0
+NB.    ]uppertriang=. (<:)/~ (i.4)
+NB. 1 1 1 1
+NB. 0 1 1 1
+NB. 0 0 1 1
+NB. 0 0 0 1
+NB.    isU uppertriang
+NB. 1
+NB.    ]nonsquare=: i.3 2
+NB. 0 1
+NB. 2 3
+NB. 4 5
+NB.    isU nonsquare
+NB. |assertion failure: isU
+NB. |       (r=c)
 
 NB. Represent number y > 0 as 1 and y - 1 0s
 expressNum=: 3 : 0

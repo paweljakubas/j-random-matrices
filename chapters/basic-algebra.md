@@ -12,18 +12,18 @@
 6. [Transpose of a matrix](#transpose-of-matrix)
 7. [Determinant and adjoint of a matrix](#determinant-and-adjoint-of-matrix)
 8. [Inverse of a matrix](#inverse-of-matrix)
-5. [Elementary operations of a matrix II](#elementary-operations-in-matrix-ii)
+9. [Elementary operations of a matrix II](#elementary-operations-in-matrix-ii)
     - [Matrix elementary row and column operations](#matrix-elementary-row-and-column-operations)
     - [Orthogonal transformations](#orthogonal-transformations) - IN PROGRESS
     - [Givens rotations](#givens-rotations) - TODO
     - [Householder reflections](#householder-reflections) - TODO
-9. [Trace of a matrix](#trace-of-matrix)
-10. [LU decomposition](#lu-decomposition)
+10. [Trace of a matrix](#trace-of-matrix)
+11. [LU decomposition](#lu-decomposition)
     - [Gaussian elimination](#gaussian-elimination)
     - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)
     - [LAPACK](#lapack) - IN PROGRESS
-11. [Rank of a matrix](#rank-of-matrix) - TODO
-12. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
+12. [Rank of a matrix](#rank-of-matrix) - TODO
+13. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
 [Project1](#project1)
 
@@ -391,7 +391,7 @@ We can also use two predicates and apply different updates for each predicate in
 100 100 100 100
 ```
 One can notice that the updating using selection is rectangular in shape and one can
-operate in matrix shape doing this. If the updating is done using predicate function
+operate in matrix shape doing this. If the updating is done using predcate function
 there is no guarantee that the updated slice of a matrix is rectangular, and one needs to
 use linearized indices. The same is, in general, true for the negated selection,
 ie. updating everything in an array except what a given selection determines. Example below:
@@ -2155,10 +2155,66 @@ when Gaussian elimination without pivoting was used.
 
 See also https://code.jsoftware.com/wiki/Essays/LU_Decomposition
 
+Now let's see how `Lx=b` and `Ux=b` can be solved for `x`
+
+```
+   ]A=: 3 3 $ 1 2 3 0 2 9 0 0 8
+1 2 3
+0 2 9
+0 0 8
+   ]b=: 0 6 3
+0 6 3
+
+   rows=: <"1 A
+   rows
+┌─────┬─────┬─────┐
+│1 2 3│0 2 9│0 0 8│
+└─────┴─────┴─────┘
+
+   rows,: (<"0 b)
+┌─────┬─────┬─────┐
+│1 2 3│0 2 9│0 0 8│
+├─────┼─────┼─────┤
+│0    │6    │3    │
+└─────┴─────┴─────┘
+
+   (< (<a:) , (< _1)) { rows,: (<"0 b)
+┌─────┬─┐
+│0 0 8│3│
+└─────┴─┘
+   (< (<a:) , (<< _1)) { rows,: (<"0 b)
+┌─────┬─────┐
+│1 2 3│0 2 9│
+├─────┼─────┤
+│0    │6    │
+└─────┴─────┘
+
+   NB. take last n elements
+   (|. - 1& + i.1) { (>0 { pair)
+8
+   (|. - 1& + i.2) { (>0 { pair)
+0 8
+   (|. - 1& + i.3) { (>0 { pair)
+0 0 8
+
+  solveTriang=: 4 : 0
+'r c'=. ,"0 $y
+assert. (r=c)
+rows=. <"1 y
+b=. <"0 x
+assert. (r=#b)
+NB. isL isU
+y
+)
+```
+
+
 **Exercise 29**
 Solve systems of equations below using Gaussian elimination without and with pivoting.
 
 <img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}2&space;&&space;4&space;&&space;-1&space;&&space;-1&space;\\4&space;&&space;9&space;&&space;0&space;&&space;-1&space;\\-6&space;&&space;-9&space;&&space;7&space;&&space;6&space;\\-2&space;&&space;-2&space;&&space;9&space;&&space;0&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\\x_{4}\end{pmatrix}&space;=&space;\begin{pmatrix}0&space;\\2&space;\\0&space;\\1\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}2 & 4 & -1 & -1 \\4 & 9 & 0 & -1 \\-6 & -9 & 7 & 6 \\-2 & -2 & 9 & 0 \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \\x_{4}\end{pmatrix} = \begin{pmatrix}0 \\2 \\0 \\1\end{pmatrix}" />
+
+
 
 #### LAPACK
 
@@ -2171,10 +2227,10 @@ As some routines require additional resources it is routine's user responsibilit
 static arrays, arrays allocated on the stack or array allocated on the heap. The main question is how much resources the user need to provide. The user
 can specify and deliver too much resources or not enough. As both cases are not satisfactory LAPACK helps in determining the optimal resources
 to be provided via a preemptive call with `LWORK=-1` and other parameters as intended. After that the `WORK` variable is updated with the optimal matrix
-to be instantiated and provided to the routine upon the main call. There are functions that does not a preparatory call, though.
+to be instantiated and provided to the routine upon the main call. There are functions that does not need the preparatory call, though. Like `dgetrf` below.
 
 Also, Fortran stores matrices column-by-column in contrast to J (or C++) which stores in row-wise fashion. One need to transpose the input matrices when
-delivering to LAPACK routines, and also transpose outputs from Fortran back to J.
+delivering to LAPACK routines, and also transpose the outputs from Fortran back to J.
 
 ```
    load 'math/lapack2'
@@ -2240,11 +2296,15 @@ delivering to LAPACK routines, and also transpose outputs from Fortran back to J
 0 4 _1
 1 1  1
 
-  NB. A = LU
+  NB. A = PLU = LU
 
    ]ipiv=: >5 { res
 1 2 3
    NB. here it means P is identity matrix as the first row is interchanged with row 1, the second with row 2, and third with row 3
+   ]P=: 3 3 $ 1 0 0   0 1 0  0 0 1
+1 0 0
+0 1 0
+0 0 1
 ```
 
 Now let's LU decompose the matrix we already tackled in previous section.
@@ -2312,6 +2372,8 @@ Now let's LU decompose the matrix we already tackled in previous section.
 
   NB. A = PLU
 ```
+
+
 
 ### Rank of matrix
 
