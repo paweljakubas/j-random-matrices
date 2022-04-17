@@ -2371,7 +2371,20 @@ Now let's LU decompose the matrix we already tackled in previous section.
   NB. A = PLU
 ```
 
+**Exercise 31**
+Solve systems of equations in Exercise 30 using LAPACK's Gaussian elimination with pivoting.
 
+[Solution to exercise 31](#solution-to-exercise-31)
+
+
+**Exercise 32**
+Solve systems of equations in Exercise 30 using LAPACK's `sgesv` that computes the solution to
+system of linear equations A * X = B for GE matrices. Under the hood it uses LU decomposition `dgetrf`
+which we covered above.
+
+[Solution to exercise 32](#solution-to-exercise-32)
+
+### QR decomposition
 
 ### Rank of matrix
 
@@ -4315,4 +4328,14 @@ _2 _2  9  0
 _6 _9  7  6
 _2 _2  9  0
 
+   ]b=: 0 2 0 1
+0 2 0 1
+   NB. A=LU, L(Ux)=b, (a) Ly=b
+   ]y=: b %. L
+_2.98372e_16 2 _6 _15
+   NB. Ux=y
+   ]x=: y %. U
+22 _9 3 5
+   A mult x
+7.10543e_15 2 0 1
 ```
