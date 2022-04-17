@@ -4573,3 +4573,57 @@ _2.84217e_14 2 0 1
    b
 0 2 0 1
 ```
+
+**Exercise 32**
+```
+   load 'math/lapack2'
+   A
+ 2  4 _1 _1
+ 4  9  0 _1
+_6 _9  7  6
+_2 _2  9  0
+   'r c' =. ,"0 $ A
+   r
+4
+   c
+4
+   ]b=: 0 2 0 1
+0 2 0 1
+   dgesv_jlapack2_
+'"liblapack.so.3" dgesv_  n *i *i *d *i *i *d *i *i '&cd
+
+   NB. One need to understand to read the arguments in line with online documentation (the link is above)
+   NB. 1. [in] N (*i)
+   NB.             The number of linear equations.
+   NB. 2. [in] NRHS (*i)
+   NB.             The number of right hand sides, i.e., the number of columns
+   NB.             of the matrix B.
+   NB. 3. [in,out] A (*d)
+   NB              On entry, the N-by-N matrix to be factored.
+   NB.             On exit, the factors L and U from the factorization A = P*L*U; the unit diagonal elements of L are not stored.
+   NB. 4. [in] LDA (*i) The leading dimension of the array A.  LDA >= max(1,N).
+   NB. 5. [out] IPIV (*i)
+   NB.             The pivot indices of dimension (N), row i of the matrix was interchanged with row IPIV(i).
+   NB. 6. [in,out] B (*d)
+   NB.             On entry, the N-by-NRHS matrix of right hand side matrix B.
+   NB.             On exit, if INFO = 0, the N-by-NRHS solution matrix X.
+   NB. 7. [in] LDB (*i)
+   NB.             The leading dimension of the array B.  LDB >= max(1,N).
+   NB. 8. [out] INFO (*i)
+   NB.             Return code, when 0 the call was successful
+
+   ]res=: dgesv_jlapack2_ c;($b);(|:A);(1>.c);(c$0.);(1 4 $ b);($b);,_1
+┌─┬─┬─┬────────────────────────────────┬─┬───────┬─────────┬─┬─┐
+│0│4│4│_6 _0.666667 0.333333  _0.333333│4│3 2 4 4│22 _9 3 5│4│0│
+│ │ │ │_9         3 0.333333   0.333333│ │       │         │ │ │
+│ │ │ │ 7   4.66667  5.11111 _0.0434783│ │       │         │ │ │
+│ │ │ │ 6         3       _3  _0.130435│ │       │         │ │ │
+└─┴─┴─┴────────────────────────────────┴─┴───────┴─────────┴─┴─┘
+
+  NB. the solution of Ax=b is
+   ]x=: >6 { res
+22 _9 3 5
+
+  NB. All results of LU decomposition with partial pivoting, ie. LU and ipiv are in 3rd and 5th column
+  NB. Compare with Exercise 31.
+```
