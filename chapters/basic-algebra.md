@@ -4132,7 +4132,7 @@ relation checkEqOfMatricesScalarsRel data
 100
 ```
 
-**Exercise 29**
+### Solution to exercise 29
 
 ```
    ]A=: 3 3 $ 1 2 3 0 2 9 0 0 8
@@ -4265,7 +4265,7 @@ if. (isU y) do. (rows,:b) else. ( (<"1 (|. y)) ,: (<"0 (|. x)) ) end.  NB.wrong 
 
 ```
 
-**Exercise 30**
+### Solution to exercise 30
 - <img src="https://latex.codecogs.com/svg.image?\begin{pmatrix}2&space;&&space;4&space;&&space;-1&space;&&space;-1&space;\\4&space;&&space;9&space;&&space;0&space;&&space;-1&space;\\-6&space;&&space;-9&space;&&space;7&space;&&space;6&space;\\-2&space;&&space;-2&space;&&space;9&space;&&space;0&space;\\\end{pmatrix}&space;\begin{pmatrix}x_{1}&space;\\x_{2}&space;\\x_{3}&space;\\x_{4}\end{pmatrix}&space;=&space;\begin{pmatrix}0&space;\\2&space;\\0&space;\\1\end{pmatrix}" title="https://latex.codecogs.com/svg.image?\begin{pmatrix}2 & 4 & -1 & -1 \\4 & 9 & 0 & -1 \\-6 & -9 & 7 & 6 \\-2 & -2 & 9 & 0 \\\end{pmatrix} \begin{pmatrix}x_{1} \\x_{2} \\x_{3} \\x_{4}\end{pmatrix} = \begin{pmatrix}0 \\2 \\0 \\1\end{pmatrix}" />
 
 Gaussian elimination without pivoting
@@ -4462,7 +4462,7 @@ _1r2  5r9     1 0
 0 2 0 1
 ```
 
-**Exercise 31**
+### Solution to exercise 31
 ```
    load 'math/lapack2'
    A
@@ -4574,7 +4574,7 @@ _2.84217e_14 2 0 1
 0 2 0 1
 ```
 
-**Exercise 32**
+### Solution to exercise 32
 ```
    load 'math/lapack2'
    A
@@ -4626,4 +4626,12 @@ _2 _2  9  0
 
   NB. All results of LU decomposition with partial pivoting, ie. LU and ipiv are in 3rd and 5th column
   NB. Compare with Exercise 31.
+
+dgetrf_jlapack2_ c;r;(|:A);(1>.c);((c<.r)$0.);,_1
+┌─┬─┬─┬────────────────────────────────┬─┬───────┬─┐
+│0│4│4│_6 _0.666667 0.333333  _0.333333│4│3 2 4 4│0│
+│ │ │ │_9         3 0.333333   0.333333│ │       │ │
+│ │ │ │ 7   4.66667  5.11111 _0.0434783│ │       │ │
+│ │ │ │ 6         3       _3  _0.130435│ │       │ │
+└─┴─┴─┴────────────────────────────────┴─┴───────┴─┘
 ```
