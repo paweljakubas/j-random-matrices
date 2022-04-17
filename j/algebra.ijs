@@ -499,85 +499,6 @@ NB. |       (r=c)
 NB. Check if a square matrix is triangular, ie. either L or U
 isT=: 3 : '(isL y) +. (isU y)'
 
-NB. Internal
-addXs=: 4 : 0
-'n elem'=.x
-b0=. (< (<a:) , (< 0)) { y
-as0=. >0 { b0
-bs0=. >1 { b0
-s=.(<as0),:(<bs0,elem)
-if. (n > 1) do.
-  for_ijk. 1 + i.(n - 1) do.
-    b=. (< (<a:) , (< ijk)) { y
-    as=. >0 { b
-    bs=. >1 { b
-    s1=.(<as),:(<bs,elem)
-  s=.s,.s1
-  end.
-end.
-s
-)
-NB. Example:
-NB.   asWithBs
-NB. ┌───────┬───────┬─────────┬────────┐
-NB. │0 1 2 3│0 5 6 7│0 0 10 11│0 0 0 15│
-NB. ├───────┼───────┼─────────┼────────┤
-NB. │0      │1      │2        │3       │
-NB. └───────┴───────┴─────────┴────────┘
-NB.    (1,100) addXs asWithBs
-NB. ┌───────┐
-NB. │0 1 2 3│
-NB. ├───────┤
-NB. │0 100  │
-NB. └───────┘
-NB.    (2,100) addXs asWithBs
-NB. ┌───────┬───────┐
-NB. │0 1 2 3│0 5 6 7│
-NB. ├───────┼───────┤
-NB. │0 100  │1 100  │
-NB. └───────┴───────┘
-NB.    (3,100) addXs asWithBs
-NB. ┌───────┬───────┬─────────┐
-NB. │0 1 2 3│0 5 6 7│0 0 10 11│
-NB. ├───────┼───────┼─────────┤
-NB. │0 100  │1 100  │2 100    │
-NB. └───────┴───────┴─────────┘
-
-NB. Solve Ax=b, where A is upper triangular U
-solveU=: 4 : 0
-'l r'=. x
-block=.(< (<a:) , (< _1)) { y
-as=. (|. - 1& + i.l) { (>0 { block)
-bs=. >1 { block
-if. (l=1) do.
-  xN=. bs % as
-  step=. r - l
-  (2,r) solveU ((step,xN) f y)
-else.
-  (<x),.(<y)
-end.
-)
-   (1,4) solveU (b solveT A1)
-┌───┬───────────────────────────┐
-│2 4│┌───────┬───────┬─────────┐│
-│   ││0 1 2 3│0 5 6 7│0 0 10 11││
-│   │├───────┼───────┼─────────┤│
-│   ││0 0.2  │1 0.2  │2 0.2    ││
-│   │└───────┴───────┴─────────┘│
-└───┴───────────────────────────┘
-
-
-NB. Solve Ax=b, where A is triangular, ie., either L or U
-solveT=: 4 : 0
-'r c'=. ,"0 $y
-assert. (r=c)
-assert. ((isL y) +. (isU y))
-rows=. <"1 y
-b=. <"0 x
-assert. (r = #b)
-if. (isU y) do. (rows,:b) else. ( (<"1 (|. y)) ,: (<"0 (|. x)) ) end.
-)
-
 NB. Represent number y > 0 as 1 and y - 1 0s
 expressNum=: 3 : 0
 assert (y > 0)
@@ -595,7 +516,6 @@ NB.    expressNum 10.1
 NB. |assertion failure: assert
 NB. |       assert(y=(>.y))
 NB.
-
 
 NB. Partition matrix y by specifying consecutive partition block lenghts rows and columns
 partitionMatrix=: 4 : 0
