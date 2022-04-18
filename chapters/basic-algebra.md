@@ -21,7 +21,7 @@
 11. [LU decomposition](#lu-decomposition)
     - [Gaussian elimination](#gaussian-elimination)
     - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)
-    - [LAPACK](#lapack) - IN PROGRESS
+    - [LAPACK](#lapack)
 12. [QR decomposition](#qr-decomposition) - TODO
 13. [Rank of a matrix](#rank-of-matrix) - TODO
 14. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
@@ -2213,7 +2213,6 @@ Solve systems of equations below using Gaussian elimination without and with piv
 [Solution to exercise 30](#solution-to-exercise-30)
 
 
-
 #### LAPACK
 
 Before we try LAPACK implementation let's underline the basics that are needed to work consciously with LAPACK.
@@ -4135,134 +4134,147 @@ relation checkEqOfMatricesScalarsRel data
 ### Solution to exercise 29
 
 ```
-   ]A=: 3 3 $ 1 2 3 0 2 9 0 0 8
-1 2 3
-0 2 9
-0 0 8
-   ]b=: 0 6 3
-0 6 3
+NB. Solve Ux=b, where U is upper triangular
 
-   rows=: <"1 A
-   rows
-┌─────┬─────┬─────┐
-│1 2 3│0 2 9│0 0 8│
-└─────┴─────┴─────┘
+   ]A=: 4 4 $ 2 4 _1 _1 0 1  2  1 0 0 _2  0 0 0  0 _3
+2 4 _1 _1
+0 1  2  1
+0 0 _2  0
+0 0  0 _3
+   ]b=: 0 2 0 1
+0 2 0 1
+   ]x=: b %. A
+_4.83333 2.33333 0 _0.333333
 
-   rows,: (<"0 b)
-┌─────┬─────┬─────┐
-│1 2 3│0 2 9│0 0 8│
-├─────┼─────┼─────┤
-│0    │6    │3    │
-└─────┴─────┴─────┘
+   ]input=: (<"1 A),:(<"0 b)
+┌─────────┬───────┬────────┬────────┐
+│2 4 _1 _1│0 1 2 1│0 0 _2 0│0 0 0 _3│
+├─────────┼───────┼────────┼────────┤
+│0        │2      │0       │1       │
+└─────────┴───────┴────────┴────────┘
 
-   (< (<a:) , (< _1)) { rows,: (<"0 b)
-┌─────┬─┐
-│0 0 8│3│
-└─────┴─┘
-   (< (<a:) , (<< _1)) { rows,: (<"0 b)
-┌─────┬─────┐
-│1 2 3│0 2 9│
-├─────┼─────┤
-│0    │6    │
-└─────┴─────┘
-
-   NB. take last n elements
-   (|. - 1& + i.1) { (>0 { pair)
-8
-   (|. - 1& + i.2) { (>0 { pair)
-0 8
-   (|. - 1& + i.3) { (>0 { pair)
-0 0 8
-
-  solveTriang=: 4 : 0
-'r c'=. ,"0 $y
-assert. (r=c)
-rows=. <"1 y
-b=. <"0 x
-assert. (r=#b)
-NB. isL isU
-y
-)
-
-NB. Internal
-addXs=: 4 : 0
+   f=: 4 : 0
 'n elem'=.x
 b0=. (< (<a:) , (< 0)) { y
 as0=. >0 { b0
 bs0=. >1 { b0
-s=.(<as0),:(<bs0,elem)
+s=.(<as0),:(<({.bs0),elem,(}.bs0))
 if. (n > 1) do.
   for_ijk. 1 + i.(n - 1) do.
     b=. (< (<a:) , (< ijk)) { y
     as=. >0 { b
     bs=. >1 { b
-    s1=.(<as),:(<bs,elem)
-  s=.s,.s1
+    s1=.(<as),:(<({.bs),elem,(}.bs))
+    s=.s,.s1
   end.
 end.
 s
 )
-NB. Example:
-NB.   asWithBs
-NB. ┌───────┬───────┬─────────┬────────┐
-NB. │0 1 2 3│0 5 6 7│0 0 10 11│0 0 0 15│
-NB. ├───────┼───────┼─────────┼────────┤
-NB. │0      │1      │2        │3       │
-NB. └───────┴───────┴─────────┴────────┘
-NB.    (1,100) addXs asWithBs
-NB. ┌───────┐
-NB. │0 1 2 3│
-NB. ├───────┤
-NB. │0 100  │
-NB. └───────┘
-NB.    (2,100) addXs asWithBs
-NB. ┌───────┬───────┐
-NB. │0 1 2 3│0 5 6 7│
-NB. ├───────┼───────┤
-NB. │0 100  │1 100  │
-NB. └───────┴───────┘
-NB.    (3,100) addXs asWithBs
-NB. ┌───────┬───────┬─────────┐
-NB. │0 1 2 3│0 5 6 7│0 0 10 11│
-NB. ├───────┼───────┼─────────┤
-NB. │0 100  │1 100  │2 100    │
-NB. └───────┴───────┴─────────┘
+   input
+┌─────────┬───────┬────────┬────────┐
+│2 4 _1 _1│0 1 2 1│0 0 _2 0│0 0 0 _3│
+├─────────┼───────┼────────┼────────┤
+│0        │2      │0       │1       │
+└─────────┴───────┴────────┴────────┘
+   (3, 10) f input
+┌─────────┬───────┬────────┐
+│2 4 _1 _1│0 1 2 1│0 0 _2 0│
+├─────────┼───────┼────────┤
+│0 10     │2 10   │0 10    │
+└─────────┴───────┴────────┘
+   (2, 20) f ((3, 10) f input)
+┌─────────┬───────┐
+│2 4 _1 _1│0 1 2 1│
+├─────────┼───────┤
+│0 20 10  │2 20 10│
+└─────────┴───────┘
+   (1, 30) f ((2, 20) f ((3, 10) f input))
+┌──────────┐
+│2 4 _1 _1 │
+├──────────┤
+│0 30 20 10│
+└──────────┘
 
-NB. Solve Ax=b, where A is upper triangular U
-solveU=: 4 : 0
+   NB. Let's do the solution in steps. First step:
+   solveUInternal=: 4 : 0
 'l r'=. x
 block=.(< (<a:) , (< _1)) { y
 as=. (|. - 1& + i.l) { (>0 { block)
 bs=. >1 { block
 if. (l=1) do.
   xN=. bs % as
-  step=. r - l
-  (2,r) solveU ((step,xN) f y)
+  step=.r - l
+  if. (step=0) do.
+    xN
+  else.
+    (2,r) solveUInternal ((step,xN) f y)
+  end.
 else.
   (<x),.(<y)
 end.
 )
-   (1,4) solveU (b solveT A1)
-┌───┬───────────────────────────┐
-│2 4│┌───────┬───────┬─────────┐│
-│   ││0 1 2 3│0 5 6 7│0 0 10 11││
-│   │├───────┼───────┼─────────┤│
-│   ││0 0.2  │1 0.2  │2 0.2    ││
-│   │└───────┴───────┴─────────┘│
-└───┴───────────────────────────┘
+   (1,4) solveUInternal input
+┌───┬─────────────────────────────────────┐
+│2 4│┌───────────┬───────────┬───────────┐│
+│   ││2 4 _1 _1  │0 1 2 1    │0 0 _2 0   ││
+│   │├───────────┼───────────┼───────────┤│
+│   ││0 _0.333333│2 _0.333333│0 _0.333333││
+│   │└───────────┴───────────┴───────────┘│
+└───┴─────────────────────────────────────┘
+   (1,1) solveUInternal ((<_3),:(<1))
+_0.333333
 
+  NB. no second step
+   solveUInternal=: 4 : 0
+'l r'=. x
+block=.(< (<a:) , (< _1)) { y
+as=. (|. - 1& + i.l) { (>0 { block)
+bs=. >1 { block
+if. (l=1) do.
+  xN=. bs % as
+  step=.r - l
+  if. (step=0) do.
+    xN
+  else.
+    (2,r) solveUInternal ((step,xN) f y)
+  end.
+else.
+  xs=. }. bs
+  b=. {. bs
+  ass=. }. as
+  a=. {. as
+  rest=. +/ (ass*xs)
+  x=. (b - rest) % a
+  if. (l=r) do.
+    x,xs
+  else.
+    step=.r - l
+    ((>:l),r) solveUInternal ((step,x) f y)
+  end.
+end.
+)
+   (1,4) solveUInternal input
+_4.83333 2.33333 0 _0.333333
 
-NB. Solve Ax=b, where A is triangular, ie., either L or U
-solveT=: 4 : 0
+   NB. and finally wrapping function
+   solveU=: 4 : 0
 'r c'=. ,"0 $y
 assert. (r=c)
-assert. ((isL y) +. (isU y))
+assert. (isU y)
 rows=. <"1 y
 b=. <"0 x
 assert. (r = #b)
-if. (isU y) do. (rows,:b) else. ( (<"1 (|. y)) ,: (<"0 (|. x)) ) end.  NB.wrong |. not enough
+(1,r) solveUInternal (rows,:b)
 )
-
+   b
+0 2 0 1
+   A
+2 4 _1 _1
+0 1  2  1
+0 0 _2  0
+0 0  0 _3
+   b solveU A
+_4.83333 2.33333 0 _0.333333
 ```
 
 ### Solution to exercise 30
