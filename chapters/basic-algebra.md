@@ -1555,8 +1555,22 @@ Let's see how the transformations work in practise
    NB. pallete1 is defined in j/algebra.ijs
    pallete1 viewmat A
 ```
+Intial matrix **A** is below:
 ![Initial matrix](../figures/fig1_1.png)
 
+Let's now interchange row 2 with 4:
+```
+   ]A1=: 2 4 interchangeR A
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 3 3 4 2 2 2 2 2 2
+2 3 2 2 2 2 2 2 2 2
+2 3 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+   pallete1 viewmat A1
+```
+The result is below:
+![Initial matrix with rows interchanged](../figures/fig1_2.png)
 
 In **scaling** elementary operation each element in a given column (row) is multiplied
 by the provided factor. For both column and row cases this could be realized as follows:
