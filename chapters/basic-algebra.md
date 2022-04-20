@@ -1542,6 +1542,22 @@ For a row case we do analogically but we choose corresponding row selections:
 112 113 114 115
 ```
 
+Let's see how the transformations work in practise
+```
+   load 'viewmat'
+   ]A=: 6 10 $ 2 2 2 2 2 2 2 2 2 2  2 2 2 2 2 2 2 2 2 2  2 3 2 2 2 2 2 2 2 2  2 3 2 2 2 2 2 2 2 2  2 3 3 4 2 2 2 2 2 2  2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+2 3 2 2 2 2 2 2 2 2
+2 3 2 2 2 2 2 2 2 2
+2 3 3 4 2 2 2 2 2 2
+2 2 2 2 2 2 2 2 2 2
+   NB. pallete1 is defined in j/algebra.ijs
+   pallete1 viewmat A
+```
+![Initial matrix](../figures/fig1_1.png)
+
+
 In **scaling** elementary operation each element in a given column (row) is multiplied
 by the provided factor. For both column and row cases this could be realized as follows:
 ```
@@ -4134,19 +4150,19 @@ relation checkEqOfMatricesScalarsRel data
 ### Solution to exercise 29
 
 ```
-NB. Solve Ux=b, where U is upper triangular
+NB. Solving Ux=b, where U is upper triangular from ab-initio
 
-   ]A=: 4 4 $ 2 4 _1 _1 0 1  2  1 0 0 _2  0 0 0  0 _3
+   ]U=: 4 4 $ 2 4 _1 _1 0 1  2  1 0 0 _2  0 0 0  0 _3
 2 4 _1 _1
 0 1  2  1
 0 0 _2  0
 0 0  0 _3
    ]b=: 0 2 0 1
 0 2 0 1
-   ]x=: b %. A
+   ]x=: b %. U
 _4.83333 2.33333 0 _0.333333
 
-   ]input=: (<"1 A),:(<"0 b)
+   ]input=: (<"1 U),:(<"0 b)
 ┌─────────┬───────┬────────┬────────┐
 │2 4 _1 _1│0 1 2 1│0 0 _2 0│0 0 0 _3│
 ├─────────┼───────┼────────┼────────┤
@@ -4224,7 +4240,8 @@ end.
    (1,1) solveUInternal ((<_3),:(<1))
 _0.333333
 
-  NB. no second step
+  NB. Now second step
+
    solveUInternal=: 4 : 0
 'l r'=. x
 block=.(< (<a:) , (< _1)) { y
@@ -4256,7 +4273,7 @@ end.
    (1,4) solveUInternal input
 _4.83333 2.33333 0 _0.333333
 
-   NB. and finally wrapping function
+   NB. And finally wrapping function taking just b and U
    solveU=: 4 : 0
 'r c'=. ,"0 $y
 assert. (r=c)
@@ -4268,12 +4285,12 @@ assert. (r = #b)
 )
    b
 0 2 0 1
-   A
+   U
 2 4 _1 _1
 0 1  2  1
 0 0 _2  0
 0 0  0 _3
-   b solveU A
+   b solveU U
 _4.83333 2.33333 0 _0.333333
 ```
 
