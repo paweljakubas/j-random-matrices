@@ -12,6 +12,52 @@ pallete1=: (255 154 162, 255 183 178, 255 218 193, 226 240 203, 191 234 215,: 19
 NB. load 'viemat'
 NB. pallete1 viewmat ?20 20$6
 
+NB. Plot (x,y) pairs in rectangle defined with left down corner x1,y1 and right top corner
+NB. x2,y2 using xn,yn number of parts
+NB.
+NB.    ---------------------- (x2,y2)  --
+NB.    |                    |          .
+NB.    |                    |          yn intervals
+NB.    |                    |          .
+NB.    ---------------------           --
+NB.  (x1,y1)
+NB.    {... xn intervals ...}
+NB.
+NB. In each axis there will be additional interval before and after added.
+
+
+getIxs=: 4 : 0
+xI=.>0{y
+yI=.>1{y
+'a b'=.x
+(yI I. b), xI I. a
+)
+
+toPlotMatrix=: 4 : 0
+'x1 y1 x2 y2 xn yn'=.y
+assert. ((x2 >: x1) *. (y2 >: y1))
+assert. ((xn > 0) *. (yn > 0))
+A0=.((yn+2), (xn+2)) $ 0
+dx=. (x2 - x1) % xn
+xI=. x1 + dx*i.(>:xn)
+dy=. (y2 - y1) % yn
+yI=. y1 + dy*i.(>:yn)
+xyI=.(<xI),(<yI)
+1 (getIxs&xyI"1 x) } A0
+)
+NB.    (2 2 $ _2 10 1 3) toPlotMatrix (_1, 2, 5, 7, 2, 10)
+NB. 0 0 0 0
+NB. 0 0 0 0
+NB. 0 1 0 0
+NB. 0 0 0 0
+NB. 0 0 0 0
+NB. 0 0 0 0
+NB. 0 0 0 0
+NB. 0 0 0 0
+NB. 0 0 0 0
+NB. 0 0 0 0
+NB. 0 0 0 0
+NB. 1 0 0 0
 
 NB. Transpose of a matrix
 transpose=: |:
