@@ -1918,7 +1918,30 @@ _0.707107 0.707107
 ```
 ![Fig 2](https://github.com/paweljakubas/j-random-matrices/blob/main/figures/fig2.pdf "Fig 2") presents the initial data rotated by 45 degrees counter-clockwise.
 
-### Givens rotations
+Another example:
+```
+   D=: 18 2 $ 0 0 0 1 0 2 0 3 1 3 1 2 1 1 1 0 2 0 2 1 3 0 3 1 4 0 4 1 5 0 5 1 6 0 6 1
+   A=: D toPlotMatrix (_2, _2, 8, 8, 30, 30)
+   twocolors viewmat A
+```
+
+The figure of **A** below.
+
+![Initial matrix](../figures/fig1_6.png)
+
+Now let's rotate the A clockwise usin T
+```
+   D1=: D mult T
+   A1=: D1 toPlotMatrix (_2, _2, 8, 8, 30, 30)
+   twocolors viewmat A1
+```
+
+**A1** rotated is below
+
+![Initial matrix rotated 45 degrees clockwise](../figures/fig1_7.png)
+
+
+### Givens Rotations
 Let's reformulate rotation matrix to have following
 <img src="https://latex.codecogs.com/svg.image?G&space;=&space;\begin{pmatrix}c&space;&&space;s&space;\\&space;-s&space;&&space;c&space;\\\end{pmatrix}&space;,&space;c^{2}&space;&plus;&space;s^{2}&space;=&space;1" title="G = \begin{pmatrix}c & s \\ -s & c \\\end{pmatrix} , c^{2} + s^{2} = 1" />
 We have the below properties:
