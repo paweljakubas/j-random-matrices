@@ -1545,15 +1545,34 @@ For a row case we do analogically but we choose corresponding row selections:
 Let's see how the transformations work in practise
 ```
    load 'viewmat'
-   ]A=: 6 10 $ 2 2 2 2 2 2 2 2 2 2  2 2 2 2 2 2 2 2 2 2  2 3 2 2 2 2 2 2 2 2  2 3 2 2 2 2 2 2 2 2  2 3 3 4 2 2 2 2 2 2  2 2 2 2 2 2 2 2 2 2
-2 2 2 2 2 2 2 2 2 2
-2 2 2 2 2 2 2 2 2 2
-2 3 2 2 2 2 2 2 2 2
-2 3 2 2 2 2 2 2 2 2
-2 3 3 4 2 2 2 2 2 2
-2 2 2 2 2 2 2 2 2 2
-   NB. pallete1 is defined in j/algebra.ijs
-   pallete1 viewmat A
+   NB. toPlotMatrix and pallete1 are defined in j/algebra.ijs
+   ]xs=: 7 2 $ 4 0 3 0 2 0 1 0 0 0 0 1 0 2
+4 0
+3 0
+2 0
+1 0
+0 0
+0 1
+0 2
+   ]A=: xs toPlotMatrix (_5, _5, 5, 5, 10, 10)
+0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 1 1 1 1 1 0 0
+0 0 0 0 0 1 0 0 0 0 0 0
+0 0 0 0 0 1 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0
+
+   ]twocolors=: ({: ,: {.) pallete1
+199 206 234
+255 154 162
+
+twocolors viewmat A
 ```
 Intial matrix **A** is below
 
@@ -1561,14 +1580,16 @@ Intial matrix **A** is below
 
 Let's now interchange row 2 with 4:
 ```
-   ]A1=: 2 4 interchangeR A
-2 2 2 2 2 2 2 2 2 2
-2 2 2 2 2 2 2 2 2 2
-2 3 3 4 2 2 2 2 2 2
-2 3 2 2 2 2 2 2 2 2
-2 3 2 2 2 2 2 2 2 2
-2 2 2 2 2 2 2 2 2 2
-   pallete1 viewmat A1
+   ]xs1=: 0 1 interchangeC xs
+0 4
+0 3
+0 2
+0 1
+0 0
+1 0
+2 0
+   A1=: xs1 toPlotMatrix (_5, _5, 5, 5, 10, 10)
+   twocolors viewmat A1
 ```
 The result is below
 
