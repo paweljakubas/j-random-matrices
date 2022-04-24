@@ -1591,9 +1591,9 @@ Let's now interchange row 2 with 4:
    A1=: xs1 toPlotMatrix (_5, _5, 5, 5, 10, 10)
    twocolors viewmat A1
 ```
-The result is below
+The result **A1** is below
 
-![Initial matrix with rows interchanged](../figures/fig1_2.png)
+![Initial matrix with columns interchanged](../figures/fig1_2.png)
 
 In **scaling** elementary operation each element in a given column (row) is multiplied
 by the provided factor. For both column and row cases this could be realized as follows:
@@ -1613,6 +1613,27 @@ f =: 4 : '(y * x)'
 108 109 110 111
 112 113 114 115
 ```
+
+Let's visualize the scaling
+```
+   NB. 5th row is multiplied by 3, hence we witness discontinity as
+   NB. (0,1) -> (0,3)
+   ]xs2=: 3 5 scaleR xs
+4 0
+3 0
+2 0
+1 0
+0 0
+0 3
+0 2
+   A2=: xs2 toPlotMatrix (_5, _5, 5, 5, 10, 10)
+   twocolors viewmat A2
+```
+
+The result **A2** is below
+
+![Initial matrix with 5th row multiplied by 3](../figures/fig1_3.png)
+
 
 The **addition** elementary operation in a column case entails adding column scaled by some factor
 ,element-wise, to other column. The case for the row varies with the choice of a row selector
@@ -1637,6 +1658,43 @@ with selectors. Then we do the same for the row 0:
 210 211 212 213
 215 216 217 218
 ```
+
+Let's visualize the addition. At first make col1 equal to 1*col0+col1.
+```
+   ]xs3=: 1 1 0 additionC xs
+4 4
+3 3
+2 2
+1 1
+0 0
+0 1
+0 2
+   A3=: xs3 toPlotMatrix (_5, _5, 5, 5, 10, 10)
+   twocolors viewmat A3
+```
+
+The result **A3** is below
+
+![Initial matrix with second column being the 1st column added to itself](../figures/fig1_4.png)
+
+Now, make col0 equal to col0+1*col1.
+```
+   ]xs4=: 1 0 1 additionC xs
+4 0
+3 0
+2 0
+1 0
+0 0
+1 1
+2 2
+   A4=: xs4 toPlotMatrix (_5, _5, 5, 5, 10, 10)
+   twocolors viewmat A4
+```
+
+The result **A4** is below
+
+![Initial matrix with the first column being the 2nd column added to itself](../figures/fig1_5.png)
+
 
 **Exercise 26**
 Show that the three basic operations can be realized by matrix multiplication of the transformed identity matrices.
