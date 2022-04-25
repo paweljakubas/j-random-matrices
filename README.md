@@ -51,6 +51,6 @@ Following is the list of books that I found especially useful during the first i
 
 ## Contents
 ### [Basic linear algebra](chapters/basic-algebra.md)
-### [Intermediate linear algebra]
+### [Intermediate linear algebra](chapters/intermediate-algebra.md)
 ### [Advanced linear algebra]
 ### [Random matrix theory]

@@ -1940,10 +1940,16 @@ Now let's rotate the A clockwise usin T
 
 ![Initial matrix rotated 45 degrees clockwise](../figures/fig1_7.png)
 
+Working column-wise gives the same results as in the above figure.
+```
+   D2=: (|: T) mult (|: D)
+   A2=: (|: D2) toPlotMatrix (_2, _2, 8, 8, 40, 40)
+   twocolors viewmat A2
+```
 
 ### Givens Rotations
 Let's reformulate rotation matrix to have following
-<img src="https://latex.codecogs.com/svg.image?G&space;=&space;\begin{pmatrix}c&space;&&space;s&space;\\&space;-s&space;&&space;c&space;\\\end{pmatrix}&space;,&space;c^{2}&space;&plus;&space;s^{2}&space;=&space;1" title="G = \begin{pmatrix}c & s \\ -s & c \\\end{pmatrix} , c^{2} + s^{2} = 1" />
+<img src="https://latex.codecogs.com/svg.image?G&space;=&space;\begin{pmatrix}c&space;&&space;s&space;\\&space;-s&space;&&space;c&space;\\\end{pmatrix}&space;,&space;c^{2}&space;&plus;&space;s^{2}&space;=&space;1" title="G = \begin{pmatrix}c & s \\ -s & c \\\end{pmatrix} , c^{2} + s^{2} = 1" /> .
 We have the below properties:
 ```
    ]vec=: 2 1 $ 4 3
