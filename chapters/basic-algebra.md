@@ -14,9 +14,9 @@
 8. [Inverse of a matrix](#inverse-of-matrix)
 9. [Elementary operations of a matrix II](#elementary-operations-in-matrix-ii)
     - [Matrix elementary row and column operations](#matrix-elementary-row-and-column-operations)
-    - [Orthogonal transformations](#orthogonal-transformations) - IN PROGRESS
-    - [Givens rotations](#givens-rotations) - TODO
-    - [Householder reflections](#householder-reflections) - TODO
+    - [Orthogonal transformations](#orthogonal-transformations)
+    - [Givens rotations](#givens-rotations)
+    - [Householder reflections](#householder-reflections) - IN PROGRESS
 10. [Trace of a matrix](#trace-of-matrix)
 11. [LU decomposition](#lu-decomposition)
     - [Gaussian elimination](#gaussian-elimination)
@@ -1948,9 +1948,9 @@ Working column-wise gives the same results as in the above figure.
 ```
 
 ### Givens Rotations
-Let's reformulate rotation matrix to have following
+Let's reformulate rotation matrix to have
 <img src="https://latex.codecogs.com/svg.image?G&space;=&space;\begin{pmatrix}c&space;&&space;s&space;\\&space;-s&space;&&space;c&space;\\\end{pmatrix}&space;,&space;c^{2}&space;&plus;&space;s^{2}&space;=&space;1" title="G = \begin{pmatrix}c & s \\ -s & c \\\end{pmatrix} , c^{2} + s^{2} = 1" /> .
-We have the below properties:
+We can observe what follows:
 ```
    ]vec=: 2 1 $ 4 3
 4
@@ -1971,12 +1971,131 @@ _0.6 0.8
 5
 0
    NB. Having vector vec=(x1 x2)^T we can construct G where c=x1/norm(vec) and s=x2/norm(vec)
-   NB. G mult vec nullifies the second element, so G is a plane rotation that rotates vec in such a way that
+   NB. G multliplying vec nullifies the second element, so G is a plane rotation that rotates vec in such a way that
    NB. the vector does ceases to have projection on the second axis.
    vec=: 2 1 $ 10 0
    (x: (G vec)) mult vec
 10
  0
+```
+
+The technique can be extended for more dimensions. The rotation matrix is embedded inside
+the identity matrix, starting from bottom-left corner which nullifies the last element of the vector.
+Then in the next step the translated towards top-right corner rotation matrix is constructed.
+And the processs is continued until only one element in the vector stands. Let's see
+an example to understand the procedure better.
+```
+   ]vec=: 4 1 $ 1 2 3 4
+1
+2
+3
+4
+
+   G=: 4 : 0
+assert. ( (>:x) < #y)
+l=.(< (<0),(<x)) { (|: y)
+r=.(< (<0),(<(>:x))) { (|: y)
+norm=.%: ( (*:l) + (*:r) )
+m=.(2 2 $ l, r, (-r), l) % norm
+xs=.x,>:x
+sel=. (<(<xs),(<xs))
+m sel } =/~ (i.#y)
+)
+
+   3 G vec
+|assertion failure: G
+|       ((>:x)<#y)
+
+   NB. rotation with 3 4
+   2 G vec
+1 0    0   0
+0 1    0   0
+0 0  0.6 0.8
+0 0 _0.8 0.6
+
+   NB. rotation with 2 3
+   1 G vec
+1        0       0 0
+0   0.5547 0.83205 0
+0 _0.83205  0.5547 0
+0        0       0 1
+
+   NB. rotation with 1 2
+   0 G vec
+ 0.447214 0.894427 0 0
+_0.894427 0.447214 0 0
+        0        0 1 0
+        0        0 0 1
+
+   NB. We will adopt customized precision
+   DP=:40
+   round=: DP&$: : (4 : 0)
+ b %~ <.1r2+y*b=. 10x^x
+)
+   NB. 'round' rounds y to x decimal places
+   3 round 1.2222234555
+611r500
+   10 round _4.44089e_16
+0
+
+   NB. Now let's construct sequence of rotations
+   NB. Rotation G3 of vec in plane (3,4)
+   ]G3=:2 G vec
+1 0    0   0
+0 1    0   0
+0 0  0.6 0.8
+0 0 _0.8 0.6
+   ]vec3=: 10&round (G3 mult vec)
+1
+2
+5
+0
+
+   NB. Rotation G2 of vec in plane (2,3)
+   ]G2=: 1 G vec3
+1         0        0 0
+0  0.371391 0.928477 0
+0 _0.928477 0.371391 0
+0         0        0 1
+   ]vec2=: 10&round (G2 mult vec3)
+                    1
+6731456009r1250000000
+                    0
+                    0
+
+   NB. Rotation G1 of vec in plane (1,2)
+   ]G1=: 0 G vec2
+ 0.182574 0.983192 0 0
+_0.983192 0.182574 0 0
+        0        0 1 0
+        0        0 0 1
+   ]res=: 10&round (G1 mult vec2)
+6846531969r1250000000
+                    0
+                    0
+                    0
+
+   NB. G1 (G2 G3)
+   ]P=: G1 mult (G2 mult G3)
+ 0.182574  0.365148 0.547723 0.730297
+_0.983192 0.0678064  0.10171 0.135613
+        0 _0.928477 0.222834 0.297113
+        0         0     _0.8      0.6
+
+   ]res=:10&round (P mult vec)
+54772255751r10000000000
+                      0
+                      0
+                      0
+
+   0 { res
+54772255751r10000000000
+   _1 x: 0 { res
+5.47723
+
+   NB. norm of initial vec the same
+   %: +/"1 *: |: vec
+5.47723
 ```
 
 ### Householder reflections
@@ -2517,7 +2636,7 @@ Solve systems of equations in Exercise 30 using LAPACK's Gaussian elimination wi
 
 
 **Exercise 32**
-Solve systems of equations in Exercise 30 using LAPACK's `sgesv` that computes the solution to
+Solve systems of equations in Exercise 30 using LAPACK's `dgesv` that computes the solution to
 system of linear equations A * X = B for GE matrices. Under the hood it uses LU decomposition `dgetrf`
 which we covered above.
 
