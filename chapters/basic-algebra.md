@@ -1979,7 +1979,7 @@ _0.6 0.8
  0
 ```
 
-The technique can be extended for more dimensions. The rotation matrix is embedded inside
+The technique can be extended for more dimensional vector. The rotation matrix is embedded inside
 the identity matrix, starting from bottom-left corner which nullifies the last element of the vector.
 Then in the next step the translated towards top-right corner rotation matrix is constructed.
 And the processs is continued until only one element in the vector stands. Let's see
@@ -2093,9 +2093,86 @@ _0.983192 0.0678064  0.10171 0.135613
    _1 x: 0 { res
 5.47723
 
-   NB. norm of initial vec the same
+   NB. norm of initial vec is the same
    %: +/"1 *: |: vec
 5.47723
+```
+
+This procedure can be gathered in the following fold:
+```
+  givens=: 3 : 0
+ix=.<:<:#y
+s=. 1, (#y), #y
+((s$,ix G y);y) ] F.: {{ ( ( ((>0}y)&,) @ ([: (s&$ @ ,)  x&G)) ; ]) (10&round (({:>0}y) mult (>1}y))) }} i.ix
+)
+   givens vec
+┌────────────────────────────────┬───────────────────────┐
+│        1         0        0   0│                      1│
+│        0         1        0   0│53851648071r10000000000│
+│        0         0      0.6 0.8│                      0│
+│        0         0     _0.8 0.6│                      0│
+│                                │                       │
+│        1         0        0   0│                       │
+│        0  0.371391 0.928477   0│                       │
+│        0 _0.928477 0.371391   0│                       │
+│        0         0        0   1│                       │
+│                                │                       │
+│ 0.182574  0.983192        0   0│                       │
+│_0.983192  0.182574        0   0│                       │
+│        0         0        1   0│                       │
+│        0         0        0   1│                       │
+└────────────────────────────────┴───────────────────────┘
+   ]Gs=:>0}givens vec
+        1         0        0   0
+        0         1        0   0
+        0         0      0.6 0.8
+        0         0     _0.8 0.6
+
+        1         0        0   0
+        0  0.371391 0.928477   0
+        0 _0.928477 0.371391   0
+        0         0        0   1
+
+ 0.182574  0.983192        0   0
+_0.983192  0.182574        0   0
+        0         0        1   0
+        0         0        0   1
+
+   ]G1=:0{Gs
+1 0    0   0
+0 1    0   0
+0 0  0.6 0.8
+0 0 _0.8 0.6
+   ]G2=:1{Gs
+1         0        0 0
+0  0.371391 0.928477 0
+0 _0.928477 0.371391 0
+0         0        0 1
+   ]G3=:2{Gs
+ 0.182574 0.983192 0 0
+_0.983192 0.182574 0 0
+        0        0 1 0
+        0        0 0 1
+
+   ]P=: G3 mult (G2 mult G1)
+ 0.182574  0.365148 0.547723 0.730297
+_0.983192 0.0678064  0.10171 0.135613
+        0 _0.928477 0.222834 0.297113
+        0         0     _0.8      0.6
+
+   NB. Or alternatively
+   ]P=:mult/ |. >0}givens vec
+ 0.182574  0.365148 0.547723 0.730297
+_0.983192 0.0678064  0.10171 0.135613
+        0 _0.928477 0.222834 0.297113
+        0         0     _0.8      0.6
+
+   10&round P mult vec
+54772255751r10000000000
+                      0
+                      0
+                      0
+
 ```
 
 ### Householder reflections

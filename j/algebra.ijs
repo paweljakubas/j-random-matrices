@@ -59,6 +59,20 @@ NB. 0 0 0 0
 NB. 0 0 0 0
 NB. 1 0 0 0
 
+NB. Round y to x decimal places
+round=: 40&$: : (4 : 0)
+ b %~ <.1r2+y*b=. 10x^x
+)
+NB. Examples
+NB.    3 round 1.2222234555
+NB. 611r500
+NB.    10 round _4.44089e_16
+NB. 0
+NB.    16 round _4.44089e_16
+NB. _1r2500000000000000
+NB.    15 round _4.44089e_16
+NB. 0
+
 NB. Transpose of a matrix
 transpose=: |:
 NB.    transpose (2 3 $ 1 2 3 4 5 6)
