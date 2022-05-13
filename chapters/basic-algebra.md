@@ -54,7 +54,7 @@ ie., via enforcing 0 and 1 indices in the selector:
 100 101
 104 105
 ```
-There is a way to choose either whole columns or rows by using *a:* :
+There is a way to choose either all columns or all rows by using *a:* :
 ```
    sel=: (<(<a:),(<0 1))
    sel { m
@@ -98,8 +98,8 @@ It is also possible to combine selections with each other:
 114 115
 ```
 Let's now see how we can negate a selector and select all elements except those specified by the selector.
-Above we were omitting indices in a given axis, now we want to learn how to treat a selection as mask
-and take everything except what the selection pinpoints. As the result can be non-rectangular, we need to
+Above we were omitting indices in a given axis, now we want to learn how to treat a selection as a mask
+and take everything except what the selection frames. As the result can be non-rectangular, we need to
 realize the operation in a linearized form to make sure we have a general solution.
 After we get the result we can reshape it as we want:
 ```
@@ -2176,6 +2176,14 @@ _0.983192 0.0678064  0.10171 0.135613
 ```
 
 ### Householder reflections
+
+Householder transformation acting on *x* transforms it into <img src="https://latex.codecogs.com/svg.image?e_{1}" title="https://latex.codecogs.com/svg.image?e_{1}" />.
+It utilizes the observation that <img src="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" title="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" /> where
+<img src="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" title="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" />.
+If we have *P* then <img src="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" title="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" />. The second form is
+prriviledged as marix-vector multiplication engaged there requires *4n* steps. In contrast to situation when *P* is explicitly constructed - in such a case,
+<img src="https://latex.codecogs.com/svg.image?n^{2}" title="https://latex.codecogs.com/svg.image?n^{2}" /> steps are needed.
+
 
 
 ### Trace of matrix
