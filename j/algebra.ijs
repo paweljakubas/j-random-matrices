@@ -98,6 +98,46 @@ NB. 7 14 7 14
 NB.    $c
 NB. 2 4
 
+NB. Rotation matrix where x defines the anchor diagonal index
+NB. and y is vector
+G=: 4 : 0
+assert. ( (>:x) < #y)
+l=.(< (<0),(<x)) { (|: y)
+r=.(< (<0),(<(>:x))) { (|: y)
+norm=.%: ( (*:l) + (*:r) )
+m=.(2 2 $ l, r, (-r), l) % norm
+xs=.x,>:x
+sel=. (<(<xs),(<xs))
+m sel } =/~ (i.#y)
+)
+NB. Examples:
+NB.    3 G y
+NB. |assertion failure: G
+NB. |       ((>:x)<#y)
+NB.    2 G y
+NB. 1 0    0   0
+NB. 0 1    0   0
+NB. 0 0  0.6 0.8
+NB. 0 0 _0.8 0.6
+NB.    1 G y
+NB. 1        0       0 0
+NB. 0   0.5547 0.83205 0
+NB. 0 _0.83205  0.5547 0
+NB. 0        0       0 1
+NB.    0 G y
+NB.  0.447214 0.894427 0 0
+NB. _0.894427 0.447214 0 0
+NB.         0        0 1 0
+NB.         0        0 0 1
+
+NB. Givens rotations for a given vector y
+givens=: 3 : 0
+ix=.<:<:#y
+s=. 1, (#y), #y
+((s$,ix G y);y) ] F.: {{ ( ( ((>0}y)&,) @ ([: (s&$ @ ,)  x&G)) ; ]) (10&round (({:>0}y) mult (>1}y))) }} i.ix
+)
+
+
 
 NB. Decompose each index in a given array into respective coordinates
 toIxs=: 3 : '(#:i.)@$y'
