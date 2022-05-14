@@ -2157,7 +2157,7 @@ This procedure can be gathered in the following fold `F.:`:
 ```
   givens=: 3 : 0
 ix=.<:<:#y
-s=. 1, (#y), #y
+s=: 1, (#y), #y
 ((s$,ix G y);y) ] F.: {{ ( ( ((>0}y)&,) @ ([: (s&$ @ ,)  x&G)) ; ]) (10&round (({:>0}y) mult (>1}y))) }} i.ix
 )
    givens vec
