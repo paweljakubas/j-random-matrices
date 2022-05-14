@@ -2177,14 +2177,63 @@ _0.983192 0.0678064  0.10171 0.135613
 
 ### Householder reflections
 
-Householder transformation acting on *x* transforms it into <img src="https://latex.codecogs.com/svg.image?e_{1}" title="https://latex.codecogs.com/svg.image?e_{1}" />.
-It utilizes the observation that <img src="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" title="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" /> where
-<img src="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" title="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" />.
-If we have *P* then <img src="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" title="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" />. The second form is
-prriviledged as marix-vector multiplication engaged there requires *4n* steps. In contrast to situation when *P* is explicitly constructed - in such a case,
+Householder transformation acting on *x* transforms it into <img src="https://latex.codecogs.com/svg.image?|x|e_{1}" title="https://latex.codecogs.com/svg.image?|x|e_{1}" />.
+It utilizes the observation that if <img src="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" title="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" /> where
+<img src="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" title="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" />
+then <img src="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" title="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" />. The second form is
+priviledged as marix-vector multiplication engaged there requires *4n* steps. In contrast to the case when *P* is explicitly constructed - in such a case,
 <img src="https://latex.codecogs.com/svg.image?n^{2}" title="https://latex.codecogs.com/svg.image?n^{2}" /> steps are needed.
 
+```
+householder=: 3 : 0
+'r c' =. ,"0 $ y
+assert ( c = 1 )
+assert ( r > 1 )
+norm=. {{ %: +/ y*y }}
+ke=. ($ y) $ (norm y),((<:r) ;@# 0)
+v=. y - ke
+u=. |: (|: % norm) v
+p=. (=/~ (i.r)) - ((2 * u) mult |: u)
+u;p
+)
+   householder (4 1 $ 1 2 3 4)
+┌─────────┬──────────────────────────────────────┐
+│_0.639307│0.182574  0.365148  0.547723  0.730297│
+│ 0.285582│0.365148  0.836886 _0.244671 _0.326227│
+│ 0.428372│0.547723 _0.244671  0.632994 _0.489341│
+│ 0.571163│0.730297 _0.326227 _0.489341  0.347545│
+└─────────┴──────────────────────────────────────┘
 
+   ]u=: >0}householder (4 1 $ 1 2 3 4)
+_0.639307
+ 0.285582
+ 0.428372
+ 0.571163
+   ]P=: >1}householder (4 1 $ 1 2 3 4)
+0.182574  0.365148  0.547723  0.730297
+0.365148  0.836886 _0.244671 _0.326227
+0.547723 _0.244671  0.632994 _0.489341
+0.730297 _0.326227 _0.489341  0.347545
+
+   NB. X - (2*u) mult (u'mult X)
+   10&round y - ((2 * u) mult ((|: u) mult y))
+54772255751r10000000000
+                      0
+                      0
+                      0
+
+   NB. P mult X
+   10&round P mult y
+54772255751r10000000000
+                      0
+                      0
+                      0
+```
+
+Both Householder reflection and Givens rotations give rise to construct a transformation
+that is transforming a vector to one component vector of the same dimension. Within Givens rotations
+we need (n-1) rotations for a n-dimensional vector to obtain final result. In case of Householder reflection
+one step, ie. one reflection, achieves the goal.
 
 ### Trace of matrix
 The trace of a square matrix *A* is the sum of its diagonal elements.
