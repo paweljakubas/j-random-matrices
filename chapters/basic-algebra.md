@@ -2234,8 +2234,8 @@ _0.983192 0.0678064  0.10171 0.135613
 Householder transformation acting on *x* transforms it into <img src="https://latex.codecogs.com/svg.image?|x|e_{1}" title="https://latex.codecogs.com/svg.image?|x|e_{1}" />.
 It utilizes the observation that if <img src="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" title="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" /> where
 <img src="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" title="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" />
-then <img src="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" title="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" />. We can transform *x* by either constructing *P* or construct *u* and then <img src="https://latex.codecogs.com/svg.image?x-uu^{T}x" title="https://latex.codecogs.com/svg.image?x-uu^{T}x" />. The latter approach is
-priviledged as marix-vector multiplication engaged there requires *4n* steps. In contrast to the former case when *P* is explicitly constructed - in such a case,
+then <img src="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" title="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" />. We can transform *x* by either constructing *P* and calculating *Px* or construct *u* and then calculating <img src="https://latex.codecogs.com/svg.image?x-uu^{T}x" title="https://latex.codecogs.com/svg.image?x-uu^{T}x" />.
+The latter approach is priviledged as a marix-vector multiplication engaged there requires *4n* steps. In contrast to the former case when *P* is explicitly constructed - in such a case,
 <img src="https://latex.codecogs.com/svg.image?n^{2}" title="https://latex.codecogs.com/svg.image?n^{2}" /> steps are needed.
 
 ```
@@ -2831,6 +2831,42 @@ which we covered above.
 [Solution to exercise 32](#solution-to-exercise-32)
 
 ### QR decomposition
+
+In QR decomposition we are applying sequentially Householder reflections embedded diagonally in identity matrix in such a way
+that column by column we zeroing elements below the diagonal. In the aftermath, we end up with an upper triangular matrix, *R*, and
+product of sized Householder reflections. As sized Householder reflection is orthogonal, the product of them is also orhogonal.
+Also the inverse of the orthogonal matrix is the transpose of it.
+So *QR* gives rise to decomposition to orthogonal and upper triangular matrix. In contrast to *LU* decomposition that resulted in
+decomposition into lower and upper triangular matrices.
+
+Let's do the following example by hand first (we will use `householder` function in j/algebra.ijs' developed in Householder reflection section above).
+
+```
+   ]A=: 4 3 $ 1 1 1 1 2 4 1 3 9 1 4 16
+1 1  1
+1 2  4
+1 3  9
+1 4 16
+
+  NB. First column of A
+   ]H1=: >1 { householder 4 1 $ (<(<a:),(<0)) { A
+0.5  0.5  0.5  0.5
+0.5  0.5 _0.5 _0.5
+0.5 _0.5  0.5 _0.5
+0.5 _0.5 _0.5  0.5
+   ]A1=: H1 mult A
+2  5  15
+0 _2 _10
+0 _1  _5
+0  0   2
+
+  NB. Second column of A1
+   ]h2=: >1 { householder 3 1 $ }. (<(<a:),(<1)) { A1
+_0.894427 _0.447214 0
+_0.447214  0.894427 0
+        0         0 1
+
+```
 
 ### Rank of matrix
 
