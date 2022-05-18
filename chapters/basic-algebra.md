@@ -16,13 +16,13 @@
     - [Matrix elementary row and column operations](#matrix-elementary-row-and-column-operations)
     - [Orthogonal transformations](#orthogonal-transformations)
     - [Givens rotations](#givens-rotations)
-    - [Householder reflections](#householder-reflections) - IN PROGRESS
+    - [Householder reflections](#householder-reflections)
 10. [Trace of a matrix](#trace-of-matrix)
 11. [LU decomposition](#lu-decomposition)
     - [Gaussian elimination](#gaussian-elimination)
     - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)
     - [LAPACK](#lapack)
-12. [QR decomposition](#qr-decomposition) - TODO
+12. [QR decomposition](#qr-decomposition) - IN PROGRESS
 13. [Rank of a matrix](#rank-of-matrix) - TODO
 14. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
@@ -2234,8 +2234,8 @@ _0.983192 0.0678064  0.10171 0.135613
 Householder transformation acting on *x* transforms it into <img src="https://latex.codecogs.com/svg.image?|x|e_{1}" title="https://latex.codecogs.com/svg.image?|x|e_{1}" />.
 It utilizes the observation that if <img src="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" title="https://latex.codecogs.com/svg.image?P=I-2uu^{T}" /> where
 <img src="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" title="https://latex.codecogs.com/svg.image?u=\frac{x-|x|e_{1}}{|x-|x|e_{1}|}" />
-then <img src="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" title="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" />. The second form is
-priviledged as marix-vector multiplication engaged there requires *4n* steps. In contrast to the case when *P* is explicitly constructed - in such a case,
+then <img src="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" title="https://latex.codecogs.com/svg.image?Px=|x|e_{1}" />. We can transform *x* by either constructing *P* or construct *u* and then <img src="https://latex.codecogs.com/svg.image?x-uu^{T}x" title="https://latex.codecogs.com/svg.image?x-uu^{T}x" />. The latter approach is
+priviledged as marix-vector multiplication engaged there requires *4n* steps. In contrast to the former case when *P* is explicitly constructed - in such a case,
 <img src="https://latex.codecogs.com/svg.image?n^{2}" title="https://latex.codecogs.com/svg.image?n^{2}" /> steps are needed.
 
 ```

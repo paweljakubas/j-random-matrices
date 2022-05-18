@@ -131,6 +131,7 @@ NB.         0        0 1 0
 NB.         0        0 0 1
 
 NB. Givens rotations for a given vector y
+NB. Returns G1, G2, ... Givens rotations
 givens=: 3 : 0
 'r c' =. ,"0 $ y
 assert ( c = 1 )
@@ -174,6 +175,7 @@ NB.                       0
 NB.                       0
 
 NB. Householder reflection working on y vector
+NB. Returns u vector and P matrix
 householder=: 3 : 0
 'r c' =. ,"0 $ y
 assert ( c = 1 )
