@@ -2847,6 +2847,11 @@ Let's do the following example by hand first (we will use `householder` function
 1 2  4
 1 3  9
 1 4 16
+   'r c' =. ,"0 $ A
+   r
+4
+   c
+3
 
   NB. First column of A
    ]H1=: >1 { householder 4 1 $ (<(<a:),(<0)) { A
@@ -2865,7 +2870,48 @@ Let's do the following example by hand first (we will use `householder` function
 _0.894427 _0.447214 0
 _0.447214  0.894427 0
         0         0 1
+   ]H2=: h2 (<(<1 2 3),(<1 2 3)) } =/~ (i.r)
+1         0         0 0
+0 _0.894427 _0.447214 0
+0 _0.447214  0.894427 0
+0         0         0 1
+   ]A2=: H2 mult A1
+2       5      15
+0 2.23607 11.1803
+0       0       0
+0       0       2
 
+   NB. Third column of A2
+   ]h3=: 10&round >1 { householder 2 1 $ }. }. (<(<a:),(<2)) { A2
+0 1
+1 0
+   ]H3=: h3 (<(<2 3),(<2 3)) } =/~ (i.r)
+1 0 0 0
+0 1 0 0
+0 0 0 1
+0 0 1 0
+   ]R=: H3 mult A2
+2       5      15
+0 2.23607 11.1803
+0       0       2
+0       0       0
+
+  NB. Hi (H inverted) is as follows
+   ]Hi=: H3 mult (H2 mult H1)
+     0.5       0.5      0.5       0.5
+_0.67082 _0.223607 0.223607   0.67082
+     0.5      _0.5     _0.5       0.5
+0.223607  _0.67082  0.67082 _0.223607
+   ]H=: |: Hi
+0.5  _0.67082  0.5  0.223607
+0.5 _0.223607 _0.5  _0.67082
+0.5  0.223607 _0.5   0.67082
+0.5   0.67082  0.5 _0.223607
+   H mult R
+1 1  1
+1 2  4
+1 3  9
+1 4 16
 ```
 
 ### Rank of matrix
