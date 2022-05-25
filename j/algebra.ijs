@@ -73,6 +73,9 @@ NB. _1r2500000000000000
 NB.    15 round _4.44089e_16
 NB. 0
 
+NB. Round y to 10 decimal places
+r10=: 10&round
+
 NB. Transpose of a matrix
 transpose=: |:
 NB.    transpose (2 3 $ 1 2 3 4 5 6)
@@ -138,7 +141,7 @@ assert ( c = 1 )
 assert ( r > 1 )
 ix=.<:<:#y
 s=: 1, (#y), #y
-((s$,ix G y);y) ] F.: {{ ( ( ((>0}y)&,) @ ([: (s&$ @ ,)  x&G)) ; ]) (10&round (({:>0}y) mult (>1}y))) }} i.ix
+>0} ((s$,ix G y);y) ] F.: {{ ( ( ((>0}y)&,) @ ([: (s&$ @ ,)  x&G)) ; ]) (r10 (({:>0}y) mult (>1}y))) }} i.ix
 )
 NB. Examples:
 NB. ]vec=: 4 1 $ 1 2 3 4
@@ -163,12 +166,12 @@ NB. │_0.983192  0.182574        0   0│                       │
 NB. │        0         0        1   0│                       │
 NB. │        0         0        0   1│                       │
 NB. └────────────────────────────────┴───────────────────────┘
-NB.    ]P=:mult/ |. >0}givens vec
+NB.    ]P=:mult/ |. givens vec
 NB.  0.182574  0.365148 0.547723 0.730297
 NB. _0.983192 0.0678064  0.10171 0.135613
 NB.         0 _0.928477 0.222834 0.297113
 NB.         0         0     _0.8      0.6
-NB.    10&round P mult vec
+NB.    r10 P mult vec
 NB. 54772255751r10000000000
 NB.                       0
 NB.                       0
@@ -207,14 +210,14 @@ NB. 0.547723 _0.244671  0.632994 _0.489341
 NB. 0.730297 _0.326227 _0.489341  0.347545
 NB.
 NB.    NB. X - (2*u) mult (u'mult X)
-NB.    10&round y - ((2 * u) mult ((|: u) mult y))
+NB.    r10 y - ((2 * u) mult ((|: u) mult y))
 NB. 54772255751r10000000000
 NB.                       0
 NB.                       0
 NB.                       0
 NB.
 NB.    NB. P mult X
-NB.    10&round P mult y
+NB.    r10 P mult y
 NB. 54772255751r10000000000
 NB.                       0
 NB.                       0
