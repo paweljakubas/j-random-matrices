@@ -223,7 +223,8 @@ NB.                       0
 NB.                       0
 NB.                       0
 
-NB. QR decomposition, takes matrix to be decomposed as y and rounding place as x, and returns 'Hs R'
+NB. QR decomposition, takes matrix to be decomposed as y and number of rounding place as x,
+NB. and returns 'Hs R Q R1 Q1'
 qr=: 4 : 0
 'r c' =: ,"0 $ y
 h1=: >1 { householder (r, 1) $ (<(<a:),(<0)) { y
@@ -233,8 +234,10 @@ dH=: 1, r, r
 dR=: 1, r, c
 S0=:(dH$,h1);(dR $, r1)
 'Hs R'=:S0 ]F..{{( ((>0}y)&,) ; (rr @ (mult"2&(>1}y))) ) @ (dH$,) (rr>1 { householder (((<:^:x)r), 1) $ (}.^:x) (<(<0),(<a:),(<x)) { (>1}y)) (<(<(}.^:x i.r)),(<(}.^:x i.r))) } =/~ (i.r)}}>:i.<:c
-Hs;((r,c) $ ,R)
+Q=:|: mult/ |. Hs
+Hs;((r,c) $ ,R);Q;((<(<i.c),(<a:)) { (r,c) $, R );((<(<a:),(<i.c)) { Q)
 )
+
 
 NB.    Examples:
 NB.    ]A=: 4 3 $ 1 1 1 1 2 4 1 3 9 1 4 16
@@ -273,6 +276,16 @@ NB. 0.5 _0.223607 _0.5  _0.67082
 NB. 0.5  0.223607 _0.5   0.67082
 NB. 0.5   0.67082  0.5 _0.223607
 NB.    (|: mult/ |. Hs) mult R
+NB. 1 1  1
+NB. 1 2  4
+NB. 1 3  9
+NB. 1 4 16
+NB.    (>2{res) mult (>1{res)
+NB. 1 1  1
+NB. 1 2  4
+NB. 1 3  9
+NB.    (>4{res) mult (>3{res)
+NB. 1 4 16
 NB. 1 1  1
 NB. 1 2  4
 NB. 1 3  9
