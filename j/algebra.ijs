@@ -223,16 +223,17 @@ NB.                       0
 NB.                       0
 NB.                       0
 
-NB. QR decomposition, takes matrix as y and returns 'Hs R'
-qr=: 3 : 0
+NB. QR decomposition, takes matrix to be decomposed as y and rounding place as x, and returns 'Hs R'
+qr=: 4 : 0
 'r c' =: ,"0 $ y
 h1=: >1 { householder (r, 1) $ (<(<a:),(<0)) { y
-r1=: 10&round h1 mult y
-s=:1,r,r
-S0=:(s$,h1);((1,r,c) $, r1)
-'Hs R'=:S0 ]F..{{( ((>0}y)&,) ; (r10 @ (mult"2&(>1}y))) ) @ (s$,) (r10 >1 { householder (((<:^:x)r), 1) $ (}.^:x) (<(<0),(<a:),(<x)) { (>1}y)) (<(<(}.^:x i.r)),(<(}.^:x i.r))) } =/~ (i.r)}}>:i.<:<:r
-'s1 r1 c1' =. ,"0 $ R
-Hs;((r1,c1) $ ,R)
+rr=: x&round
+r1=: rr h1 mult y
+dH=: 1, r, r
+dR=: 1, r, c
+S0=:(dH$,h1);(dR $, r1)
+'Hs R'=:S0 ]F..{{( ((>0}y)&,) ; (rr @ (mult"2&(>1}y))) ) @ (dH$,) (rr>1 { householder (((<:^:x)r), 1) $ (}.^:x) (<(<0),(<a:),(<x)) { (>1}y)) (<(<(}.^:x i.r)),(<(}.^:x i.r))) } =/~ (i.r)}}>:i.<:c
+Hs;((r,c) $ ,R)
 )
 
 NB.    Examples:
@@ -242,7 +243,7 @@ NB. 1 2  4
 NB. 1 3  9
 NB. 1 4 16
 NB.
-NB.    qr A
+NB.    10 qr A
 NB. ┌────────────────────────────┬────────────────────────────────────────┐
 NB. │0.5       0.5       0.5  0.5│2                   5                 15│
 NB. │0.5       0.5      _0.5 _0.5│0 894427191r400000000 894427191r80000000│

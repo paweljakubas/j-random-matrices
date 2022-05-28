@@ -21,8 +21,10 @@
 11. [LU decomposition](#lu-decomposition)
     - [Gaussian elimination](#gaussian-elimination)
     - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)
-    - [LAPACK](#lapack)
-12. [QR decomposition](#qr-decomposition) - IN PROGRESS
+    - [LAPACK](#lu-lapack)
+12. [QR decomposition](#qr-decomposition)
+    - [Least squares problem](#least-squares-problem) IN PROGRESS
+    - [LAPACK](#qr-lapack)
 13. [Rank of a matrix](#rank-of-matrix) - TODO
 14. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
@@ -2660,7 +2662,7 @@ Solve systems of equations below using Gaussian elimination without and with piv
 [Solution to exercise 30](#solution-to-exercise-30)
 
 
-#### LAPACK
+#### LU LAPACK
 
 Before we try LAPACK implementation let's underline the basics that are needed to work consciously with LAPACK.
 We are going to call [http://www.netlib.org/lapack/explore-html/dd/d9a/group__double_g_ecomputational_ga0019443faea08275ca60a734d0593e60.html]
@@ -2833,13 +2835,13 @@ which we covered above.
 ### QR decomposition
 
 In QR decomposition we are applying sequentially Householder reflections embedded diagonally in identity matrix in such a way
-that column by column we zeroing elements below the diagonal. In the aftermath, we end up with an upper triangular matrix, *R*, and
-product of sized Householder reflections. As sized Householder reflection is orthogonal, the product of them is also orhogonal.
+that column by column we are zeroing the elements below the diagonal element. As a consequence, we end up with an upper triangular matrix, *R*, and a
+product of the embedded Householder reflections. As the embedded Householder reflection is orthogonal, the product of them is also orhogonal.
 Also the inverse of the orthogonal matrix is the transpose of it.
-So *QR* gives rise to decomposition to orthogonal matrix and upper triangular matrix. In contrast to *LU* decomposition that results in a
+So *QR* gives rise to decomposition to orthogonal matrix and upper triangular matrix - in contrast to *LU* decomposition that results in a
 decomposition into lower and upper triangular matrices.
 
-Let's do the following example by hand first (we will use `householder` function in j/algebra.ijs' developed in Householder reflection section above).
+Let's do the following example manually first (we will use `householder` function as exposed in j/algebra.ijs' and developed in Householder reflection section above).
 
 ```
    ]A=: 4 3 $ 1 1 1 1 2 4 1 3 9 1 4 16
@@ -2917,9 +2919,10 @@ _0.67082 _0.223607 0.223607   0.67082
 
 **Exercise 33**
 Gather the above procedure in one function that takes *A* and returns Householder transformation(s)
-and *R*. One way of achieving this can be done using fold like it was done for Givens rotations.
+and *R*. One way of achieving this is by using fold, like it was done for Givens rotations.
 
 [Solution to exercise 33](#solution-to-exercise-33)
+
 
 
 ### Rank of matrix
@@ -5194,18 +5197,19 @@ dgetrf_jlapack2_ c;r;(|:A);(1>.c);((c<.r)$0.);,_1
 1 3  9
 1 4 16
 
-qr=: 3 : 0
-'r c' =. ,"0 $ y
-h1=. >1 { householder (r, 1) $ (<(<a:),(<0)) { y
-r1=. 10&round h1 mult y
-s=:1,r,r
-S0=.(s$,h1);((1,r,c) $, r1)
-'Hs R'=.S0 ]F..{{( ((>0}y)&,) ; (10&round @ (mult"2&(>1}y))) ) @ (s$,) (10&round >1 { householder (((<:^:x)r), 1) $ (}.^:x) (<(<0),(<a:),(<x)) { (>1}y)) (<(<(}.^:x i.r)),(<(}.^:x i.r))) } =/~ (i.r)}}>:i.<:<:r
-'s1 r1 c1' =. ,"0 $ R
-Hs;((r1,c1) $ ,R)
+qr=: 4 : 0
+'r c' =: ,"0 $ y
+h1=: >1 { householder (r, 1) $ (<(<a:),(<0)) { y
+rr=: x&round
+r1=: rr h1 mult y
+dH=: 1, r, r
+dR=: 1, r, c
+S0=:(dH$,h1);(dR $, r1)
+'Hs R'=:S0 ]F..{{( ((>0}y)&,) ; (rr @ (mult"2&(>1}y))) ) @ (dH$,) (rr>1 { householder (((<:^:x)r), 1) $ (}.^:x) (<(<0),(<a:),(<x)) { (>1}y)) (<(<(}.^:x i.r)),(<(}.^:x i.r))) } =/~ (i.r)}}>:i.<:c
+Hs;((r,c) $ ,R)
 )
 
-   qr A
+   10 qr A
 ┌────────────────────────────┬────────────────────────────────────────┐
 │0.5       0.5       0.5  0.5│2                   5                 15│
 │0.5       0.5      _0.5 _0.5│0 894427191r400000000 894427191r80000000│
