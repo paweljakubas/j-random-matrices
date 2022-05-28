@@ -2925,14 +2925,15 @@ and *R*. One way of achieving this is by using fold, like it was done for Givens
 
 It is of great significance to underline what are dimensional requirements for matrices that undergo
 QR decomposition. The QR decomposition works for any A that is $R^{m n} \text{, where } m \ge n$ and
-it produces Q that is $R^{m m}$ and R that is $R^{m n}$ - and here $R^{n n}$ is upper triangular block
-below which is zero block of dimension $R^{(m-n) n}$. Because of the zero block we can cut through column
-Q block and have $(Q_{1} Q_{2})$ where $Q_{1}$ is $R^{m n}$ and $Q_{2}$ is $R^{m (m-n)}$, and we have
-both $A=QR$ and $A=Q_{1}R$ which stems from multiplying of parts of rows of Q by zeros of zero block in R.
+it produces Q that is $R^{m m}$ and R that is $R^{m n}$ - and here $R^{n n}$ is upper triangular block, $R_{1}$
+below which is zero block of dimension $R^{(m-n) n}$, $R_{2}$. Because of the zero block we can cut vertically
+the Q block and have $(Q_{1} Q_{2})$ where $Q_{1}$ is $R^{m n}$ and $Q_{2}$ is $R^{m (m-n)}$, and we have
+both $A=QR$ and $A=Q_{1}R_{1}$ which stems from the fact that multiplying of parts of rows of Q with indices m
+or more by zeros of zero block in R gives zero. So we can drop both $Q_{2}$ and $R_{2}$
 The latter form is known as **thin QR decomposition**.
 
 ```j
-]A=: 6 3 $ 1 1 1 1 2 4 1 3 9 1 4 12 1 5 18 1 6 21
+   ]A=: 6 3 $ 1 1 1 1 2 4 1 3 9 1 4 12 1 5 18 1 6 21
 1 1  1
 1 2  4
 1 3  9
@@ -2971,14 +2972,38 @@ _0.597614 _0.358569 _0.119523  0.119523  0.358569  0.597614
  0.368555 _0.341487 _0.598704   0.55359  0.212103 _0.194057
 0.0436288 _0.626266  0.630708  0.340353 _0.285913 _0.102512
  0.477125 _0.202924 _0.199787 _0.257215 _0.460139   0.64294
-   |: mult/ |. Hs
+   ]Q=: |: mult/ |. Hs
 0.408248 _0.597614  0.332875  0.368555 0.0436288  0.477125
 0.408248 _0.358569 _0.393398 _0.341487 _0.626266 _0.202924
 0.408248 _0.119523  0.151307 _0.598704  0.630708 _0.199787
 0.408248  0.119523 _0.574966   0.55359  0.340353 _0.257215
 0.408248  0.358569  0.605228  0.212103 _0.285913 _0.460139
 0.408248  0.597614 _0.121046 _0.194057 _0.102512   0.64294
-   (|: mult/ |. Hs) mult R
+   Q mult R
+1 1  1
+1 2  4
+1 3  9
+1 4 12
+1 5 18
+1 6 21
+
+   ]'r c' =. ,"0 $ A
+6
+3
+   i.3
+0 1 2
+   ]Q1=:(<(<a:),(<i.c)) { Q
+0.408248 _0.597614  0.332875
+0.408248 _0.358569 _0.393398
+0.408248 _0.119523  0.151307
+0.408248  0.119523 _0.574966
+0.408248  0.358569  0.605228
+0.408248  0.597614 _0.121046
+   ]R1=:(<(<i.c),(<a:)) { R
+6123724357r2500000000 85732140997r10000000000 132680694401r5000000000
+                    0 41833001327r10000000000  34661629671r2000000000
+                    0           1r10000000000 15735915851r10000000000
+   Q1 mult R1
 1 1  1
 1 2  4
 1 3  9
@@ -3204,6 +3229,9 @@ cols=.>1{x
 │ 0  3 _7│_8  7  8│ 2  1 _1  6│
 └────────┴────────┴───────────┘
 ```
+
+## Project 1
+Implement solution to least squares problem when new data is coming.
 
 
 ## Basic linear algebra. Solutions to exercises
