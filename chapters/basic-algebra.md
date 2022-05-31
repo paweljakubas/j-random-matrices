@@ -23,8 +23,8 @@
     - [Gaussian elimination with pivoting](#gaussian-elimination-with-pivoting)
     - [LAPACK](#lu-lapack)
 12. [QR decomposition](#qr-decomposition)
-    - [Least squares problem](#least-squares-problem) - IN PROGRESS
-    - [LAPACK](#qr-lapack) - TODO
+    - [Least squares problem](#least-squares-problem)
+    - [LAPACK](#qr-lapack) - IN PROGRESS
 13. [Rank of a matrix](#rank-of-matrix) - TODO
 14. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
@@ -3024,7 +3024,7 @@ $$\left\lVert QQ^{T}b-QRx \right\rVert_2 =$$
 $$\left\lVert Q(Q^{T}b-Rx) \right\rVert_2 =$$
 $$\left\lVert Q^{T}b-Rx \right\rVert_2$$
 When we use that $Q=Q_{1}Q_{2}$ then we have
-$$\left\lVert \begin{pmatrix}Q_1^Tb_1\\Q_2^Tb_2\end{pmatrix} - \begin{pmatrix}R\\0\end{pmatrix}x \right\rVert_2$$
+$$\left\lVert \begin{pmatrix}Q_1^Tb_1 \\ Q_2^Tb_2\end{pmatrix} - \begin{pmatrix}R \\ 0\end{pmatrix}x \right\rVert_2$$
 When we square this formula when we have the following:
 $$\left\lVert Q_1^Tb_1 - Rx \right\rVert_2^2 + \left\lVert Q_2^Tb_2 \right\rVert_2^2$$
 The whole formula is minimized when the first term is wiped out which means
@@ -5308,7 +5308,7 @@ dgetrf_jlapack2_ c;r;(|:A);(1>.c);((c<.r)$0.);,_1
 ```
 
 ### Solution to exercise 33
-```
+```j
    ]A=: 4 3 $ 1 1 1 1 2 4 1 3 9 1 4 16
 1 1  1
 1 2  4
@@ -5361,4 +5361,37 @@ _0.67082 _0.223607 0.223607   0.67082
 1 2  4
 1 3  9
 1 4 16
+```
+
+### Solution to exercise 34
+```j
+   ]px=: 1,2,3,4,5
+1 2 3 4 5
+   ]A=: 5$1 ,. px
+1 1
+1 2
+1 3
+1 4
+1 5
+   ]b=: 7.8, 11.1, 13.9, 16.1, 22.1
+7.8 11.1 13.9 16.1 22.1
+
+   ]R1=:>3{10 qr A
+894427191r400000000    2683281573r400000000
+                  0 31622776601r10000000000
+   ]Q1=:>4{10 qr A
+0.447214    _0.632456
+0.447214    _0.316228
+0.447214 _2.47534e_11
+0.447214     0.316228
+0.447214     0.632456
+
+   ]x=: (%. R1) mult ((|: Q1) mult b)
+4.12 3.36
+
+   NB. x p. y - Evaluates polynomial x for given value(s) of y.
+   x p. px
+7.48 10.84 14.2 17.56 20.92
+   py
+7.8 11.1 13.9 16.1 22.1
 ```
