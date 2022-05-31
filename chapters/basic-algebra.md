@@ -2965,7 +2965,7 @@ The latter form is known as **thin QR decomposition**.
 │       0          0  0.0914681   0.0510807   _0.134802   0.985319│                                                                     │
 └─────────────────────────────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────┘
 
-   'Hs R'=: 10 qr A
+   'Hs R Q R1 Q1'=: 10 qr A
    mult/ |. Hs
  0.408248  0.408248  0.408248  0.408248  0.408248  0.408248
 _0.597614 _0.358569 _0.119523  0.119523  0.358569  0.597614
@@ -2973,6 +2973,8 @@ _0.597614 _0.358569 _0.119523  0.119523  0.358569  0.597614
  0.368555 _0.341487 _0.598704   0.55359  0.212103 _0.194057
 0.0436288 _0.626266  0.630708  0.340353 _0.285913 _0.102512
  0.477125 _0.202924 _0.199787 _0.257215 _0.460139   0.64294
+
+   NB. Alternatively
    ]Q=: |: mult/ |. Hs
 0.408248 _0.597614  0.332875  0.368555 0.0436288  0.477125
 0.408248 _0.358569 _0.393398 _0.341487 _0.626266 _0.202924
@@ -2993,6 +2995,8 @@ _0.597614 _0.358569 _0.119523  0.119523  0.358569  0.597614
 3
    i.3
 0 1 2
+
+   NB. Alternatively
    ]Q1=:(<(<a:),(<i.c)) { Q
 0.408248 _0.597614  0.332875
 0.408248 _0.358569 _0.393398
@@ -3024,7 +3028,7 @@ $$\left\lVert QQ^{T}b-QRx \right\rVert_2 =$$
 $$\left\lVert Q(Q^{T}b-Rx) \right\rVert_2 =$$
 $$\left\lVert Q^{T}b-Rx \right\rVert_2$$
 When we use that $Q=Q_{1}Q_{2}$ then we have
-$$\left\lVert \begin{pmatrix} Q_1^Tb_1 \\ Q_2^Tb_2 \end{pmatrix} - \begin{pmatrix} R \\ 0 \end{pmatrix}x \right\rVert_2$$
+$$\left\lVert \begin{pmatrix}Q_1^Tb_1\\Q_2^Tb_2\end{pmatrix} - \begin{pmatrix}R\\0\end{pmatrix}x \right\rVert_2$$
 When we square this formula when we have the following:
 $$\left\lVert Q_1^Tb_1 - Rx \right\rVert_2^2 + \left\lVert Q_2^Tb_2 \right\rVert_2^2$$
 The whole formula is minimized when the first term is wiped out which means
@@ -3035,6 +3039,8 @@ Solve least square problem for the following points
 (1, 7.8), (2, 11.1), (3, 13.9), (4, 16.1), (5, 22.1)
 
 [Solution to exercise 34](#solution-to-exercise-34)
+
+#### QR LAPACK
 
 
 ### Rank of matrix
