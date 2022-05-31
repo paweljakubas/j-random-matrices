@@ -23,11 +23,11 @@ in correctness of Richard Feynman's famous quote:
 *It's the way I study - to understand something by trying to work it out or, in other words, to understand something by creating it.*
 
 The sequels are planned and will cover the author's J experiments in:
-- probability
-- statistics
+- probability and statistics
 - data mining
 - quantum mechanics
 - network science and graph spectra
+- statistical physics
 
 I find this hacking so enjoyable that I hope this will become a multi-year project for me.
 I bet that investing in J will prove very fruitful as I will not only get extremely powerful calculator at my disposal,
@@ -52,5 +52,7 @@ Following is the list of books that I found especially useful during the first i
 ## Contents
 ### [Basic linear algebra](chapters/basic-algebra.md)
 ### [Intermediate linear algebra](chapters/intermediate-algebra.md)
-### [Advanced linear algebra]
+### [Advanced linear algebra I]
+### [Advanced linear algebra II]
 ### [Random matrix theory]
+### [Random matrix theory applications]
