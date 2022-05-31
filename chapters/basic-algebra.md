@@ -3028,7 +3028,7 @@ $$\left\lVert QQ^{T}b-QRx \right\rVert_2 =$$
 $$\left\lVert Q(Q^{T}b-Rx) \right\rVert_2 =$$
 $$\left\lVert Q^{T}b-Rx \right\rVert_2$$
 When we use that $Q=Q_{1}Q_{2}$ then we have
-$$\left\lVert \begin{pmatrix}Q_1^Tb_1\\Q_2^Tb_2\end{pmatrix} - \begin{pmatrix}R\\0\end{pmatrix}x \right\rVert_2$$
+$$\left\lVert \begin{pmatrix}Q_1^Tb_1\\ Q_2^Tb_2\end{pmatrix} - \begin{pmatrix}R\\ 0\end{pmatrix}x \right\rVert_2$$
 When we square this formula when we have the following:
 $$\left\lVert Q_1^Tb_1 - Rx \right\rVert_2^2 + \left\lVert Q_2^Tb_2 \right\rVert_2^2$$
 The whole formula is minimized when the first term is wiped out which means
