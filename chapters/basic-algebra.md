@@ -3042,6 +3042,84 @@ Solve least square problem for the following points
 
 #### QR LAPACK
 
+```j
+   load 'math/lapack2'
+   dgeqrf_jlapack2_
+'"liblapack.so.3" dgeqrf_  n *i *i *d *i *d *d *i *i '&cd
+   ]A=: 4 3 $ 1 1 1 1 2 4 1 3 9 1 4 16
+1 1  1
+1 2  4
+1 3  9
+1 4 16
+   'r c' =. ,"0 $ A
+
+   NB. Arguments
+   NB. 1. [in] M (*i) The number of rows of the matrix A.  M >= 0.
+   NB. 2. [in] N (*i) The number of columns of the matrix A.  N >= 0.
+   NB. 3. [in,out] A (*d)
+   NB              On entry, the M-by-N matrix to be factored.
+   NB.             On exit, the elements on and above the diagonal of the array
+   NB.             contain the min(M,N)-by-N upper trapezoidal matrix R (R is
+   NB.             upper triangular if m >= n); the elements below the diagonal,
+   NB.             with the array TAU, represent the orthogonal matrix Q as a
+   NB.             product of min(m,n) elementary reflectors
+   NB. 4. [in] LDA (*i) The leading dimension of the array A.  LDA >= max(1,M).
+   NB. 5. [out] TAU (*d)
+   NB.             Array of  dimension (min(M,N)) that has scalar factors of the elementary reflectors
+   NB. 6. [out] WORK (*d)
+   NB.             Work matrix of dimension (MAX(1,LWORK))
+   NB. 7. [in] LWORK (*i) The dimension of the array WORK.
+   NB. 8. [out] INFO (*i)
+   NB.             Return code, when 0 the call was successful
+
+   NB. As mentioned in LU LAPACK section is a number of procedures additional matrix need to be
+   NB. delivered to the procedure that is used internally. In order to be optimal one
+   NB. can query LAPACK for the answer.
+
+   NB. For the query we have first a preparatory call for which LWORK=_1
+   ]pre=: dgeqrf_jlapack2_ c;r;(|:A);(1>.c);((r<.c)$0.);(1$0.);(,_1);,_1
+┌─┬─┬─┬────────┬─┬─────┬───┬──┬─┐
+│0│3│4│1 1 1  1│3│0 0 0│128│_1│0│
+│ │ │ │1 2 3  4│ │     │   │  │ │
+│ │ │ │1 4 9 16│ │     │   │  │ │
+└─┴─┴─┴────────┴─┴─────┴───┴──┴─┘
+
+   ]lwork =. , (6;0) {:: pre
+128
+
+   NB. the final call is constructed with `lwork` used in position WORK and LWORK
+   res=: dgeqrf_jlapack2_ c;r;(|:A);(1>.c);((r<.c)$0.);(lwork$0.);lwork;,_1
+
+   NB. R can be retrieved as follows
+   ]hR=: |: >3 { res
+_1.73205  0.816497 0.707107
+0.366025 _0.767327 _16.7432
+0.366025   _4.6188  7.75672
+ _2.3094  _2.04124  3.53553
+   ]uppertriang=: (<:)/~ (i.c)
+1 1 1
+0 1 1
+0 0 1
+   ]uppertriang,0
+1 1 1
+0 1 1
+0 0 1
+0 0 0
+   ]R=: (uppertriang,0) * hR
+_1.73205  0.816497 0.707107
+       0 _0.767327 _16.7432
+       0         0  7.75672
+       0         0        0
+
+  NB. Now, the matrix Q is represented as a product of elementary reflectors
+  NB. Q = H(1) H(2) . . . H(k), where k = min(m,n).
+  NB. Each H(i) has the form
+  NB. H(i) = I - tau * v * v**T
+  NB.    where tau is a real scalar, and v is a real vector with
+  NB.    v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
+  NB.   and tau in TAU(i).
+```
+
 
 ### Rank of matrix
 
