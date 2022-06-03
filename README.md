@@ -3,7 +3,7 @@
 by Pawel Jakubas, PhD
 
 These are notes that cover a number of topics from linear algebra that I have
-found fundamental to master, using J language, on my way to harness random matrices. The prerequisite
+found fundamental to master random matrices using J language. The prerequisite
 for fully comprehending the examples below is *Learning J* which is the recommended first
 introductory material when learning J. The great example how beautifully and effciently J can be used in a specific domain is
 a wonderful *Fractals, Visualization and J*. Besides that a list of high quality book references is specified.
@@ -18,7 +18,7 @@ And I mean here anyone quantitative and interested to learn about J and witness 
 For J experts it will be rather very far from what they would write down, maybe not interesting at all,
 but for beginning J programmers, like myself, presumably the proof that this array language, as in the current form, is very
 useful, powerful and intellectually attractive. I attach a number of examples, along with the solutions,
-as a documentation of my hacking, also for anyone that would be eager to learn through reading. I strongly believe
+as a documentation of my hacking, also for anyone that would be eager to learn through doing. I strongly believe
 in correctness of Richard Feynman's famous quote:
 *It's the way I study - to understand something by trying to work it out or, in other words, to understand something by creating it.*
 
@@ -31,7 +31,8 @@ The sequels are planned and will cover the author's J experiments in:
 
 I find this hacking so enjoyable that I hope this will become a multi-year project for me.
 I bet that investing in J will prove very fruitful as I will not only get extremely powerful calculator at my disposal,
-but also quantitative toolbox massively outperfoming other popular approaches.
+but also quantitative toolbox massively outperfoming other popular approaches. For sure, when it comes to
+quantitative prototyping.
 
 Following is the list of books that I found especially useful during the first installement:
 ### Linear algebra, optimization and machine learning
