@@ -3113,7 +3113,7 @@ _2       _5      _15
   NB.    v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
   NB.   and tau in TAU(i).
 
-  NB. Now one can do it manually or use another LAPACK procedure
+  NB. Now one can do it manually (see exercise 35) or use another LAPACK procedure instead
    dorgqr_jlapack2_
 '"liblapack.so.3" dorgqr_  n *i *i *i *d *i *d *d *i *i '&cd
 
@@ -3151,6 +3151,63 @@ Calculate Q from `dgeqrf` manually rather than via `dorgqr`.
 
 
 ### Rank of matrix
+
+```
+   NB. 4th column is 1st column plus 2nd
+   ]A=: 5 4 $ 1 1 1 2 1 2 4 3 1 3 9 4 1 4 16 5 1 5 20 6
+1 1  1 2
+1 2  4 3
+1 3  9 4
+1 4 16 5
+1 5 20 6
+
+   'Hs R Q R1 Q1'=: 10 qr A
+   (i.4) { 8&round R
+111803399r50000000 670820393r100000000 1118033989r50000000 894427191r100000000
+                 0  158113883r50000000  158113883r10000000  158113883r50000000
+                 0                   0                   2                   0
+                 0                   0                   0                   0
+
+   NB. we see no all diagonal are non-zero, the last one is 0, so we have rank=3
+
+   NB. A1 is just A with interchange columns
+   ]A1=: 0 3 interchangeC A
+2 1  1 1
+3 2  4 1
+4 3  9 1
+5 4 16 1
+6 5 20 1
+   'Hs R Q R1 Q1'=: 10 qr A1
+   (i.4) { 8&round R
+474341649r50000000 737864787r100000000 2635231383r100000000 210818511r100000000
+                 0  74535599r100000000    93169499r12500000 _74535599r100000000
+                 0                   0                    2                   0
+                 0                   0                    0                   0
+
+   NB. 4th column is 1st column plus 2nd, 5th column is 10 times 1st plus 2nd
+   ]A=: 6 5 $ 1 1 1 2 11 1 2 4 3 12 1 3 9 4 13 1 4 16 5 14 1 5 20 6 15 1 6 30 7 16
+1 1  1 2 11
+1 2  4 3 12
+1 3  9 4 13
+1 4 16 5 14
+1 5 20 6 15
+1 6 30 7 16
+   'Hs R Q R1 Q1'=: 10 qr A
+   Q mult R
+1 1  1 2 11
+1 2  4 3 12
+1 3  9 4 13
+1 4 16 5 14
+1 5 20 6 15
+1 6 30 7 16
+   (i.5) { 8&round R
+122474487r50000000   85732141r10000000   816496581r25000000    68891899r6250000 3306811153r100000000
+                 0 418330013r100000000 2390457219r100000000 418330013r100000000  418330013r100000000
+                 0                   0  398807747r100000000                   0                    0
+                 0                   0                    0                   0                    0
+                 0                   0                    0                   0                    0
+   NB. There are two zero diagonal elements of R, so rank is once again 3.
+```
 
 ### Partitioned matrix
 
