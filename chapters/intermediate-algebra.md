@@ -13,7 +13,7 @@
 10. [Gramian matrix](#gramian-matrix)
 11. [FFT](#fft)
 
-[Project2](#project2)
+[Project3](#project3)
 
 [Solutions to exercices](#intermediate-linear-algebra-solutions-to-exercises)
 

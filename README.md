@@ -1,20 +1,20 @@
-# Linear algebra and random matrices - J approach
+# Linear algebra and random matrices in J
 
 by Pawel Jakubas, PhD
 
-These are notes that cover a number of topics from linear algebra that the
-author found interesting when exploring J language capabilities in his way towards harnessing random matrices. The prerequisite
+These are notes that cover a number of topics from linear algebra that I have
+found fundamental to master, using J language, on my way to harness random matrices. The prerequisite
 for fully comprehending the examples below is *Learning J* which is the recommended first
 introductory material when learning J. The great example how beautifully and effciently J can be used in a specific domain is
-presented in a wonderful *Fractals, Visualization and J*. Besides that a list of high quality book references is specified.
-This tutorial is supposed to be very practical and, I hope, has an educational flavour. I do not enforce a tacit representation as I think,
-although undoubtly very elegant, can be difficult to appreciate for beginner J enthusiasts and could steepen learning curve for them.
+a wonderful *Fractals, Visualization and J*. Besides that a list of high quality book references is specified.
+This tutorial is supposed to be very practical and, I hope, has an educational flavor. I do not enforce a tacit representation as I think,
+although undoubtly very elegant, can be difficult to appreciate for a beginner J enthusiasta and could steepen his/her learning curve.
 I also omit discussing the performance optimisations that could be adopted, once again for the sake of clarity and for being user-friendly
 as much as possible. The aim of this tutorial is to document my adventures and experiments with J that I found interesting when exploring a number of topics
 culminating in random matrices, which although used in physics for decades with many successes, only relatively recently have started to play
 an important role in other areas of science like biology, computational statistics or machine learning.
-The aim of these notes is to document my efforts for the future myself, but there is a chance they could prove useful for someone,
-and some potential J user will find them inspiring and get interested in this powerful array programming language.
+The aim of these notes is to document my efforts for the future myself, but there is a chance they could also be useful for someone else.
+And I mean here anyone quantitative and interested to learn about J and witness the potential of this powerful array programming language.
 For J experts it will be rather very far from what they would write down, maybe not interesting at all,
 but for beginning J programmers, like myself, presumably the proof that this array language, as in the current form, is very
 useful, powerful and intellectually attractive. I attach a number of examples, along with the solutions,

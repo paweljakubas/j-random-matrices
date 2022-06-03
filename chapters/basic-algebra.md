@@ -3057,7 +3057,7 @@ Solve least square problem for the following points
    NB. 1. [in] M (*i) The number of rows of the matrix A.  M >= 0.
    NB. 2. [in] N (*i) The number of columns of the matrix A.  N >= 0.
    NB. 3. [in,out] A (*d)
-   NB              On entry, the M-by-N matrix to be factored.
+   NB.             On entry, the M-by-N matrix to be factored.
    NB.             On exit, the elements on and above the diagonal of the array
    NB.             contain the min(M,N)-by-N upper trapezoidal matrix R (R is
    NB.             upper triangular if m >= n); the elements below the diagonal,
@@ -5507,4 +5507,124 @@ _0.67082 _0.223607 0.223607   0.67082
 7.48 10.84 14.2 17.56 20.92
    py
 7.8 11.1 13.9 16.1 22.1
+```
+
+### Solution to exercise 35
+```j
+   load 'math/lapack2'
+   ]A=: 4 3 $ 1 1 1 1 2 4 1 3 9 1 4 16
+1 1  1
+1 2  4
+1 3  9
+1 4 16
+   'r c' =. ,"0 $ A
+   ]pre=: dgeqrf_jlapack2_ r;c;(|:A);(1>.r);((r<.c)$0.);(1$0.);(,_1);,_1
+┌─┬─┬─┬────────┬─┬─────┬──┬──┬─┐
+│0│4│3│1 1 1  1│4│0 0 0│96│_1│0│
+│ │ │ │1 2 3  4│ │     │  │  │ │
+│ │ │ │1 4 9 16│ │     │  │  │ │
+└─┴─┴─┴────────┴─┴─────┴──┴──┴─┘
+   ]lwork =. , (6;0) {:: pre
+96
+   res=: dgeqrf_jlapack2_ r;c;(|:A);(1>.r);((r<.c)$0.);(lwork$0.);lwork;,_1
+   ]hR=: |: >3 { res
+      _2       _5       _15
+0.333333 _2.23607  _11.1803
+0.333333 0.447214         2
+0.333333 0.894427 _0.679285
+
+   ]uppertriang=: ((<:)/~ (i.c)),0
+1 1 1
+0 1 1
+0 0 1
+0 0 0
+
+   ]R=: uppertriang * hR
+_2       _5      _15
+ 0 _2.23607 _11.1803
+ 0        0        2
+ 0        0        0
+
+   ]tau=: |: >5 { res
+1.5 1 1.36852
+
+  NB. Now, the matrix Q is represented as a product of elementary reflectors
+  NB. Q = H(1) H(2) . . . H(k), where k = min(m,n).
+  NB. Each H(i) has the form
+  NB. H(i) = I - tau * v * v**T
+  NB.    where tau is a real scalar, and v is a real vector with
+  NB.    v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
+  NB.   and tau in TAU(i).
+
+   ]lowertriang=: -. uppertriang
+0 0 0
+1 0 0
+1 1 0
+1 1 1
+
+   ]diag=: (=/~ (i.c)),0
+1 0 0
+0 1 0
+0 0 1
+0 0 0
+   ]vs=: diag + (lowertriang * hR)
+       1        0         0
+0.333333        1         0
+0.333333 0.447214         1
+0.333333 0.894427 _0.679285
+
+   NB. Calculating H1
+   ]v1=: (r,1) $ , (<(<a:),(<0)) { vs
+       1
+0.333333
+0.333333
+0.333333
+   ]I=: =/~ i.r
+1 0 0 0
+0 1 0 0
+0 0 1 0
+0 0 0 1
+   ]H1=: I - (0{tau) * v1 mult (|: v1)
+_0.5      _0.5      _0.5      _0.5
+_0.5  0.833333 _0.166667 _0.166667
+_0.5 _0.166667  0.833333 _0.166667
+_0.5 _0.166667 _0.166667  0.833333
+
+   NB. Calculating H2
+   ]v2=: (r,1) $ , (<(<a:),(<1)) { vs
+       0
+       1
+0.447214
+0.894427
+   ]H2=: I - (1{tau) * v2 mult (|: v2)
+1         0         0         0
+0         0 _0.447214 _0.894427
+0 _0.447214       0.8      _0.4
+0 _0.894427      _0.4       0.2
+
+   NB. Calculating H3
+   ]v3=: (r,1) $ , (<(<a:),(<2)) { vs
+        0
+        0
+        1
+_0.679285
+   ]H3=: I - (2{tau) * v3 mult (|: v3)
+1 0         0        0
+0 1         0        0
+0 0 _0.368524 0.929618
+0 0  0.929618 0.368524
+
+   NB. Q=H1 H2 H3
+   ]Q=: H1 mult (H2 mult H3)
+_0.5   0.67082  0.5  0.223607
+_0.5  0.223607 _0.5  _0.67082
+_0.5 _0.223607 _0.5   0.67082
+_0.5  _0.67082  0.5 _0.223607
+
+   NB. final check
+   Q mult R
+1 1  1
+1 2  4
+1 3  9
+1 4 16
 ```
