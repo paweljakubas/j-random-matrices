@@ -25,11 +25,14 @@
 12. [QR decomposition](#qr-decomposition)
     - [Least squares problem](#least-squares-problem)
     - [LAPACK](#qr-lapack)
-13. [Rank of a matrix](#rank-of-matrix) - IN PROGRESS
+13. [Rank of a matrix](#rank-of-matrix)
+    - [QR with column pivoting](#qr-with-column-pivoting) - IN PROGRESS
+    - [LAPACK](#qr-rank-revealing-lapack) TO-DO
 14. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
 [Project I](#project-i)
 [Project II](#project-ii)
+[Project III](#project-iii)
 
 [Solutions to exercices](#basic-linear-algebra-solutions-to-exercises)
 
@@ -3152,7 +3155,21 @@ Calculate Q from `dgeqrf` manually rather than via `dorgqr`.
 
 ### Rank of matrix
 
-```
+The set of vectors $x_1, x_2,..,x_n$ are said to be linearly independent if $\sum_i \alpha x_i = 0$
+implies that for all $\alpha_i = 0$. If we have matrix A that is $R^{m n}$ then
+column (row) rank is the maximum number of linearly independent columns (rows) within matrix A.
+It can be shown that for each matrix column and row rank are equal. We have
+$$rank (A) \le min(n,m)$$
+
+We will use modified QR decomposition for determining the rank of the matrix. In order to understand why this is
+a case one need to observe that for any linearly independent vectors $x_1, x_2,..,x_n$
+and any **nonsingular** matrix T, the vectors $Tx_1, Tx_2,..,Tx_n$ are also linearly independent.
+So if we decompose A=QR, and we want to determine linear dependence of the columns of A,
+then equally we can investigate QR. And because Q is orthogonal matrix, so nonsingular as each
+its column is composed of orthonormal basis vectors, then we need to analyze R.
+Let's do preparatory calculations to get grips with what will come next.
+
+```j
    NB. 4th column is 1st column plus 2nd
    ]A=: 5 4 $ 1 1 1 2 1 2 4 3 1 3 9 4 1 4 16 5 1 5 20 6
 1 1  1 2
@@ -3168,9 +3185,9 @@ Calculate Q from `dgeqrf` manually rather than via `dorgqr`.
                  0                   0                   2                   0
                  0                   0                   0                   0
 
-   NB. we see no all diagonal are non-zero, the last one is 0, so we have rank=3
+   NB. we see not all diagonal are non-zero, the last one is 0, and we have rank(A)=3
 
-   NB. A1 is just A with interchange columns
+   NB. A1 is just A with columns interchanged
    ]A1=: 0 3 interchangeC A
 2 1  1 1
 3 2  4 1
@@ -3206,8 +3223,17 @@ Calculate Q from `dgeqrf` manually rather than via `dorgqr`.
                  0                   0  398807747r100000000                   0                    0
                  0                   0                    0                   0                    0
                  0                   0                    0                   0                    0
-   NB. There are two zero diagonal elements of R, so rank is once again 3.
+   NB. There are two zero diagonal elements of R, and rank(A) is once again 3.
 ```
+
+If we look at the second, 4th and 5th column of R of the last example, we see that they are linearly dependent.
+For this particular example looking at diagonals of R was enough to determine the rank, but it could not be the case in
+for arbitrary matrix. Hence, the use of column pivoting to decompose R into two matrices in which one has strictly non-zero
+diagonals.
+
+#### QR with column pivoting
+
+#### qr rank revealing LAPACK
 
 ### Partitioned matrix
 
