@@ -3165,8 +3165,8 @@ We will use modified QR decomposition for determining the rank of the matrix. In
 a case one need to observe that for any linearly independent vectors $x_1, x_2,..,x_n$
 and any **nonsingular** matrix T, the vectors $Tx_1, Tx_2,..,Tx_n$ are also linearly independent.
 So if we decompose A=QR, and we want to determine linear dependence of the columns of A,
-then equally we can investigate QR. And because Q is orthogonal matrix, so nonsingular as each
-its column is composed of orthonormal basis vectors, then we need to analyze R.
+then equally we can investigate the columns of QR. And because Q is orthogonal matrix, so nonsingular as each
+its column is composed of orthonormal basis vectors, then we need only to analyze R.
 Let's do preparatory calculations to get grips with what will come next.
 
 ```j
@@ -3232,6 +3232,74 @@ for arbitrary matrix. Hence, the use of column pivoting to decompose R into two 
 diagonals.
 
 #### QR with column pivoting
+
+Let's try QR with pivoting as proposed above using a practical example.
+```j
+   ]A=: 6 5 $ 1 1 1 2 11 1 2 4 3 12 1 3 9 4 13 1 4 16 5 14 1 5 20 6 15 1 6 30 7 16
+1 1  1 2 11
+1 2  4 3 12
+1 3  9 4 13
+1 4 16 5 14
+1 5 20 6 15
+1 6 30 7 16
+
+   NB. let's calculate the norm of the columns
+   norm=: +/&.:*:
+   norm 1 1 1 1 1 1
+2.44949
+   ]norms=: norm"1 (|: A)
+2.44949 9.53939 40.6694 11.7898 33.3317
+
+   NB. Handling the first column of A, r=0
+   NB. (a) finding the first index of norms with the highest value
+   ]r=: 0
+0
+   ]max=: >./ norms
+40.6694
+   max = norms
+0 0 1 0 0
+   ]k=: I. max = norms
+2
+   NB. pivot vector
+   ]piv=: k
+   NB. now let's interchange the column that we currently handling with the one with max norm
+   NB. here it is r <-> 2
+   ]A1=: r 2 interchangeC A
+ 1 1 1 2 11
+ 4 2 1 3 12
+ 9 3 1 4 13
+16 4 1 5 14
+20 5 1 6 15
+30 6 1 7 16
+   NB. we are also interchanging norms
+   ]norms1=: r 2 interchangeC 1 5 $ ,norms
+40.6694 9.53939 2.44949 11.7898 33.3317
+   NB. now we proceed with the first column of A1 as for regular QR
+   ]H1=: >1 { householder 6 1 $ (<(<a:),(<0)) { A1
+0.0245885   0.098354   0.221297   0.393416    0.49177   0.737655
+ 0.098354   0.990083 _0.0223141 _0.0396695 _0.0495869 _0.0743803
+ 0.221297 _0.0223141   0.949793 _0.0892563   _0.11157  _0.167356
+ 0.393416 _0.0396695 _0.0892563   0.841322  _0.198347  _0.297521
+  0.49177 _0.0495869   _0.11157  _0.198347   0.752066  _0.371901
+ 0.737655 _0.0743803  _0.167356  _0.297521  _0.371901   0.442148
+   ]A11=: 10&round H1 mult A1
+406693988153r10000000000    3737453821r400000000   1229425599r625000000 113107155109r10000000000 290144441367r10000000000
+                       0 11586830351r10000000000  2256214869r2500000000  20611689827r10000000000   50917712557r5000000000
+                       0   1107036829r1000000000  3902966911r5000000000      589884441r312500000   44564853253r5000000000
+                       0   1269464281r2000000000  1219887581r2000000000    1244675931r1000000000    8417712557r1250000000
+                       0   1983537939r2500000000 5124297381r10000000000  13058449137r10000000000    5917712557r1000000000
+                       0  _1549386183r5000000000   335805759r1250000000    _206163147r5000000000   11882844177r5000000000
+   NB. now we need to adjust elements of norms except the first element
+   NB. we take the first row of A11
+   ]norms2=: (*: }. ,norms1) - (*: }. 0 { A11)
+3.69649 2.13059 11.0677 269.162
+```
+
+**Exercise 36**
+Implement function for QR with column pivoting using for example fold.
+
+[Solution to exercise 36](#solution-to-exercise-36)
+
 
 #### qr rank revealing LAPACK
 
