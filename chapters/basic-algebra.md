@@ -3155,8 +3155,13 @@ Calculate Q from `dgeqrf` manually rather than via `dorgqr`.
 
 ### Rank of matrix
 
-The set of vectors $ x_1, x_2,..,x_n $ are said to be linearly independent if $ \sum_i \alpha x_i = 0 $
-implies that for all $ \alpha_i = 0 $. If we have matrix A that is $R^{m n}$ then
+The set of vectors
+$$ x_1, x_2,..,x_n $$
+are said to be linearly independent if
+$$ \sum_i \alpha x_i = 0 $$
+implies that for all
+$$ \alpha_i = 0 $$.
+If we have matrix A that is $R^{m n}$ then
 column (row) rank is the maximum number of linearly independent columns (rows) within matrix A.
 It can be shown that for each matrix column and row rank are equal. We have
 $$rank (A) \le min(n,m)$$
