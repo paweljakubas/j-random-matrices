@@ -3155,8 +3155,8 @@ Calculate Q from `dgeqrf` manually rather than via `dorgqr`.
 
 ### Rank of matrix
 
-The set of vectors $x_1, x_2,..,x_n$ are said to be linearly independent if $\sum_i \alpha x_i = 0$
-implies that for all $\alpha_i = 0$. If we have matrix A that is $R^{m n}$ then
+The set of vectors $ x_1, x_2,..,x_n $ are said to be linearly independent if $ \sum_i \alpha x_i = 0 $
+implies that for all $ \alpha_i = 0 $. If we have matrix A that is $R^{m n}$ then
 column (row) rank is the maximum number of linearly independent columns (rows) within matrix A.
 It can be shown that for each matrix column and row rank are equal. We have
 $$rank (A) \le min(n,m)$$
@@ -3299,7 +3299,6 @@ Let's see how QR with pivoting as proposed above works by doing a practical exam
    NB. we take the first row of A1 and substract absolute value of elements from norms0
    ]norms1a=: (*: }. ,norms0) - (*: | }. r { A1)
 3.69649 2.13059 11.0677 269.162
-   NB. r=1
    ]r=:1
 1
    ]max=: >./ norms1a
@@ -3346,7 +3345,6 @@ Let's see how QR with pivoting as proposed above works by doing a practical exam
    NB. we take the second row of A1 and substract absolute value of elements from norms1
    ]norms2a=: (}. ,norms1) - (*: | }.}. r { A2)
 0.00375117 0.303845 0.375117
-   NB. r=2
    ]r=:2
 2
    ]max=: >./ norms2a
@@ -3413,6 +3411,9 @@ _0.919871 _0.168605  0.326973 _0.136011
 
    NB. Indeed, column of R2 are linear combinations of columns of R1
 ```
+
+For more details and discussion for QR with column pivoting read [4, p. 276].
+
 
 **Exercise 36**
 Implement function for QR with column pivoting using for example fold.
