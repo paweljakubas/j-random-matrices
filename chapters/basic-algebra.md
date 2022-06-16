@@ -3343,7 +3343,7 @@ Let's see how QR with pivoting as proposed above works by doing a practical exam
 
    NB. Handling the third column of A2
    NB. now we need to adjust elements of norms1 after dropping the first element
-   NB. we take the first row of A1 and substract absolute value of elements from norms0
+   NB. we take the second row of A1 and substract absolute value of elements from norms1
    ]norms2a=: (}. ,norms1) - (*: | }.}. r { A2)
 0.00375117 0.303845 0.375117
    NB. r=2
@@ -3386,6 +3386,32 @@ _0.919871 _0.168605  0.326973 _0.136011
                        0                        0                      0                        0                       0
                        0                        0                      0                        0                       0
 
+   NB. Handling the third column of A3
+   NB. now we need to adjust elements of norms2 after dropping the first element
+   NB. we take the third row of A3 and substract absolute value of elements from norms2
+   ]norms3a=: 8&round (}. ,norms2) - (*: | }.}.}. r { A3)
+0 0
+   NB. As all norms are zero, we stop proceeding. We have R that is composed of
+   NB.    | R1 R2 |
+   NB.    | 01 02 |
+   ]R1=: (<(<0 1 2),(<0 1 2)) { A3
+406693988153r10000000000 290144441367r10000000000   3737453821r400000000
+                       0 164061583389r10000000000  2278080327r1250000000
+                       0                        0 6124682559r10000000000
+   ]O1=: (<(<3 4 5),(<0 1 2)) { A3
+0 0 0
+0 0 0
+0 0 0
+   ]R2=: (<(<0 1 2),(<3 4)) { A3
+113107155109r10000000000    1229425599r625000000
+ 32808336693r10000000000 14583694077r10000000000
+     172256697r312500000     _19139633r312500000
+   ]O1=: (<(<3 4 5),(<3 4)) { 8&round A3
+0 0
+0 0
+0 0
+
+   NB. Indeed, column of R2 are linear combinations of columns of R1
 ```
 
 **Exercise 36**
