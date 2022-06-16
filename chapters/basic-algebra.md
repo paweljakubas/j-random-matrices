@@ -3160,7 +3160,7 @@ $$ x_1, x_2,..,x_n $$
 are said to be linearly independent if
 $$ \sum_i \alpha x_i = 0 $$
 implies that for all
-$$ \alpha_i = 0 $$.
+$$ \alpha_i = 0 $$
 If we have matrix A that is $R^{m n}$ then
 column (row) rank is the maximum number of linearly independent columns (rows) within matrix A.
 It can be shown that for each matrix column and row rank are equal. We have
@@ -3415,8 +3415,15 @@ _0.919871 _0.168605  0.326973 _0.136011
 0 0
 
    NB. Indeed, column of R2 are linear combinations of columns of R1
+   NB. The dimension of R1 is the rank of A.
 ```
 
+In each step we made sure the current column upon which we apply Householder reflection has the
+biggest norm among all to be processed columns. Reshuffling meant that we applied permutation
+matrix on A. As A is orthogonal it does not change linear dependence of columns of A. Hence,
+the column pivoting does not change the rank of matrix A. It just give rise to *R1* that is
+upper triangular (ie. it sorts columns with regard to the increasing number of nonzero elements)
+and determines the rank of A. the columns of *R2* matrix are linear combination of R1 columns.
 For more details and discussion for QR with column pivoting read [4, p. 276].
 
 
