@@ -27,7 +27,7 @@
     - [LAPACK](#qr-lapack)
 13. [Rank of a matrix](#rank-of-matrix)
     - [QR with column pivoting](#qr-with-column-pivoting)
-    - [LAPACK](#qr-rank-revealing-lapack) - IN PROGRESS
+    - [LAPACK](#qr-rank-revealing-lapack)
 14. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
 [Project I](#project-i)
@@ -3509,6 +3509,13 @@ Implement function for QR with column pivoting using for example fold.
 0 0 1 1 1
 0 0 0 1 1
 0 0 0 0 1
+   ]R=: (uppertriang,0) * hR
+_40.6694 _29.0144  _9.34363     _11.3107     _1.96708
+       0 _16.4062  _1.82246     _3.28083     _1.45837
+       0        0 _0.612468    _0.551221    0.0612468
+       0        0         0 _7.10559e_16   9.6136e_19
+       0        0         0            0 _2.57268e_17
+       0        0         0            0            0
    ]R=: 10&round (uppertriang,0) * hR
 _406693988153r10000000000 _290144441367r10000000000  _3737453821r400000000 _113107155109r10000000000    _1229425599r625000000
                         0   _41015395847r2500000000 _2278080327r1250000000  _32808336693r10000000000 _14583694077r10000000000
@@ -3517,7 +3524,87 @@ _406693988153r10000000000 _290144441367r10000000000  _3737453821r400000000 _1131
                         0                         0                      0                         0                        0
                         0                         0                      0                         0                        0
 
+  NB. Now, the matrix Q is represented as a product of elementary reflectors
+  NB. Q = H(1) H(2) . . . H(k), where k = min(m,n).
+  NB. Each H(i) has the form
+  NB. H(i) = I - tau * v * v**T
+  NB.    where tau is a real scalar, and v is a real vector with
+  NB.    v(1:i-1) = 0 and v(i) = 1; v(i+1:m) is stored on exit in A(i+1:m,i),
+  NB.   and tau in TAU(i).
 
+  NB. Now one can do it manually (see exercise 35) or use another LAPACK procedure instead
+   dorgqr_jlapack2_
+'"liblapack.so.3" dorgqr_  n *i *i *i *d *i *d *d *i *i '&cd
+
+   NB. Arguments
+   NB. 1. [in] M (*i) The number of rows of the matrix A.  M >= 0.
+   NB. 2. [in] N (*i) The number of columns of the matrix A.  N >= 0.
+   NB. 2. [in] K (*i) The number of elementary reflectors.  N >= K >= 0.
+   NB. 4. [in,out] Resultant matrix of dgeqrf_jlapack2_ (argument 3)
+   NB. 5. [in] LDA (*i) The leading dimension of the array A.  LDA >= max(1,M).
+   NB. 6. [out] TAU (*d)
+   NB.             Array of  dimension (min(M,N)) that has scalar factors of the elementary reflectors
+   NB. 7. [out] WORK (*d)
+   NB.             Work matrix of dimension (MAX(1,LWORK))
+   NB. 8. [in] LWORK (*i) The dimension of the array WORK.
+   NB. 9. [out] INFO (*i)
+   NB.             Return code, when 0 the call was successful
+
+   ]R=: (uppertriang,0) * hR
+_40.6694 _29.0144  _9.34363     _11.3107     _1.96708
+       0 _16.4062  _1.82246     _3.28083     _1.45837
+       0        0 _0.612468    _0.551221    0.0612468
+       0        0         0 _7.10559e_16   9.6136e_19
+       0        0         0            0 _2.57268e_17
+       0        0         0            0            0
+   ]Q=: |: > 4 { dorgqr_jlapack2_ (1 2 2 3 4 6 7 8{res),<,_1
+_0.0245885  _0.626995   0.608067  0.471397 0.0922671
+ _0.098354  _0.557493  _0.106137 _0.559286 _0.511096
+ _0.221297   _0.40102  _0.328899 _0.259074  0.779272
+ _0.393416  _0.157578 _0.0602199 0.0437222 _0.299287
+  _0.49177 _0.0445906  _0.528703  0.569936 _0.156196
+ _0.737655   0.329307   0.477138 _0.266696 0.0950394
+   Q mult (5 5 $ , R)
+ 1 11 1 2 1
+ 4 12 2 3 1
+ 9 13 3 4 1
+16 14 4 5 1
+20 15 5 6 1
+30 16 6 7 1
+
+  NB. As we see the last result recreates A with permuted columns. Let's see if we can
+  NB. verify this results looking at JPVT of dgeqp3. So we will reconstruct P.
+   ]pivs=: >5 { res
+3 5 2 4 1
+   NB. pivs mean that in 1st column there is third one, in the second 5th one, etc.
+   (pivs - 1) ,. i.c
+2 0
+4 1
+1 2
+3 3
+0 4
+   ((c,c) $ 0) ]F..{{1 (<x)} y}} (pivs - 1) ,. i.c
+0 0 0 0 1
+0 0 1 0 0
+1 0 0 0 0
+0 0 0 1 0
+0 1 0 0 0
+   ]P=: ((c,c) $ 0) ]F..{{1 (<x)} y}} (pivs - 1) ,. i.c
+0 0 0 0 1
+0 0 1 0 0
+1 0 0 0 0
+0 0 0 1 0
+0 1 0 0 0
+   A mult P
+ 1 11 1 2 1
+ 4 12 2 3 1
+ 9 13 3 4 1
+16 14 4 5 1
+20 15 5 6 1
+30 16 6 7 1
+   NB. Finally,
+   (A mult P) -: Q mult (5 5 $ , R)
+1
 ```
 
 ### Partitioned matrix
