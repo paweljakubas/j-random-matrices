@@ -26,8 +26,8 @@
     - [Least squares problem](#least-squares-problem)
     - [LAPACK](#qr-lapack)
 13. [Rank of a matrix](#rank-of-matrix)
-    - [QR with column pivoting](#qr-with-column-pivoting) - IN PROGRESS
-    - [LAPACK](#qr-rank-revealing-lapack) TO-DO
+    - [QR with column pivoting](#qr-with-column-pivoting)
+    - [LAPACK](#qr-rank-revealing-lapack) - IN PROGRESS
 14. [A partitioned matrix](#partitioned-matrix) - IN PROGRESS
 
 [Project I](#project-i)
@@ -3434,6 +3434,91 @@ Implement function for QR with column pivoting using for example fold.
 
 
 #### QR rank revealing LAPACK
+
+```j
+   load 'math/lapack2'
+   dgeqp3_jlapack2_
+'"liblapack.so.3" dgeqp3_  n *i *i *d *i *i *d *d *i *i '&cd
+   ]A=: 6 5 $ 1 1 1 2 11 1 2 4 3 12 1 3 9 4 13 1 4 16 5 14 1 5 20 6 15 1 6 30 7 16
+1 1  1 2 11
+1 2  4 3 12
+1 3  9 4 13
+1 4 16 5 14
+1 5 20 6 15
+1 6 30 7 16
+   ]'r c' =. ,"0 $ A
+6
+5
+
+   NB.  DGEQP3 computes a QR factorization with column pivoting of a
+   NB.  matrix A:  A*P = Q*R  using Level 3 BLAS.
+   NB.
+   NB. Arguments
+   NB. 1. [in] M (*i) The number of rows of the matrix A.  M >= 0.
+   NB. 2. [in] N (*i) The number of columns of the matrix A.  N >= 0.
+   NB. 3. [in,out] A (*d)
+   NB.             On entry, the M-by-N matrix to be factored.
+   NB.             On exit, the elements on and above the diagonal of the array
+   NB.             contain the min(M,N)-by-N upper trapezoidal matrix R (R is
+   NB.             upper triangular if m >= n); the elements below the diagonal,
+   NB.             with the array TAU, represent the orthogonal matrix Q as a
+   NB.             product of min(m,n) elementary reflectors
+   NB. 4. [in] LDA (*i) The leading dimension of the array A.  LDA >= max(1,M).
+   NB. 5. [in/out] JPVT (*i)
+   NB.             JPVT is INTEGER array, dimension (N)
+   NB.             On entry, if JPVT(J).ne.0, the J-th column of A is permuted
+   NB.             to the front of A*P (a leading column); if JPVT(J)=0,
+   NB.             the J-th column of A is a free column.
+   NB.             On exit, if JPVT(J)=K, then the J-th column of A*P was the
+   NB.             the K-th column of A.
+   NB. 6. [out] TAU (*d)
+   NB.             Array of  dimension (min(M,N)) that has scalar factors of the elementary reflectors
+   NB. 7. [out] WORK (*d)
+   NB.             Work matrix of dimension (MAX(1,LWORK))
+   NB. 8. [in] LWORK (*i) The dimension of the array WORK.
+   NB. 9. [out] INFO (*i)
+   NB.             Return code, when 0 the call was successful
+
+   NB. As already shown in QR LAPACK section a number of procedures require additional matrix to be
+   NB. delivered to the procedure that is used internally. In order to learn about the optimal one
+   NB. we can query LAPACK for the answer.
+
+   NB. For the query we have first a preparatory call for which LWORK=_1
+   ]pre=: dgeqp3_jlapack2_ r;c;(|:A);(1>.r);(c$0.);((r<.c)$0.);(1$0.);(,_1);,_1
+┌─┬─┬─┬─────────────────┬─┬─────────┬─────────┬───┬──┬─┐
+│0│6│5│ 1  1  1  1  1  1│6│0 0 0 0 0│0 0 0 0 0│202│_1│0│
+│ │ │ │ 1  2  3  4  5  6│ │         │         │   │  │ │
+│ │ │ │ 1  4  9 16 20 30│ │         │         │   │  │ │
+│ │ │ │ 2  3  4  5  6  7│ │         │         │   │  │ │
+│ │ │ │11 12 13 14 15 16│ │         │         │   │  │ │
+└─┴─┴─┴─────────────────┴─┴─────────┴─────────┴───┴──┴─┘
+
+   ]lwork =. , (7;0) {:: pre
+202
+   res=: dgeqp3_jlapack2_ r;c;(|:A);(1>.r);(c$0.);((r<.c)$0.);(lwork$0.);lwork;,_1
+   ]hR=: |: >3 { res
+ _40.6694  _29.0144  _9.34363     _11.3107     _1.96708
+0.0959937  _16.4062  _1.82246     _3.28083     _1.45837
+ 0.215986  0.177384 _0.612468    _0.551221    0.0612468
+ 0.383975 _0.055548  0.211621 _7.10559e_16   9.6136e_19
+ 0.479969 _0.171206  0.593075    _0.349643 _2.57268e_17
+ 0.719953 _0.521413 0.0324359     0.817291   _0.0878374
+   ]uppertriang=: (<:)/~ (i.c)
+1 1 1 1 1
+0 1 1 1 1
+0 0 1 1 1
+0 0 0 1 1
+0 0 0 0 1
+   ]R=: 10&round (uppertriang,0) * hR
+_406693988153r10000000000 _290144441367r10000000000  _3737453821r400000000 _113107155109r10000000000    _1229425599r625000000
+                        0   _41015395847r2500000000 _2278080327r1250000000  _32808336693r10000000000 _14583694077r10000000000
+                        0                         0     _19139633r31250000      _172256697r312500000       19139633r312500000
+                        0                         0                      0                         0                        0
+                        0                         0                      0                         0                        0
+                        0                         0                      0                         0                        0
+
+
+```
 
 ### Partitioned matrix
 
