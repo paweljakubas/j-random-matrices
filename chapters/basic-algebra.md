@@ -39,16 +39,16 @@
 # Basic linear algebra
 Let's start with fundamental results and operations on matrices
 that are prerequisite for going further. There are topics that I dive into quite deeply,
-others I just stop investigating when accomplishing basic result. This is the reflection
-of my subjective thinking what I regard will be especially important to master the later steps.
+some I just stop investigating when accomplishing basic result. This is the reflection
+of my subjective thinking about what I regard especially important to master the later steps.
 
 ## Selecting from matrix
-Generic selector can be defined by specifying both indices, row's or column's. The way the selection
-works can also be extended to higher dimensional arrays, for example, in case of tensor the
-plane index should also be additionally specified.
+Generic selector can be defined by specifying both indices, belonging to either row or column or both.
+The way the selection works can also be extended to higher dimensional arrays, for example, in case of tensor the
+plane index should also be additionally specified before row and column ones.
 In the first example below the selector allows cutting submatrix by taking first two rows and columns,
-ie., via enforcing 0 and 1 indices in the selector:
-```
+by specifying 0 and 1 indices in the selector:
+```j
    ]m=: 100 + 4 4 $ i.16
 100 101 102 103
 104 105 106 107
@@ -61,7 +61,7 @@ ie., via enforcing 0 and 1 indices in the selector:
 104 105
 ```
 There is a way to choose either all columns or all rows by using *a:* :
-```
+```j
    sel=: (<(<a:),(<0 1))
    sel { m
 100 101
@@ -73,8 +73,8 @@ There is a way to choose either all columns or all rows by using *a:* :
    sel { m
 108 109 110 111
 ```
-Also one can define a selection by saying which indices to omit:
-```
+One can also define a selection by saying which indices to omit:
+```j
 sel=: (<(<<2 3 1),(<a:))
    sel { m
 100 101 102 103
@@ -88,13 +88,13 @@ sel=: (<(<<2 3 1),(<a:))
 ```
 There is also a way to specify indices starting the count from the end via prefixing negative sign
 to the index. In that case *_1* is the last index:
-```
+```j
    sel=: (<(<a:),(<_1))
    sel { x
 103 107 111 115
 ```
-It is also possible to combine selections with each other:
-```
+It is also possible to combine selections with each other using array building combinators:
+```j
    sel=:((< (<0 1), (<0 1)),(<(<2 3),(<2 3)))
    sel { m
 100 101
@@ -104,11 +104,11 @@ It is also possible to combine selections with each other:
 114 115
 ```
 Let's now see how we can negate a selector and select all elements except those specified by the selector.
-Above we were omitting indices in a given axis, now we want to learn how to treat a selection as a mask
+Above we were omitting indices in a given axis, now we want to learn how to treat a selection as a negative mask
 and take everything except what the selection frames. As the result can be non-rectangular, we need to
 realize the operation in a linearized form to make sure we have a general solution.
 After we get the result we can reshape it as we want:
-```
+```j
    sel=:(< (<1 2), (<1 2))
    sel { m
 105 106
@@ -152,7 +152,7 @@ corresponding elements increased by 100 and 200 with respect to the first plane.
 
 We can also select from a given array by specifying a predicate that filters the array's values.
 Let's say we want to select only those values that divide without remainder by 3
-```
+```j
    3 | (,m)
 1 2 0 1 2 0 1 2 0 1 2 0 1 2 0 1
    (0 = 3 | (,m))
@@ -171,8 +171,8 @@ Select all values from *m* that does not divide without remainder by either 3 or
 
 Finally, we will see how to introduce functions that act on indices of elements of arrays.
 First let's show how to get handle on them:
-```
-      ]m=: 100 + 4 4 $ i.16
+```j
+   ]m=: 100 + 4 4 $ i.16
 100 101 102 103
 104 105 106 107
 108 109 110 111
@@ -200,7 +200,7 @@ First let's show how to get handle on them:
 3 3
 ```
 In order to get diagonal elements one can do the following:
-```
+```j
    nub=: 3 : '{./.~ y'
    nub 1 2 3 4 5 6
 1 2 3 4 5 6
@@ -228,7 +228,7 @@ In order to get diagonal elements one can do the following:
 ```
 One can also utilize the following scheme to generate diagonal or triangular selections.
 *(x u/ y)* returns a table having entries *(a u b)* for every *a* in *x* and *b* in *y*.
-```
+```j
    ]diag=: =/~ (i.#m)
 1 0 0 0
 0 1 0 0
@@ -293,7 +293,7 @@ Use the tensor from Exercise 2
 (a) we can use J selections,
 (b) negated J selections,
 (c) deliver functions filtering values,
-(d) write index functions,
+(d) write functions acting on indices,
 and finally (e) use combination of those approaches
 
 ## Updating of matrix
@@ -3829,10 +3829,13 @@ Implement solution to least squares problem when new data is coming.
 ### Project II
 Implement LU wih full pivoting.
 
+### Project III
+Implement QR with givens rotations. See how it behaves for small and big matrices, also dense and sparse
+in comparison with other QR varieties.
 
 ## Basic linear algebra. Solutions to exercises
 ### Solution to exercise 1
-```
+```j
    m
 100 101 102 103
 104 105 106 107
@@ -3853,7 +3856,7 @@ Implement LU wih full pivoting.
 ```
 
 ### Solution to exercise 2
-```
+```j
    ]t=: (m ,: m+100) , m+200
 100 101 102 103
 104 105 106 107
@@ -3912,7 +3915,7 @@ Implement LU wih full pivoting.
 ```
 
 ### Solution to exercise 3
-```
+```j
    m
 100 101 102 103
 104 105 106 107
@@ -3931,7 +3934,7 @@ Implement LU wih full pivoting.
 ```
 
 ### Solution to exercise 4
-```
+```j
    m
 100 101 102 103
 104 105 106 107
@@ -3953,7 +3956,7 @@ Implement LU wih full pivoting.
 ```
 
 ### Solution to exercise 5
-```
+```j
    m
 100 101 102 103
 104 105 106 107
@@ -3979,7 +3982,7 @@ Implement LU wih full pivoting.
 ```
 
 ### Solution to exercise 6
-```
+```j
    ]t=: (m ,: m+100) , m+200
 100 101 102 103
 104 105 106 107
