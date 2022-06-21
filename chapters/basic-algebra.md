@@ -298,7 +298,7 @@ and finally (e) use combination of those approaches
 
 ## Updating of matrix
 We can update a matrix with new values and a selection:
-```
+```j
    sel=: (<(<0 1),(<0 1))
    sel { m
 100 101
@@ -310,7 +310,7 @@ We can update a matrix with new values and a selection:
 112 113 114 115
 ```
 We need to be sure that the shape of the delivered new values is compatible with what selection determines:
-```
+```j
    (2 2 $ 1 2 3 4) sel } m
   1   2 102 103
   3   4 106 107
@@ -344,8 +344,8 @@ We need to be sure that the shape of the delivered new values is compatible with
 112 113   7   9
 ```
 The question of ovelapping selection arises. The overwriting is deterministic in a sense that
-the selection on the right overwrites the values of the left selection:
-```
+the selection on the right overwrites the values from the left selection:
+```j
    sel=: ((<(<0 1),(<0 1)),(<(<1 2),(<1 2)))
    sel { m
 100 101
@@ -365,7 +365,7 @@ the selection on the right overwrites the values of the left selection:
 112 113 114 115
 ```
 There is also a way to update with predicate function:
-```
+```j
 pred =: 4 : '(y > x) # (i. # y)'
    (110 pred (,m)) { (,m)
 111 112 113 114 115
@@ -378,7 +378,7 @@ pred =: 4 : '(y > x) # (i. # y)'
 For matrices, as seen above, one can go through linearized form of matrix (*,*) and
 after applying the operation retrieve the shape using (*$*)
 We can also use two predicates and apply different updates for each predicate in one go:
-```
+```j
    pred1 =: 4 : '((y > (0 { x)) *. (y < (1 { x))) # (i. # y)'
    (101 104 pred1 (,m)) { (,m)
 102 103
@@ -397,12 +397,12 @@ We can also use two predicates and apply different updates for each predicate in
 108 109 110 100
 100 100 100 100
 ```
-One can notice that the updating using selection is rectangular in shape and one can
-operate in matrix shape doing this. If the updating is done using predcate function
+One can notice that the updating using selection is rectangular and one can work within
+the matrix shape doing this. If the updating is done using predcate function
 there is no guarantee that the updated slice of a matrix is rectangular, and one needs to
 use linearized indices. The same is, in general, true for the negated selection,
 ie. updating everything in an array except what a given selection determines. Example below:
-```
+```j
    sel=:(< (<1 2), (<1 2))
    sel { m
 105 106
@@ -420,7 +420,7 @@ ie. updating everything in an array except what a given selection determines. Ex
 ```
 Now rather than to update with new values let's update the selected elements using
 the specified function that uses the old values.
-```
+```j
    f =: 3 : '(y + 100)'
    (f (sel { m))
 205 206
@@ -457,11 +457,11 @@ X X X X X            0 X X X X           X X X X 0
 [Solution to exercise 8](#solution-to-exercise-8)
 
 Let's finally investigate how to update some neighborhood of a given point in a matrix. In an example below we want to
-increment the nearest neighbors of the point. If the point is going to be defined by *(x,y)* then we will
+increment the nearest neighbors of the point specified. If the point is going to be defined by *(x,y)* then we will
 update 4 points: *(x-1,y)*,*(x+1,y)*,*(x,y-1)*,*(x,y+1)*. The complication that arises here regards points chosen on the
 boundary of a matrix. Let's assume that in that case we want to omit the points tresspassing the boundary (in other version
 we could also contemplate including them wrapped up on the oppostite side).
-```
+```j
    nn=: 3 : '( ((0{y)-1), (1{y) ),( ((0{y)+1), (1{y) ),( (0{y), ((1{y)-1) ),:( (0{y), ((1{y)+1) )'
 
    ]nn11=: nn 1 1
@@ -569,7 +569,7 @@ Show capability to update (make 0) both diagonals passing through the point.
 [Solution to exercise 11](#solution-to-exercise-11)
 
 **Summary**: As in the case of selecting the updating of a matrix can be realized in a number of ways:
-(a) via J selections which requires rectangular updating values mimicking the shape of the selection,
+(a) via J selections which require rectangular updating of the values mimicking the shape of the selection,
 (b) negated selections but then we need to work with linearized indices,
 (c) functions acting on both values or indices to filtering out indices to be updated
 (d) on top of indices to be updated we can provide new values independent or dependent
@@ -4027,7 +4027,7 @@ in comparison with other QR varieties.
 ```
 
 ### Solution to exercise 7
-```
+```j
    m
 100 101 102 103
 104 105 106 107
@@ -4080,7 +4080,7 @@ in comparison with other QR varieties.
 ```
 
 ### Solution to exercise 8
-```
+```j
    m
 100 101 102 103
 104 105 106 107
@@ -4139,7 +4139,7 @@ in comparison with other QR varieties.
 ```
 
 ### Solution to exercise 9
-```
+```j
    ]t=: (m ,: m+100) , m+200
 100 101 102 103
 104 105 106 107
@@ -4309,7 +4309,7 @@ _1 1 1
 ```
 
 ### Solution to exercise 10
-```
+```j
    NB. (a) Show capability to update (increment) the second nearest neighbors in a matrix.
    m
 100 101 102 103
