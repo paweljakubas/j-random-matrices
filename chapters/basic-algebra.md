@@ -579,7 +579,7 @@ on the current values
 ## Generating random matrix
 Let's start to revisit what are basic functionalities in J when it comes to vector random generation.
 When we want to pick N natural numbers from 0 up to M-1, then it can be achieved via `?N#M`:
-```
+```j
    ?6#6
 1 3 3 2 0 2
    ?6#6
@@ -595,10 +595,10 @@ When we want to pick N natural numbers from 0 up to M-1, then it can be achieved
    1+?6#6
 3 5 3 6 1 3
 ```
-In the first three examples we picked 6 numbers from the set {0,1,2,3,4,5}, the next two 10 numbers from the same set.
+In the first three examples we picked 6 numbers from the set {0,1,2,3,4,5}, in the next two 10 numbers from the same set.
 In the last example, we picked 6 numbers from the set {1,2,3,4,5,6}.
 But what if we want to choose the set in completely arbitrary way? Well, we can exploit selecting capability we have already mastered:
-```
+```j
    domain=: _1 1
    ( 10 ?@$ #domain) { domain
 _1 1 1 1 1 _1 1 1 _1 _1
@@ -612,9 +612,9 @@ _1 1 1 1 1 _1 1 1 _1 _1
 1 1000 1 100 100 1 1 1000 1000 100
 ```
 
-These were **random sampling with replacement**. If we want to pick a sequence of elements from a given domain **without replacement** we can use `?` with
+Up till now all these were examples of **random sampling with replacement**. If we want to pick a sequence of elements from a given domain **without replacement** we can use `?` with
 the remark that the number of picked numbers cannot exceed the cardinality of the domain:
-```
+```j
    domain=: 1 10 100 1000
    ( 1 ? #domain) { domain
 100
@@ -630,14 +630,15 @@ the remark that the number of picked numbers cannot exceed the cardinality of th
 
 ```
 
-Now what if we want to set relative weights to the elements of domain? On the one hand we can replicate accordingly elements in the domain.
+Now what if we want to set relative weights to the elements of domain? On the one hand we can replicate elements in the domain accordingly
+to reflect the requested weights.
 So if we want to have 100 picked 3 times more frequently than any other number in the domain we could set domain the following:
-```
+```j
    domain=: 1 10 100 100 100 1000
 ```
 
 The following reference [https://code.jsoftware.com/wiki/Fifty_Shades_of_J/Chapter_28] suggests:
-```
+```j
    cumulativeWeights=: +/\ % +/
    cumulativeWeights 1 1 3 1
 0.166667 0.333333 0.833333 1
@@ -649,10 +650,10 @@ The following reference [https://code.jsoftware.com/wiki/Fifty_Shades_of_J/Chapt
 2 2 2 3 1 2 3 2 3 1
 ```
 `rnd` picks random number from (0,1) interval, the last line picks 10 random numbers from a set {0,1,2,3} where
-element 3 has relative weight 3 with respect to other elements of the domain that all have relative weight equal to 1.
+the third element has relative weight 3 with respect to other elements of the domain that all have relative weight equal to 1.
 
 Now, let's see how we can use arbitrary domain using both approaches.
-```
+```j
    domain=: 1 10 100 1000
    (1 1 3 1 rndWeighted 10) { domain
 1000 1 100 100 1000 100 10 1 100 10
@@ -677,8 +678,8 @@ is very nontrivial or only intricate approximation can be provided.
 Now we are empowered to replicate **binomial distribution**. We need to set binary domain and weights being probabilities,
 ie. two positive numbers that add up to 1. Traditionally, domain reflects **Bernoulli trial** which is experiment with two outcomes
 possible, 1 representing success with probability p, 0 representing failure with probability (1-p) [6, page 89-91].
-We can generalize domain though.
-```
+We can generalize the domain though.
+```j
    cumulativeWeights=: +/\ % +/
    rnd=: ?@#&0
    rndWeighted=: cumulativeWeights@[ I. rnd@]
@@ -699,7 +700,7 @@ Calculate experimental mean and variance of Bernoulli random variables and compa
 [Solution to exercise 13](#solution-to-exercise-13)
 
 Moreover, random numbers 0 and 1 in binomial distribution can be obtained via `binomialrand` - see [https://code.jsoftware.com/wiki/Addons/stats/base/random]
-```
+```j
    load 'stats/base/random'
    NB. probability of success=0.2, number of trials 10
    binomialrand 0.2 10
@@ -707,7 +708,7 @@ Moreover, random numbers 0 and 1 in binomial distribution can be obtained via `b
 ```
 
 Let's now investigate two continuous distributions: normal and uniform. A **normal distribution** example is below:
-```
+```j
    NB. `rnorm` is defined in j/algebra.ijs and takes as x mean and variance, and number of samples as y
    0 1 rnorm 10
 _0.22246 0.565404 _0.81757 _1.44307 1.37019 1.32798 _0.325787 0.85836 _0.586362 0.751552
@@ -716,7 +717,7 @@ _0.22246 0.565404 _0.81757 _1.44307 1.37019 1.32798 _0.325787 0.85836 _0.586362 
 7.79113 7.16799 12.1581 8.78351 10.3067 9.38921 11.7871 11.0787 8.18868 10.8973
 ```
 We can now see using `intervalHist` from j/algebra.ijs how the generated samples are distributed:
-```
+```j
    ]bins=: 0.2*i:15
 _3 _2.8 _2.6 _2.4 _2.2 _2 _1.8 _1.6 _1.4 _1.2 _1 _0.8 _0.6 _0.4 _0.2 0 0.2 0.4 0.6 0.8 1 1.2 1.4 1.6 1.8 2 2.2 2.4 2.6 2.8 3
    bins intervalHist (0 1 rnorm 100)
@@ -802,7 +803,7 @@ Show that 1-,2-, 3- sigma interval probabilities can be reasonable assessed usin
 
 
 Finally, we can look at **uniform distribution** sample generation (`runiform` is in j/algebra.ijs ):
-```
+```j
    NB. 10 samples of U(0,1)
    0 1 runiform 10
 0.183411 0.0968962 0.587723 0.165308 0.68218 0.0916652 0.00554653 0.149567 0.340257 0.370271
@@ -853,7 +854,7 @@ Generate 8x5 matrix where consecutive columns consist of random and evenly proba
 
 [Solution to exercise 17](#solution-to-exercise-17)
 
-In-depth coverage of many both discrete and continuous distribution families will be included in statistics inference chapter.
+In-depth coverage of many both discrete and continuous distribution families will be included in statistics inference book.
 
 The last topics to cover when introducing basic random generation are **random generators** and **seeds**.
 We have the following random generators at our disposal (adapted from [https://code.jsoftware.com/wiki/Vocabulary/query])
@@ -867,7 +868,7 @@ We have the following random generators at our disposal (adapted from [https://c
 |       0       | combination of all |       12       |
 
 Below is self-explanatory code snippet.
-```
+```j
    NB. show current rng (Mersenne Twister is default)
    9!:42 ''
 2
@@ -900,6 +901,21 @@ _1.42716 _0.353494 0.0569464 _0.300366 0.752976
    NB. the rng's state reset functionality will be important later for experiment's reproducibility
    0 1 rnorm 5
 _1.42716 _0.353494 0.0569464 _0.300366 0.752976
+
+   NB. We can establish random seed based on timestamp
+   6!:0 ''
+2022 7 6 19 58 51.5735
+   6!:0 ''
+2022 7 6 19 58 53.7392
+   NB. Obviously it is different value every invoke of the function
+   NB. Now we need to map the timestamp into number accepted in resetting the state of rng with seed
+   <.13#.|.6!:0''
+20846180
+   <.13#.|.6!:0''
+21583140
+
+   NB. Random seed could be inserted to a given rng as follows
+   9!:1 ] <.13#.|.6!:0''
 ```
 
 The above is functionality is enough to have a basic control of random generation.
@@ -911,7 +927,7 @@ More information can be found here [https://code.jsoftware.com/wiki/Essays/RNG].
 (c) pick random samples from normal and uniform distributions,
 (d) get frequency report of the generated samples,
 (e) use substantial number generation to reason about properties of distributions, like mean or variance,
-(f) set random number generator with default or arbitrary seed,
+(f) set random number generator with default, arbitrary or random seed,
 (g) reset the state of the generator.
 
 ## Testing matrix properties
