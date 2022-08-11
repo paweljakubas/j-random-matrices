@@ -1,4 +1,4 @@
-# Linear algebra and random matrices in J
+# Linear algebra and random matrices using J
 
 by Pawel Jakubas, PhD
 
